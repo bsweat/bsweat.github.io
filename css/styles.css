@@ -31,18 +31,17 @@ body {
     transform: translateY(-50%);
     white-space: nowrap;
     overflow: hidden;
-    border-right: 0.5vw solid white;
     width: 0;
-    animation: typing 2s steps(6, end) forwards, blink 0.8s step-start infinite;
+    animation: typing 2s steps(6, end) forwards;
 }
 
     .branding.no-type {
         width: auto;
-        border: none;
         display: flex;
         align-items: center;
     }
 
+/* Cursor styles */
 .cursor {
     display: inline-block;
     width: 0.6ch;
@@ -52,7 +51,6 @@ body {
     animation: blink 0.8s step-start infinite;
 }
 
-/* Typing animation */
 @keyframes typing {
     from {
         width: 0
