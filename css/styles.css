@@ -37,29 +37,28 @@ body {
 /* Typing effect */
 .typing-wrapper {
     display: inline-block;
-    white-space: nowrap;
     overflow: hidden;
+    white-space: nowrap;
+    position: relative;
 }
 
 .typing {
     display: inline-block;
-    animation: typing steps(var(--chars)) forwards;
-    animation-duration: calc(var(--chars) * 0.1s);
     white-space: nowrap;
     overflow: hidden;
-    border-right: none;
+    animation: typing steps(var(--chars), end) forwards;
+    animation-duration: calc(var(--chars) * 0.1s);
 }
 
 @keyframes typing {
     from {
-        width: 0ch;
+        width: 0;
     }
 
     to {
-        width: calc(var(--chars) * 1ch);
+        width: 100%;
     }
 }
-
 /* Blinking cursor */
 .cursor {
     display: inline-block;
