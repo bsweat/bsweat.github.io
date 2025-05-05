@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bsweat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: monospace;
+            text-transform: lowercase;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .branding {
+            font-size: 10vw;
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 0.5vw solid white;
+            width: 0;
+            animation: typing 2s steps(6, end) forwards, blink 0.8s step-start infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 6ch
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent
+            }
+        }
+
+        nav {
+            width: 100%;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            background-color: #000;
+            opacity: 0;
+            visibility: hidden;
+            animation: fadeIn 1s ease-in forwards;
+            animation-delay: 2.2s;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+            nav a:hover {
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+    <div class="branding">bsweat</div>
+
+    <nav>
+        <a href="/projects">projects</a>
+        <a href="/writeups">writeups</a>
+        <a href="/photography">photography</a>
+        <a href="/resume">resume</a>
+    </nav>
+</body>
+</html>
