@@ -5,8 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>bsweat</title>
     <link rel="stylesheet" href="css/styles.css" />
+    <style>
+        canvas.matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: transparent;
+            pointer-events: none;
+            display: none;
+        }
+    </style>
 </head>
 <body>
+    <canvas class="matrix"></canvas>
+
     <div class="branding">
         <span class="typing-wrapper">
             <span class="typing">bsweat</span><span class="cursor"></span>
@@ -22,5 +37,41 @@
     </nav>
 
     <script src="js/fade.js"></script>
+    <script>
+        // Matrix Rain Script (delayed start)
+        setTimeout(() => {
+            const canvas = document.querySelector('.matrix');
+            const ctx = canvas.getContext('2d');
+            canvas.style.display = 'block';
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const binary = ['0', '1'];
+            const fontSize = 12;
+            const columns = canvas.width / fontSize;
+            const drops = Array(Math.floor(columns)).fill(1);
+
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#0f0';
+                ctx.font = fontSize + "px monospace";
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = binary[Math.floor(Math.random() * 2)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > canvas.height || Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+
+                    drops[i]++;
+                }
+            }
+
+            setInterval(drawMatrix, 50);
+        }, 5000);
+    </script>
 </body>
 </html>
