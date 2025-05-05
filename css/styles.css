@@ -22,7 +22,7 @@ body {
         opacity: 1;
     }
 
-/* Branding / central text */
+/* Branding / central text (bsweat) */
 .branding {
     font-size: 10vw;
     position: absolute;
@@ -30,9 +30,8 @@ body {
     left: 5%;
     transform: translateY(-50%);
     white-space: nowrap;
-    overflow: hidden;
-    width: 0;
-    animation: typing 2s steps(6, end) forwards;
+    display: flex;
+    align-items: center;
 }
 
     .branding.no-type {
@@ -41,7 +40,7 @@ body {
         align-items: center;
     }
 
-/* Cursor styles */
+/* Cursor styles (only cursor will blink) */
 .cursor {
     display: inline-block;
     width: 0.6ch;
@@ -49,16 +48,6 @@ body {
     background-color: white;
     margin-left: 0.2ch;
     animation: blink 0.8s step-start infinite;
-}
-
-@keyframes typing {
-    from {
-        width: 0
-    }
-
-    to {
-        width: 6ch
-    }
 }
 
 @keyframes blink {
