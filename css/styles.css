@@ -40,7 +40,9 @@ body {
     overflow: hidden;
     white-space: nowrap;
     border-right: none;
-    animation: typing 0.8s steps(8, end) forwards;
+    width: 0;
+    animation: typing steps(var(--chars), end) forwards;
+    animation-duration: calc(var(--chars) * 0.1s); /* typing speed per char */
 }
 
 @keyframes typing {
