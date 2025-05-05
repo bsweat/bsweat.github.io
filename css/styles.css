@@ -22,9 +22,79 @@ body {
         opacity: 1;
     }
 
-/* Branding / headline text */
+/* Branding section */
 .branding {
     font-size: 10vw;
     position: absolute;
     top: 50%;
-    left: 5
+    left: 5%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    display: flex;
+    align-items: baseline;
+}
+
+/* Typing effect */
+.typing {
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    animation: typing 0.8s steps(8, end) forwards;
+}
+
+@keyframes typing {
+    from {
+        width: 0
+    }
+
+    to {
+        width: 8ch
+    }
+}
+
+/* Blinking cursor */
+.cursor {
+    display: inline-block;
+    width: 0.6ch;
+    height: 1em;
+    background-color: white;
+    margin-left: 0.2ch;
+    animation: blink 0.8s step-start infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Navigation */
+nav {
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    background-color: #000;
+    opacity: 0;
+    visibility: hidden;
+    animation: fadeIn 1s ease-in forwards;
+    animation-delay: 1s; /* Matches typing + delay */
+}
+
+    nav a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.2rem;
+    }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        visibility: visible;
+    }
+}
