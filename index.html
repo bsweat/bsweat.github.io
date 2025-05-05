@@ -36,7 +36,7 @@
             }
         }
 
-        /* Ensure text is centered and responsive */
+        /* Main Body Styles */
         body {
             background-color: #000;
             color: #fff;
@@ -46,10 +46,11 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Align text to the left */
             opacity: 0;
             transition: opacity 0.6s ease-in-out;
             margin: 0;
+            padding-left: 5vw; /* Add some padding from the left */
         }
 
             body.fade-in {
@@ -58,7 +59,7 @@
 
         .branding {
             font-size: 10vw;
-            text-align: center;
+            text-align: left;
             position: relative;
         }
 
@@ -93,17 +94,34 @@
                     text-decoration: underline;
                 }
 
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-                visibility: visible;
-            }
-        }
-
+        /* Mobile Adjustments */
         @media (max-width: 768px) {
+            body {
+                align-items: flex-start;
+                padding-left: 10vw;
+            }
+
             .branding {
                 font-size: 15vw;
             }
+
+            nav {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                visibility: visible;
+                opacity: 1;
+            }
+
+                nav a {
+                    font-size: 1.5rem;
+                    text-align: center;
+                }
         }
     </style>
 </head>
@@ -163,7 +181,7 @@
             }
 
             setInterval(drawMatrix, 50);
-        }, 5000); // Matrix rain appears after 5 seconds
+        }, 2000); // Matrix rain now starts after 2 seconds
     </script>
 </body>
 </html>
