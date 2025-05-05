@@ -6,6 +6,7 @@
     <title>bsweat</title>
     <link rel="stylesheet" href="css/styles.css" />
     <style>
+        /* Matrix rain canvas */
         canvas.matrix {
             position: fixed;
             top: 0;
@@ -17,17 +18,37 @@
             pointer-events: none;
             display: none;
         }
+
+        /* Cursor Blinking Animation */
+        .cursor {
+            display: inline-block;
+            width: 0.6ch;
+            height: 1em;
+            background-color: white;
+            margin-left: 0.2ch;
+            animation: blink 0.8s step-start infinite;
+            animation-delay: calc(var(--chars) * 0.1s);
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Matrix Rain Canvas -->
     <canvas class="matrix"></canvas>
 
+    <!-- Branding with Typing Animation -->
     <div class="branding">
         <span class="typing-wrapper">
             <span class="typing">bsweat</span><span class="cursor"></span>
         </span>
     </div>
 
+    <!-- Navigation Bar -->
     <nav>
         <a href="index.html">home</a>
         <a href="projects.html">projects</a>
@@ -37,6 +58,7 @@
     </nav>
 
     <script src="js/fade.js"></script>
+
     <script>
         // Matrix Rain Script (delayed start)
         setTimeout(() => {
@@ -71,7 +93,7 @@
             }
 
             setInterval(drawMatrix, 50);
-        }, 5000);
+        }, 5000); // Matrix rain appears after 5 seconds
     </script>
 </body>
 </html>
