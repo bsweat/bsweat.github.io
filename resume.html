@@ -1,5 +1,4 @@
-﻿/* File: index.html */
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -68,36 +67,7 @@
         }
     </style>
 </head>
-<body>
-    <div class="title" id="main-title"></div>
 
-    <div class="menu">
-        <a href="projects.html">Projects</a>
-        <a href="resume.html">Resume</a>
-        <a href="photography.html">Photography</a>
-        <a href="writeups.html">Writeups</a>
-    </div>
-
-    <script>
-    const titleText = 'bsweat';
-    let index = 0;
-    const titleElem = document.getElementById('main-title');
-
-    function typeTitle() {
-      if (index <= titleText.length) {
-        titleElem.textContent = titleText.slice(0, index);
-        titleElem.classList.add('typed');
-        index++;
-        setTimeout(typeTitle, 150);
-      }
-    }
-
-    window.onload = typeTitle;
-    </script>
-</body>
-</html>
-
-<!-- Repeat the below structure for each subpage, updating TITLE accordingly (projects.html, resume.html, etc.) -->
 <!-- File: projects.html (same structure for resume.html, photography.html, writeups.html) -->
 <!DOCTYPE html>
 <html lang="en">
@@ -119,9 +89,10 @@
 
         .page-title {
             font-size: 3rem;
-            text-align: right;
+            text-align: left;
             padding: 2rem;
             white-space: nowrap;
+            align-self: flex-start;
         }
 
         .typed::after {
@@ -188,23 +159,24 @@
         <a href="resume.html">Resume</a>
         <a href="photography.html">Photography</a>
         <a href="writeups.html">Writeups</a>
+        <a href="projects.html">Projects</a>
     </div>
 
     <script>
-    const pageTitleText = 'Projects';
-    let idx = 0;
-    const pageTitle = document.getElementById('page-title');
+        const pageTitleText = 'bsweat';
+        let idx = 0;
+        const pageTitle = document.getElementById('page-title');
 
-    function typePageTitle() {
-      if (idx <= pageTitleText.length) {
-        pageTitle.textContent = pageTitleText.slice(0, idx);
-        pageTitle.classList.add('typed');
-        idx++;
-        setTimeout(typePageTitle, 150);
-      }
-    }
+        function typePageTitle() {
+            if (idx <= pageTitleText.length) {
+                pageTitle.textContent = pageTitleText.slice(0, idx);
+                pageTitle.classList.add('typed');
+                idx++;
+                setTimeout(typePageTitle, 150);
+            }
+        }
 
-    window.onload = typePageTitle;
+        window.onload = typePageTitle;
     </script>
 </body>
 </html>
