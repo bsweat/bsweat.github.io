@@ -13,11 +13,13 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 100vh;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .title {
-            font-size: 4rem;
+            font-size: 10rem;
             padding: 2rem;
             text-align: left;
             align-self: flex-start;
@@ -68,8 +70,6 @@
     </style>
 </head>
 
-<!-- File: projects.html (same structure for resume.html, photography.html, writeups.html) -->
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -88,7 +88,7 @@
         }
 
         .page-title {
-            font-size: 3rem;
+            font-size: 6rem;
             text-align: left;
             padding: 2rem;
             white-space: nowrap;
@@ -112,6 +112,7 @@
 
         .content {
             padding: 2rem;
+            font-size: 1rem;
         }
 
         .menu {
@@ -142,19 +143,18 @@
         }
     </style>
 </head>
+<div class="menu">
+    <a href="index.html">Home</a>
+    <a href="resume.html">Resume</a>
+    <a href="photography.html">Photography</a>
+    <a href="writeups.html">Writeups</a>
+    <a href="projects.html">Projects</a>
+</div>
 <body>
     <div class="page-title" id="page-title"></div>
 
     <div class="content">
         <p>welcome to my humble abode :3</p>
-    </div>
-
-    <div class="menu">
-        <a href="index.html">Home</a>
-        <a href="resume.html">Resume</a>
-        <a href="photography.html">Photography</a>
-        <a href="writeups.html">Writeups</a>
-        <a href="projects.html">Projects</a>
     </div>
 
     <script>

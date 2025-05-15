@@ -13,15 +13,23 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 100vh;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .title {
             font-size: 4rem;
-            padding: 2rem;
+            padding: 1rem;
             text-align: left;
             align-self: flex-start;
             white-space: nowrap;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .typed::after {
@@ -111,6 +119,7 @@
 
         .content {
             padding: 2rem;
+            font-size: 1rem;
         }
 
         .menu {
@@ -141,41 +150,124 @@
         }
     </style>
 </head>
+
+<div class="menu">
+    <a href="index.html">Home</a>
+    <a href="resume.html">Resume</a>
+    <a href="photography.html">Photography</a>
+    <a href="writeups.html">Writeups</a>
+    <a href="projects.html">Projects</a>
+</div>
+
 <body>
-    <div class="page-title" id="page-title"></div>
+    <div class="content-wrapper">
+        <div class="page-title" id="page-title"></div>
 
-    <div class="content">
-        <p>Placeholder content for the Projects page.</p>
-        <ul>
-            <li>Project 1</li>
-            <li>Project 2</li>
-            <li>Project 3</li>
-        </ul>
+        <div class="content">
+            <p>Placeholder content for the Projects page.</p>
+            <ul>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+            </ul>
+        </div>
     </div>
 
-    <div class="menu">
-        <a href="index.html">Home</a>
-        <a href="resume.html">Resume</a>
-        <a href="photography.html">Photography</a>
-        <a href="writeups.html">Writeups</a>
-        <a href="projects.html">Projects</a>
-    </div>
+        
 
-    <script>
-        const pageTitleText = 'Projects';
-        let idx = 0;
-        const pageTitle = document.getElementById('page-title');
+        <script>
+            const pageTitleText = 'Projects';
+            let idx = 0;
+            const pageTitle = document.getElementById('page-title');
 
-        function typePageTitle() {
-            if (idx <= pageTitleText.length) {
-                pageTitle.textContent = pageTitleText.slice(0, idx);
-                pageTitle.classList.add('typed');
-                idx++;
-                setTimeout(typePageTitle, 150);
+            function typePageTitle() {
+                if (idx <= pageTitleText.length) {
+                    pageTitle.textContent = pageTitleText.slice(0, idx);
+                    pageTitle.classList.add('typed');
+                    idx++;
+                    setTimeout(typePageTitle, 150);
+                }
             }
-        }
 
-        window.onload = typePageTitle;
-    </script>
+            window.onload = typePageTitle;
+        </script>
 </body>
 </html>
