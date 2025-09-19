@@ -1,325 +1,281 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Portfolio — Home</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal Website</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
-        :root {
-            --bg: #000;
-            --fg: #fff;
-            --accent: #aaa;
-            --menu-gap: 1.2rem;
-            --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
-        }
-
-        html, body {
-            height: 100%;
-        }
-
         body {
             margin: 0;
-            min-height: 100%;
-            background: var(--bg);
-            color: var(--fg);
-            font-family: var(--mono);
-            line-height: 1.5;
-            display: flex;
-            flex-direction: column;
+            font-family: monospace;
+            background: black;
+            color: white;
         }
 
-        header {
+        .page-title {
             position: fixed;
-            top: 20px;
+            top: 10px;
             right: 20px;
-            text-align: right;
-            z-index: 40;
+            font-size: 2em;
+            white-space: nowrap;
         }
 
-            header h1 {
-                margin: 0;
-                font-size: clamp(1.6rem,4vw,2.8rem);
-                letter-spacing: 0.04em;
+            .page-title.active::after {
+                content: "|";
+                margin-left: 5px;
+                animation: blink 1s step-start infinite;
             }
 
-        .home-title {
-            text-align: center;
-            font-size: clamp(2rem,6vw,3rem);
-            margin-bottom: 1rem;
-        }
-
-        main {
-            flex: 1 1 auto;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding: 120px 24px 120px 24px;
-            box-sizing: border-box;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .content {
-            max-width: 900px;
-            width: 100%;
-            color: var(--fg);
-            font-size: 1rem;
-            opacity: 0;
-            transform: translateY(15px);
-            transition: opacity .35s ease, transform .35s ease;
-        }
-
-            .content.show {
-                opacity: 1;
-                transform: none;
+        @keyframes blink {
+            50% {
+                opacity: 0;
             }
-
-        .placeholder {
-            opacity: 0.9;
-            color: var(--accent);
-            border-left: 2px solid rgba(255,255,255,0.04);
-            padding-left: 1rem;
-            white-space: pre-wrap;
-            font-size: 0.96rem;
         }
 
-        .home-links {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-
-            .home-links a {
-                display: inline-block;
-                margin: 0 1rem;
-                color: var(--fg);
-                text-decoration: none;
-                border-bottom: 1px dashed var(--accent);
-                transition: color .2s;
-                font-size: 1.2rem;
-            }
-
-                .home-links a:hover {
-                    color: var(--accent);
-                }
-
-        nav.bottom-menu {
+        .menu {
             position: fixed;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
-            bottom: 22px;
-            z-index: 30;
             display: flex;
-            gap: var(--menu-gap);
-            align-items: center;
+            gap: 20px;
         }
 
-            nav.bottom-menu a {
-                color: var(--fg);
+            .menu a {
+                color: white;
                 text-decoration: none;
-                font-size: 0.95rem;
-                padding: 6px 10px;
-                border-radius: 6px;
-                transition: transform .12s ease, color .12s ease;
             }
-
-                nav.bottom-menu a:hover {
-                    transform: translateY(-3px);
-                }
-
-                nav.bottom-menu a.active {
-                    color: var(--accent);
-                }
 
         .hamburger {
-            position: fixed;
-            top: 16px;
-            left: 16px;
-            width: 44px;
-            height: 44px;
             display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 45;
-            border-radius: 8px;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 2em;
             cursor: pointer;
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.03);
         }
 
-            .hamburger span {
-                display: block;
-                width: 22px;
-                height: 2px;
-                background: var(--fg);
-                position: relative;
-            }
-
-                .hamburger span::before, .hamburger span::after {
-                    content: '';
-                    position: absolute;
-                    left: 0;
-                    right: 0;
-                    height: 2px;
-                    background: var(--fg);
-                }
-
-                .hamburger span::before {
-                    top: -7px;
-                }
-
-                .hamburger span::after {
-                    top: 7px;
-                }
-
         .mobile-menu {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.96);
-            z-index: 44;
-            display: flex;
+            width: 100%;
+            height: 100%;
+            background: black;
             flex-direction: column;
-            gap: 1.2rem;
-            padding: 80px 24px 24px 24px;
-            transform: translateY(-8%);
-            opacity: 0;
-            pointer-events: none;
-            transition: transform .25s ease, opacity .18s ease;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
         }
 
-            .mobile-menu.open {
-                transform: none;
-                opacity: 1;
-                pointer-events: auto;
-            }
-
             .mobile-menu a {
-                color: var(--fg);
+                color: white;
+                font-size: 2em;
                 text-decoration: none;
-                font-size: 1.2rem;
             }
 
-        @media (max-width:680px) {
-            header {
-                right: 12px;
-                top: 12px;
+        .page {
+            display: none;
+            padding: 80px 20px 40px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            transform: translateY(10px);
+        }
+
+            .page.active {
+                display: block;
+                opacity: 1;
+                transform: translateY(0);
             }
 
-            nav.bottom-menu {
+        .home-title {
+            font-size: 3em;
+            margin-top: 40px;
+        }
+
+            .home-title.active::after {
+                content: "|";
+                margin-left: 5px;
+                animation: blink 1s step-start infinite;
+            }
+
+        .home-links {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            font-size: 1.5em;
+        }
+
+        ul.resume {
+            list-style-type: none;
+            padding: 0;
+        }
+
+            ul.resume li::before {
+                content: "• ";
+            }
+
+        .swiper {
+            width: 80%;
+            max-width: 600px;
+            height: 400px;
+            margin: 20px auto;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            .menu {
                 display: none;
             }
 
             .hamburger {
-                display: flex;
-            }
-
-            main {
-                padding-top: 80px;
-                padding-bottom: 80px;
+                display: block;
             }
         }
     </style>
 </head>
 <body>
-    <div class="hamburger" id="hamburger" aria-label="Open menu" role="button" tabindex="0">
-        <span></span>
+    <div class="page-title" id="page-title"></div>
+    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#home" onclick="toggleMobileMenu()">Home</a>
+        <a href="#resume" onclick="toggleMobileMenu()">Resume</a>
+        <a href="#projects" onclick="toggleMobileMenu()">Projects</a>
+        <a href="#photography" onclick="toggleMobileMenu()">Photography</a>
+        <a href="#blog" onclick="toggleMobileMenu()">Blog</a>
+    </div>
+    <div class="menu">
+        <a href="#home">Home</a>
+        <a href="#resume">Resume</a>
+        <a href="#projects">Projects</a>
+        <a href="#photography">Photography</a>
+        <a href="#blog">Blog</a>
     </div>
 
-    <header>
-        <h1 id="page-title">Home</h1>
-    </header>
-
-    <main>
-        <div class="content" id="page-content">
-            <section id="page-body" class="placeholder">
-                Loading...
-            </section>
+    <div id="home" class="page">
+        <div class="home-title" id="home-title"></div>
+        <p>Short about me section placeholder text goes here.</p>
+        <div class="home-links">
+            <a href="#resume">Resume</a>
+            <a href="#photography">Photography</a>
+            <a href="#projects">Projects</a>
+            <a href="#blog">Blog</a>
         </div>
-    </main>
-
-    <nav class="bottom-menu" role="navigation" aria-label="Primary">
-        <a href="#home" data-route="home">home</a>
-        <a href="#projects" data-route="projects">projects</a>
-        <a href="#resume" data-route="resume">resume</a>
-        <a href="#photography" data-route="photography">photography</a>
-        <a href="#blog" data-route="blog">blog</a>
-    </nav>
-
-    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-        <a href="#home" data-route="home">home</a>
-        <a href="#projects" data-route="projects">projects</a>
-        <a href="#resume" data-route="resume">resume</a>
-        <a href="#photography" data-route="photography">photography</a>
-        <a href="#blog" data-route="blog">blog</a>
     </div>
 
+    // RESUME
+    <div id="resume" class="page">
+        <h2>Resume</h2>
+        <ul class="resume">
+            <li>Experience: Penetration Tester at XYZ Corp</li>
+            <li>Skills: Web Security, Network Security, Reverse Engineering</li>
+            <li>Education: B.S. in Cybersecurity</li>
+        </ul>
+    </div>
+    
+
+    //PROJECTAS
+    <div id="projects" class="page">
+        <h2>Projects</h2>
+        <p>Project 1: Placeholder description of a security project.</p>
+        <p>Project 2: Placeholder description of another hacking achievement.</p>
+    </div>
+
+    //FOTOGRAFIA
+    <div id="photography" class="page">
+        <h2>Photography</h2>
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="images/photo1.jpg" alt="Photo 1"></div>
+                <div class="swiper-slide"><img src="images/photo2.jpg" alt="Photo 2"></div>
+                <div class="swiper-slide"><img src="images/photo3.jpg" alt="Photo 3"></div>
+            </div>
+        </div>
+    </div>
+
+
+    //EL BLOGO
+    <div id="blog" class="page">
+        <h2>Blog</h2>
+        <article>
+            <h3>Blog Post 1</h3>
+            <p>Short placeholder snippet for blog post 1...</p>
+        </article>
+        <article>
+            <h3>Blog Post 2</h3>
+            <p>Short placeholder snippet for blog post 2...</p>
+        </article>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        const routes = {
-            'home': {
-                title: 'Home',
-                body: `<div class="home-title">bsweat</div>\n<div class="placeholder">About me (placeholder) — write a short introduction here about your interests, hacking achievements, and goals.</div>\n<div class="home-links">\n  <a href="#resume">Resume</a>\n  <a href="#photography">Photography</a>\n  <a href="#projects">Projects</a>\n  <a href="#blog">Blog</a>\n</div>`
-            },
-            'projects': {
-                title: 'Projects',
-                body: `\nCurrent & Past Projects (placeholder)\n\n- **CTF Writeup**: Documented solutions and lessons learned from Capture the Flag competitions.\n- **Pen Testing Toolkit**: Custom scripts and tools for reconnaissance and exploitation.\n- **Web Exploit Demo**: Proof-of-concept showcasing XSS and SQLi testing in a controlled lab.\n`
-            },
-            'resume': {
-                title: 'Resume',
-                body: `Professional Experience (placeholder)\n\n· Security Analyst — Company XYZ (2022–Present)\n· IT Support Intern — Company ABC (2020–2021)\n· Certifications: CompTIA Security+, CEH, OSCP (in progress)\n· Skills: Penetration Testing, Linux, Python, Networking, Cloud Security\n`
-            },
-            'photography': {
-                title: 'Photography',
-                body: `Photography Galleries (placeholder)\n\n- <a href="#gallery1">Landscape Gallery</a> (rotating images)\n- <a href="#gallery2">Urban Exploration Gallery</a> (rotating images)\n- <a href="#gallery3">Macro Shots Gallery</a> (rotating images)\n\nReplace these links with real galleries and image carousels.`
-            },
-            'blog': {
-                title: 'Blog',
-                body: `Recent Blog Posts (placeholder)\n\n### Post 1: Breaking into Cybersecurity\nA short story about how I got started in ethical hacking and the lessons I learned.\n\n### Post 2: Favorite Linux Tools for Pentesting\nA list of essential command-line utilities and scripts I use regularly.\n\n### Post 3: Photography Meets Hacking\nHow capturing urban decay inspired my approach to exploring vulnerable systems.`
+        const pages = document.querySelectorAll('.page');
+        const pageTitle = document.getElementById('page-title');
+        const homeTitle = document.getElementById('home-title');
+
+        function typeWriter(target, text, callback) {
+            target.textContent = '';
+            let i = 0;
+            function typing() {
+                if (i < text.length) {
+                    target.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(typing, 50);
+                } else {
+                    callback();
+                }
             }
-        };
-
-        const titleEl = document.getElementById('page-title');
-        const bodyEl = document.getElementById('page-body');
-        const contentEl = document.getElementById('page-content');
-
-        function render() {
-            const hash = location.hash.replace(/^#/, '') || 'home';
-            const key = hash.split('/')[0];
-            const r = routes[key] || routes['home'];
-
-            titleEl.textContent = r.title;
-            document.title = r.title + ' — Portfolio';
-
-            contentEl.classList.remove('show');
-            setTimeout(() => {
-                bodyEl.innerHTML = r.body;
-                contentEl.classList.add('show');
-            }, 200);
-
-            document.querySelectorAll('nav.bottom-menu a, .mobile-menu a').forEach(a => {
-                const route = a.dataset.route || '';
-                if (route === key) a.classList.add('active'); else a.classList.remove('active');
-            });
-
-            closeMobileMenu();
+            typing();
         }
 
-        window.addEventListener('hashchange', render);
-        window.addEventListener('load', render);
-
-        const hamburger = document.getElementById('hamburger');
-        const mobileMenu = document.getElementById('mobileMenu');
-        function openMobileMenu() { mobileMenu.classList.add('open'); mobileMenu.setAttribute('aria-hidden', 'false'); }
-        function closeMobileMenu() { mobileMenu.classList.remove('open'); mobileMenu.setAttribute('aria-hidden', 'true'); }
-        hamburger.addEventListener('click', () => { if (mobileMenu.classList.contains('open')) closeMobileMenu(); else openMobileMenu(); });
-        hamburger.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') hamburger.click(); });
-        document.addEventListener('click', (e) => {
-            if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target) && mobileMenu.classList.contains('open')) {
-                closeMobileMenu();
+        function showPage(hash) {
+            if (!hash) hash = '#home';
+            pages.forEach(p => p.classList.remove('active'));
+            const activePage = document.querySelector(hash);
+            if (activePage) {
+                activePage.classList.add('active');
+                if (hash === '#home') {
+                    pageTitle.textContent = '';
+                    pageTitle.classList.remove('active');
+                    typeWriter(homeTitle, 'bsweat', () => {
+                        homeTitle.classList.add('active');
+                    });
+                } else {
+                    homeTitle.textContent = '';
+                    homeTitle.classList.remove('active');
+                    const titleText = activePage.querySelector('h2')?.textContent || '';
+                    typeWriter(pageTitle, titleText, () => {
+                        pageTitle.classList.add('active');
+                    });
+                }
             }
+        }s
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        window.addEventListener('hashchange', () => showPage(location.hash));
+        window.addEventListener('load', () => showPage(location.hash));
+
+        // Initialize Swiper
+        new Swiper('.swiper', {
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
         });
-        document.querySelectorAll('.mobile-menu a').forEach(a => a.addEventListener('click', () => closeMobileMenu()));
     </script>
 </body>
 </html>
