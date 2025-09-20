@@ -110,6 +110,26 @@
             font-size: 1.5em;
         }
 
+        /* Make home page links big and white */
+        .home-links a {
+          display: block;
+          font-size: 2rem;      /* bigger font */
+          color: white;         /* override default blue */
+          text-decoration: none;
+          margin: 1rem 0;
+          font-family: monospace;
+          text-align: center;
+        }
+
+        .home-links a:hover {
+          text-decoration: underline;
+        }
+
+        /* Hide bottom menu on Home */
+        .page[data-page="home"] .bottom-menu {
+          display: none;
+        }
+
         ul.resume {
             list-style-type: none;
             padding: 0;
