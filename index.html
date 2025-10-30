@@ -1,303 +1,222 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Personal Website</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <style>
-        body {
-            margin: 0;
-            font-family: monospace;
-            background: black;
-            color: white;
-        }
-
-        .page-title {
-            position: fixed;
-            top: 10px;
-            right: 20px;
-            font-size: 2em;
-            white-space: nowrap;
-        }
-
-            .page-title.active::after {
-                content: "|";
-                margin-left: 5px;
-                animation: blink 1s step-start infinite;
-            }
-
-        @keyframes blink {
-            50% {
-                opacity: 0;
-            }
-        }
-
-        .menu {
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 20px;
-        }
-
-            .menu a {
-                color: white;
-                text-decoration: none;
-            }
-
-        .hamburger {
-            display: none;
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            font-size: 2em;
-            cursor: pointer;
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-        }
-
-            .mobile-menu a {
-                color: white;
-                font-size: 2em;
-                text-decoration: none;
-            }
-
-        .page {
-            display: none;
-            padding: 80px 20px 40px;
-            text-align: center;
-            opacity: 0;
-            transition: opacity 0.5s, transform 0.5s;
-            transform: translateY(10px);
-        }
-
-            .page.active {
-                display: block;
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-        .home-title {
-            font-size: 3em;
-            margin-top: 40px;
-        }
-
-            .home-title.active::after {
-                content: "|";
-                margin-left: 5px;
-                animation: blink 1s step-start infinite;
-            }
-
-        /* Make home page links big and white */
-        .home-links {
-          display: block;
-          font-size: 2rem;      /* bigger font */
-          color: white;         /* override default blue */
-          text-decoration: none;
-          margin: 1rem 0;
-          font-family: monospace;
-          text-align: center;
-        }
-
-        .home-links a:hover {
-          text-decoration: underline;
-        }
-
-        /* Hide bottom menu on Home */
-        .page[data-page="home"] .bottom-menu {
-          display: none;
-        }
-
-        ul.resume {
-            list-style-type: none;
-            padding: 0;
-        }
-
-            ul.resume li::before {
-                content: "• ";
-            }
-
-        .swiper {
-            width: 80%;
-            max-width: 600px;
-            height: 400px;
-            margin: 20px auto;
-        }
-
-        .swiper-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        @media (max-width: 768px) {
-            .menu {
-                display: none;
-            }
-
-            .hamburger {
-                display: block;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>brandon sweat</title>
+<style>
+body {
+    background: black;
+    color: white;
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+.container {
+    display: none;
+    opacity: 0;
+    transition: opacity .15s;
+    padding: 12vh 6vw 4vh 6vw;
+}
+.active {
+    display: block;
+    opacity: 1;
+}
+.header {
+    position: fixed;
+    top: 2vh;
+    left: 2vw;
+    right: 2vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+.page-title {
+    font-weight: bold;
+    font-size: 1.8em;
+    white-space: nowrap;
+    min-height: 1.2em;
+}
+.nav {
+    font-size: 1em;
+    color: gray;
+    display: flex;
+    gap: 1em;
+}
+.nav span {
+    cursor: pointer;
+}
+.nav span:hover { color: white; }
+#home {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+#home h1 { font-size: 2em; margin-bottom: 2vh; }
+.home-links span {
+    display: block;
+    color: gray;
+    font-size: 1.2em;
+    margin: 1vh;
+    cursor: pointer;
+}
+.home-links span:hover { color: white; }
+.ascii-art { color: gray; font-size: .7em; white-space: pre; margin-top: 3vh; }
+@keyframes blink { 0%,49%,100%{border-color:white}50%,99%{border-color:transparent} }
+.resume-entry { margin-bottom: 1em; }
+.resume-entry h3 { margin: .3em 0; }
+.project-item { margin-bottom: .8em; border: 1px solid gray; padding: .6em; cursor: pointer; transition: all .2s; position: relative; }
+.project-item:hover { background: #111; }
+.project-details { display: none; margin-top: .5em; color: #ccc; width: 100%; }
+.triangle { font-size: .8em; position: absolute; top: 50%; right: .6em; transform: translateY(-50%); transition: transform .2s; }
+.carousel-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    overflow: hidden;
+}
+.carousel {
+    display: flex;
+    width: 100%;
+    max-width: 800px;
+    margin: 2em auto;
+    overflow: hidden;
+}
+.carousel-track {
+    display: flex;
+    animation: scroll 20s linear infinite;
+}
+.carousel-track img {
+    height: 200px;
+    width: auto;
+    object-fit: contain;
+    margin-right: 5px;
+    flex-shrink: 0;
+}
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+@media (max-width: 600px) {
+    .carousel-track { flex-direction: column; animation: none; }
+    .carousel-track img { width: 100%; height: auto; margin-bottom: 5px; }
+}
+@media (max-width: 768px) {
+    .page-title { font-size: 1.5em; }
+    .nav { font-size: .9em; gap: .5em; }
+    .container { padding-top: 14vh; }
+}
+</style>
 </head>
 <body>
-    <div class="page-title" id="page-title"></div>
-    <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
-    <div class="mobile-menu" id="mobile-menu">
-        <a href="#home" onclick="toggleMobileMenu()">Home</a>
-        <a href="#resume" onclick="toggleMobileMenu()">Resume</a>
-        <a href="#projects" onclick="toggleMobileMenu()">Projects</a>
-        <a href="#photography" onclick="toggleMobileMenu()">Photography</a>
-        <a href="#blog" onclick="toggleMobileMenu()">Blog</a>
+<div id="home">
+    <h1>brandon sweat</h1>
+    <div class="home-links">
+        <span onclick="showPage('resume')">resume</span>
+        <span onclick="showPage('projects')">projects</span>
+        <span onclick="showPage('photography')">photography</span>
     </div>
-    <div class="menu">
-        <a href="#home">Home</a>
-        <a href="#resume">Resume</a>
-        <a href="#projects">Projects</a>
-        <a href="#photography">Photography</a>
-        <a href="#blog">Blog</a>
+    <div class="ascii-art">
+        :D
     </div>
+</div>
+<div class="header" id="header" style="display:none;">
+    <div class="page-title" id="pageTitle"></div>
+    <div class="nav">
+        <span onclick="showPage('resume')">resume</span>
+        <span onclick="showPage('projects')">projects</span>
+        <span onclick="showPage('photography')">photography</span>
+        <span onclick="showPage('home')">home</span>
+    </div>
+</div>
+<div id="resume" class="container">
+    <a href="documents/resume.docx" download style="color:antiquewhite">
+        <h2>Download my resume here</h2><br>
 
-    <div id="home" class="page">
-        <div class="home-title" id="home-title"></div>
-        <p>Short about me section placeholder text goes here.</p>
-        <div class="home-links">
-            <a href="#resume">Resume</a>
-            <a href="#photography">Photography</a>
-            <a href="#projects">Projects</a>
-            <a href="#blog">Blog</a>
+    </a>
+    <div class="resume-entry">
+        <h3>IT Technician – SkyWest</h3>
+        <p><i>St. George, UT | 2024-Present</i></p>
+        <p>Conducted troubleshooting, hardware configuration, network management, user and group profile configuration.</p>
+        <p>Experience with Microsoft AD, Azure, and Admin Portal. Managed networks with ClearPass and NetDisco.</p>
+    </div>
+    <div class="resume-entry">
+        <h3>Head Coach – Contact Climbing Gym</h3>
+        <p><i>St. George, UT | 2021-2024</i></p>
+        <p>Instructed large groups of climbers from ages 6-18. Created training plans and taught complex topics to large groups.</p>
+    </div>
+    <div class="resume-entry">
+        <h3>Gym Staff – Utah Tech Climbing Gym</h3>
+        <p><i>St. George, UT | 2019-2023</i></p>
+        <p>Developed the gym's initial safety standards. Budgeted, planned, and constructed an IFSC compliant speed climbing wall.</p>
+    </div>
+</div>
+<div id="projects" class="container">
+    <div class="project-item" onclick="toggleDetails(this)">
+        <span>Project 1 – Home Cyber Lab</span>
+        <span class="triangle">▶</span>
+        <div class="project-details">Configured DVWA and Snort IDS.</div>
+    </div>
+    <div class="project-item" onclick="toggleDetails(this)">
+        <span>Project 2 – Threat Intelligence Parser</span>
+        <span class="triangle">▶</span>
+        <div class="project-details">Python scripts to parse OSINT feeds.</div>
+    </div>
+</div>
+<div id="photography" class="container">
+    <div class="carousel-container">
+        <div class="carousel">
+            <div class="carousel-track">
+		        <img src="images/iceland3.jpg" alt="Photo 3">
+                <img src="images/iceland4.jpg" alt="Photo 4">
+                <img src="images/iceland6.jpg" alt="Photo 6">
+                <img src="images/iceland5.jpg" alt="Photo 5">
+                <img src="images/iceland7.jpg" alt="Photo 7">
+                <img src="images/iceland8.jpg" alt="Photo 8">
+                <img src="images/iceland9.jpg" alt="Photo 9">
+                <img src="images/iceland10.jpg" alt="Photo 10">
+                <img src="images/iceland2.jpg" alt="Photo 2">
+                <img src="images/iceland11.jpg" alt="Photo 11">
+                <img src="images/iceland12.jpg" alt="Photo 12">
+            </div>
         </div>
-    </div>
-
-    <div id="resume" class="page">
-        <h2>Resume</h2>
-        <ul class="resume">
-            <li>Experience:</li>
-                <ul>SkyWest IT Technician (Jun. 2024 - Present): Working with end users, quickly identifying and making solutions to problems, built an understanding of our wide technology stack</ul>
-                <ul>Technologies:</ul>
-                    <li>Microsoft Active Directory, InTune, Azure</li>
-                    <li>Networking with ClearPass & NetDisco</li>
-                    <li>Cybersecurity PUP identification, basic malware quarantine and cleanup</li>
-                    <li>Physical networking tasks, building PCs, hardware troubleshooting</li>
-                <ul>Contact Climbing Gym Head Coach (Feb. 2021 - Jun 2024) - Instructed large groups of high-level youth climbers. Experience teaching complex topics, managing groups, and making long-term timelines.</ul>
-                <ul>Utah Tech Univeristy Climbing Gym (Oct. 2019 - Jan.2023) - Built climbs, taught classes, managed events. Planned, budgeted, and constructed an IFSC standardized speed climbing wall.</ul>
-            <li>Education: Associates (Utah Tech Univeristy), currently enrolled in classes. CompTia Security+, Google Cybersecurity.</li>
-            <li>Skills: Windows, Linux, networking, working with end users. Photography, graphic design, videography.</li>
-        </ul>
-    </div>
-
-    <div id="projects" class="page">
-        <h2>Projects</h2>
-        <p>Project 1: Placeholder description of a security project.</p>
-        <p>Project 2: Placeholder description of another hacking achievement.</p>
-    </div>
-
-    <div id="photography" class="page">
-        <h2>Photography</h2>
-        <div class="swiper">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><img src="images/iceland1.jpg" alt="Photo 1"></div>
-                <div class="swiper-slide"><img src="images/iceland2.jpg" alt="Photo 2"></div>
-                <div class="swiper-slide"><img src="images/iceland3.jpg" alt="Photo 3"></div>
-                <div class="swiper-slide"><img src="images/iceland4.jpg" alt="Photo 4"></div>
-                <div class="swiper-slide"><img src="images/iceland5.jpg" alt="Photo 5"></div>
-                <div class="swiper-slide"><img src="images/iceland6.jpg" alt="Photo 6"></div>
-                <div class="swiper-slide"><img src="images/iceland7.jpg" alt="Photo 7"></div>
-                <div class="swiper-slide"><img src="images/iceland8.jpg" alt="Photo 8"></div>
-                <div class="swiper-slide"><img src="images/iceland9.jpg" alt="Photo 9"></div>
-                <div class="swiper-slide"><img src="images/iceland10.jpg" alt="Photo 10"></div>
+        <div class="carousel">
+            <div class="carousel-track">
+                <img src="placeholder5.jpg">
+                <img src="placeholder6.jpg">
+                <img src="placeholder7.jpg">
+                <img src="placeholder8.jpg">
             </div>
         </div>
     </div>
-    </div>
-
-    <div id="blog" class="page">
-        <h2>Blog</h2>
-        <article>
-            <h3>These will hold cool writeups and blog posts one day</h3>
-            <p>idk if substack or twitter is appropriate for them...</p>
-        </article>
-        <article>
-            <h3>pardon our dust</h3>
-            <p>we're under contruction</p>
-        </article>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        const pages = document.querySelectorAll('.page');
-        const pageTitle = document.getElementById('page-title');
-        const homeTitle = document.getElementById('home-title');
-
-        function typeWriter(target, text, callback) {
-            target.textContent = '';
-            let i = 0;
-            function typing() {
-                if (i < text.length) {
-                    target.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(typing, 50);
-                } else {
-                    callback();
-                }
-            }
-            typing();
-        }
-
-        function showPage(hash) {
-            if (!hash) hash = '#home';
-            pages.forEach(p => p.classList.remove('active'));
-            const activePage = document.querySelector(hash);
-            if (activePage) {
-                activePage.classList.add('active');
-                if (hash === '#home') {
-                    pageTitle.textContent = '';
-                    pageTitle.classList.remove('active');
-                    typeWriter(homeTitle, 'bsweat', () => {
-                        homeTitle.classList.add('active');
-                    });
-                } else {
-                    homeTitle.textContent = '';
-                    homeTitle.classList.remove('active');
-                    const titleText = activePage.querySelector('h2')?.textContent || '';
-                    typeWriter(pageTitle, titleText, () => {
-                        pageTitle.classList.add('active');
-                    });
-                }
-            }
-        }
-
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-        }
-
-        window.addEventListener('hashchange', () => showPage(location.hash));
-        window.addEventListener('load', () => showPage(location.hash));
-
-        // Initialize Swiper
-        new Swiper('.swiper', {
-            loop: true,
-            autoplay: {
-                delay: 3000,
-                disableOnInteraction: false,
-            },
-        });
-    </script>
+</div>
+<script>
+let currentPage='home', typingInterval;
+function showPage(p){
+    if(p===currentPage) return;
+    clearInterval(typingInterval);
+    const o=document.getElementById(currentPage), n=document.getElementById(p), h=document.getElementById('header');
+    o.style.opacity='0';
+    setTimeout(()=>{ o.style.display='none'; n.style.display='block'; setTimeout(()=>n.style.opacity='1',10)},150);
+    h.style.display=(p==='home')?'none':'flex';
+    typeTitle(p);
+    currentPage=p;
+}
+function typeTitle(t){
+    const title=document.getElementById('pageTitle');
+    title.style.animation=''; title.textContent=''; title.style.borderRight='2px solid white';
+    let i=0;
+    typingInterval=setInterval(()=>{ if(i<t.length) title.textContent+=t[i++]; else { clearInterval(typingInterval); title.style.animation='blink 1s step-end infinite' } },29);
+}
+function toggleDetails(e){
+    const d=e.querySelector('.project-details'), tr=e.querySelector('.triangle'), v=d.style.display==='block';
+    d.style.display=v?'none':'block'; tr.style.transform=v?'rotate(0deg)':'rotate(90deg)';
+}
+</script>
 </body>
 </html>
