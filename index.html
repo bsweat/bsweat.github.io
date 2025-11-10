@@ -143,7 +143,7 @@ body {
         <h3>IT Technician – SkyWest</h3>
         <p><i>St. George, UT | 2024-Present</i></p>
         <p>Conducted troubleshooting, hardware configuration, network management, user and group profile configuration.</p>
-        <p>Experience with Microsoft AD, Azure, and Admin Portal. Managed networks with ClearPass and NetDisco.</p>
+        <p>Experience with Microsoft AD, Azure, and Admin Portal. Managed networks with ClearPass, NetDisco, and IPAM.</p>
     </div>
     <div class="resume-entry">
         <h3>Head Coach – Contact Climbing Gym</h3>
@@ -179,10 +179,26 @@ body {
 </div>
 <div id="projects" class="container">
     <div class="project-item" onclick="toggleDetails(this)">
-        <span>Project 1 – Home Cyber Lab</span>
+        <span>CTF Writeup - SkyWest OSINT competition</span>
         <span class="triangle">▶</span>
-        <div class="project-details">Configured DVWA and Snort IDS.</div>
-    </div>
+        <div class="project-details">
+                <p>Let the record show I finished this problem first, I just typo'd the final flag. Heartbreaking. Spoilers ahead for anything involving the github.com/OWoodfl1nt or twitter @OWoodflint </p>
+                <p>To begin the challenge, we are granted an edit screenshot of the Windows XP default background. The image itself looks boring, but after lifting up the hood of the image's metadata with the site exif.tools, we reveal a plethora of information. </p>
+                <p>We're given a copyright holder, "Owoodflint", a latitude and longitude, the encoding process, and a few other less helpful bits.</p>
+                <p>The flags are the following info: The users name, his city, his BSSID, his SSID of the WAP, his email address, his password, and name.</p>
+                <p>Initially, it looked like the city was a gimme, as the screenshot has coordinates baked in. The coordinates were in a weird format, which pointed me to a big city. </p>
+                <p>The name of the city missed, then the specific neighborhood, which also missed. I tried entering the coordinates in a different format, which led me to a provincial area. </p>
+                <p>This lead me to believe that I was in the completely wrong city before, and guessed the nearest big city to the second coordinates. Also a miss. Time to move on.</p>
+                <p>The copyright holder of the image was "Owoodflint". Let's Google that. Bingo! We got a twitter, wordpress site, and github, all at the top of the search. </p>
+                <p>Figuring they have to be at the top of the SEO due to the CTF, I opened all of them. The twitter had a tweet of his BSSID, easy flag. We then needed the city that the target was in, and we had the BSSID. </p>
+                <p>I entered the BSSID into wigle.net, a site that maps all the networks across the world. Wigle did have that BSSID mapped, to a network in London, and had the BSSID. Two more questions down!</p>
+                <p>The email address was another easy hit, included in his about me page on github. Finally, his WordPress page had the name of the city he was on vacation to, another flag down.</p>
+                <p>Finding his password had me stumped. I initially started searching for active vulnerabilities in WordPress, as I knew that the site was a treasure trove of massive security weaknesses. </p>
+                <p>I then realized that was probably diving way too deep into this question, and I should start closer to the surface. I scoured his GitHub, going through the change history to the page, wondering if he would have posted it in plaintext in the past. </p>
+                <p>No luck. I then perused his twitter again, wondering if we would find any easy hints with past tweets or info in the bio. A miss again. I returned to google with the "OWoodflint" name, and clicked through a few pages</p>
+                <p>I hit the flag when his WordPress page came up, under a different index. The initial info of the link on Google had a sentence that I didn't remember seeing before, something related to pennies. I copied the text, opened the wordpress page, and searched for it in the source of the page.</p>
+                <p>It pulled up! I copied the entire string, pasted it as a flag, and it hit. What a silly problem lol.</div>
+        </div>
     <div class="project-item" onclick="toggleDetails(this)">
         <span>Project 2 – Threat Intelligence Parser</span>
         <span class="triangle">▶</span>
@@ -190,6 +206,7 @@ body {
     </div>
 </div>
 <div id="photography" class="container">
+    If interested in booking a photoshoot, email brandonsweat@proton.me
     <div class="carousel-container">
         <div class="carousel">
             <div class="carousel-track">
