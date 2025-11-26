@@ -200,9 +200,21 @@ body {
                 <p>It pulled up! I copied the entire string, pasted it as a flag, and it hit. What a silly problem lol.</div>
         </div>
     <div class="project-item" onclick="toggleDetails(this)">
-        <span>Project 2 – Threat Intelligence Parser</span>
+        <span>Vulnerability assessment - OpenVAS + Metasploitable</span>
         <span class="triangle">▶</span>
-        <div class="project-details">Python scripts to parse OSINT feeds.</div>
+        <div class="project-details">
+            <p>I wanted to get some hands on expeirence with an open-source vulnerability scanner, and OpenVAS by Greenbone sounded like a great choice.</p>
+            <p>I deployed 2 VMs, a Kali Linux and a Metasploitable, in VirtualBox. I connected them to each other via a virtual network, updated, and got the two connected.</p>
+            <p>Nmapping Metasploitable is always funny, and it of course brought back a laundry list of open ports. After confirming that the target machine was up, running, and vulnerable, I began the scan</p>
+            <p>In the OpenVAS web UI, I scheduled a new task for a full and fast scan. It took about 15 minutes to run through all of metasploitable's ports, and <a href="documents/metasploitableReport.pdf" download style="color:antiquewhite">the report can be found here</p>
+            <br>
+            <p>The idea of having to remediate a network this bad is overwhelming! Of the 23 "High" risk level vulnerabilities found, half of them have very straightforward solutions. Updating, changing default passwords, or disabling the service in leiu of a safer alternative.</p>
+            <p>Luckily, many of these screaming red flags are easy to verify the fix for. Update the services from the vendor, and once admin:admin or postgres:postgres doesn't work, we're past square one!</p>
+            <p>A vulnerability I got to learn about was CVE-2011-3556, a weakness in Java's Remote Method Invocation. It allows an attacker to get RCE through server-side request forgery.</p>
+            <p>The attacker would deserialize the RMI registry with a crafted payload like AnTrinh's, create a few listeners for the incoming RMI connection and shell, then send a payload to the remote server.</p>
+            <p>It takes only 5 commands to get RCE on a fairly common, but often misconfigured, service with millions of Java deployments. The solution is also not as simple as an update, instead needing a redeployment without class-loading enabled.</p>
+            <p>Thanks to Tobias Neitzel (https://blog.tneitzel.eu/) for the detailed writeup on the vulnerability.</p>
+        </div>
     </div>
 </div>
 <div id="photography" class="container">
