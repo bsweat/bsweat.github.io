@@ -227,6 +227,14 @@
     .tlink { color: var(--green); text-decoration: none; }
     .tlink:hover { text-decoration: underline; }
 
+    /* ── SCROLL HINT ────────────────────────── */
+    .scroll-hint { display: none; }
+
+    @keyframes hint-bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(5px); }
+    }
+
     /* FOOTER */
     .site-footer {
       margin: 52px 52px 0;
@@ -275,12 +283,13 @@
       /* ── Folder grid — 2 columns, full-width, centered ── */
       .folder-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 14px 12px;
+        gap: 10px 12px;
         justify-items: stretch;
       }
-      .folder-link { width: 100%; }
-      /* Remove SVG size cap so icons fill their column */
-      .f-svg { max-width: none; }
+      /* Tighter gap between icon and label + constrain icon width
+         so the about panel peeks clearly below the fold */
+      .folder-link { width: 100%; gap: 8px; }
+      .f-svg { max-width: 78%; }
 
       /* Center the lone 5th folder in its own row */
       .folder-link:last-child:nth-child(odd) {
@@ -297,6 +306,26 @@
 
       /* ── Footer ── */
       .site-footer { margin: 52px 16px 0; }
+
+      /* ── Scroll hint — fixed at bottom, fades out on scroll ── */
+      .scroll-hint {
+        display: block;
+        position: fixed;
+        bottom: 22px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 0.52rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--green);
+        opacity: 0.45;
+        pointer-events: none;
+        z-index: 50;
+        transition: opacity 0.5s;
+        animation: hint-bounce 2s ease-in-out infinite;
+      }
+      .scroll-hint.hidden { opacity: 0; }
     }
   </style>
 </head>
@@ -451,6 +480,8 @@
 
 </div><!-- /.page-wrap -->
 
+<div class="scroll-hint" id="scroll-hint">▾ scroll</div>
+
 <script>
   // Typewriter
   const text = '> security researcher · IT consultant · photographer';
@@ -468,6 +499,16 @@
   // Blink cursor in terminal card
   const bc = document.getElementById('blink-cursor');
   if (bc) setInterval(() => { bc.style.opacity = bc.style.opacity === '0' ? '1' : '0'; }, 530);
+
+  // Scroll hint — fade out and remove once the user scrolls
+  const hint = document.getElementById('scroll-hint');
+  if (hint) {
+    const hideHint = () => {
+      hint.classList.add('hidden');
+      window.removeEventListener('scroll', hideHint);
+    };
+    window.addEventListener('scroll', hideHint, { passive: true });
+  }
 </script>
 
 </body>
