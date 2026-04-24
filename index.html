@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brandon Sweat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d0d;
+      --bg2: #111;
+      --fg: #eeeae2;
+      --muted: #9a9490;
+      --muted2: #3a3632;
+      --green: #1ec776;
+      --green-dim: rgba(30,199,118,0.12);
+      --green-glow: rgba(30,199,118,0.35);
+      --accent: #c0392b;
+      --border: #1e1e1e;
+      --border2: #2a2a2a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      min-height: 100vh;
+    }
+
+    /* ── TOP BAR ─────────────────────────────── */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 40px 52px 0;
+    }
+
+    .name {
+      font-size: clamp(1.8rem, 3.8vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1;
+    }
+
+    .tagline {
+      margin-top: 11px;
+      font-size: 0.8rem;
+      color: var(--green);
+      min-height: 1.3em;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 7px;
+      height: 0.85em;
+      background: var(--green);
+      vertical-align: text-bottom;
+      margin-left: 1px;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .header-meta {
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-align: right;
+      line-height: 2.1;
+      padding-top: 6px;
+    }
+
+    .status { display: flex; align-items: center; gap: 5px; justify-content: flex-end; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── DIVIDER ─────────────────────────────── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 28px 0;
+    }
+
+    /* ── FOLDER GRID ─────────────────────────── */
+    .folders-section {
+      padding: 0 52px;
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 40px;
+      align-items: start;
+    }
+    .folders-left {}
+    .section-label {
+      font-size: 0.6rem;
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .folder-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px 24px;
+    }
+
+    .folder-link {
+      text-decoration: none;
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.22s cubic-bezier(.25,.8,.25,1);
+    }
+
+    .folder-link:hover { transform: translateY(-8px); }
+    .folder-link:hover .f-svg { filter: drop-shadow(0 0 16px var(--green-glow)); }
+    .folder-link:hover .f-stroke { stroke: #5fffa6; }
+    .folder-link.active .f-stroke { stroke: #5fffa6; }
+    .folder-link.active .f-svg { filter: drop-shadow(0 0 12px var(--green-glow)); }
+
+    .f-svg { width: 100%; max-width: 150px; transition: filter 0.2s; }
+
+    .f-stroke { stroke: var(--green); transition: stroke 0.2s; }
+    .f-glyph { fill: none; stroke: var(--green); opacity: 0.55; transition: stroke 0.2s; }
+    .f-text { fill: #1ec776; opacity: 0.6; }
+
+    .folder-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--fg);
+      line-height: 1.35;
+    }
+
+    .folder-link.active .folder-label { color: var(--green); }
+
+    /* ── ABOUT PANEL ─────────────────────────── */
+    .about-panel {
+      margin: 0 52px;
+      padding: 44px 0 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .panel-kicker {
+      font-size: 0.6rem;
+      color: var(--green);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 72px;
+      align-items: start;
+    }
+
+    .bio-text { font-size: 0.78rem; color: var(--muted); line-height: 2; }
+    .bio-text p { margin-bottom: 18px; }
+    .bio-text em { color: var(--fg); font-style: normal; font-weight: 500; }
+    .bio-text a { color: var(--green); text-decoration: none; }
+
+    .interest-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 24px;
+    }
+
+    .interest-chip {
+      font-size: 0.6rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+    }
+
+    .interest-chip.hi { border-color: var(--green); color: var(--green); }
+
+    /* PORTRAIT */
+    .portrait-wrap { margin-bottom: 18px; }
+    .portrait-kicker { font-size: 0.58rem; color: var(--green); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+    .portrait-frame { border: 1px solid var(--border2); overflow: hidden; }
+    .portrait-frame img { width: 100%; display: block; object-fit: cover; }
+    .portrait-placeholder { background: #080808; aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+    .portrait-icon { opacity: 0.18; }
+    .portrait-hint { font-size: 0.57rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.5; }
+
+    /* TERMINAL CARD */
+    .term-card {
+      background: #0a0a0a;
+      border: 1px solid var(--border2);
+    }
+
+    .term-bar {
+      background: #141414;
+      padding: 9px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .tdot { width: 8px; height: 8px; border-radius: 50%; }
+    .tdot.r { background: #c0392b; }
+    .tdot.y { background: #e6a817; }
+    .tdot.g { background: #1ec776; }
+    .term-title { font-size: 0.58rem; color: #333; margin-left: auto; }
+
+    .term-body { padding: 18px; font-size: 0.7rem; color: #aaa; line-height: 2; }
+    .tp { color: var(--green); }
+    .tk { color: var(--green); }
+    .tv { color: #ccc; }
+    .to { color: #555; }
+    .tlink { color: var(--green); text-decoration: none; }
+    .tlink:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    .site-footer {
+      margin: 52px 52px 0;
+      padding: 20px 0 32px;
+      border-top: 1px solid var(--border);
+      font-size: 0.63rem;
+      color: var(--muted);
+      display: flex;
+      gap: 24px;
+    }
+
+    .site-footer a { color: var(--muted); text-decoration: none; transition: color 0.15s; }
+    .site-footer a:hover { color: var(--green); }
+    .gp { color: var(--green); }
+
+    /* ── RESPONSIVE ──────────────────────────── */
+    .page-wrap { max-width: 1400px; margin: 0 auto; }
+
+    @media (max-width: 900px) {
+      .folder-grid { grid-template-columns: repeat(3, 1fr); }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .term-card { display: none; }
+      .portrait-wrap { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .top-bar, .folders-section, .about-panel, .site-footer { padding-left: 24px; padding-right: 24px; }
+      .about-panel { margin-left: 24px; margin-right: 24px; }
+      .site-footer { margin-left: 24px; margin-right: 24px; }
+      .folder-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
+      .header-meta { display: none; }
+      .portrait-wrap { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <h1 class="name">Brandon Sweat</h1>
+    <p class="tagline" id="tagline"><span class="cursor"></span></p>
+  </div>
+  <div class="header-meta">
+    <div class="status"><span class="dot"></span>available for work</div>
+    <div>brandonsweat@proton.me</div>
+  </div>
+</div>
+
+<div style="padding: 0 52px;">
+  <hr class="divider">
+</div>
+
+<div class="page-wrap">
+
+<div class="folders-section">
+  <div class="folders-left">
+    <p class="section-label">// root directory</p>
+
+    <nav class="folder-grid" aria-label="Site navigation">
+
+    <!-- BLOG -->
+    <a href="blog.html" class="folder-link">
+      <svg class="f-svg" viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path class="f-stroke" d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke-width="1.5" stroke-linejoin="round"/>
+        <line class="f-glyph" x1="26" y1="52" x2="94" y2="52" stroke-width="1.2"/>
+        <line class="f-glyph" x1="26" y1="63" x2="76" y2="63" stroke-width="1.2"/>
+        <line class="f-glyph" x1="26" y1="74" x2="86" y2="74" stroke-width="1.2"/>
+      </svg>
+      <span class="folder-label">Blog /<br>Writeups</span>
+    </a>
+
+    <!-- PROJECTS -->
+    <a href="projects.html" class="folder-link">
+      <svg class="f-svg" viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path class="f-stroke" d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke-width="1.5" stroke-linejoin="round"/>
+        <text class="f-text" x="60" y="71" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="18" style="fill:#1ec776;opacity:0.6">&lt; / &gt;</text>
+      </svg>
+      <span class="folder-label">Projects</span>
+    </a>
+
+    <!-- PHOTOGRAPHY -->
+    <a href="photography.html" class="folder-link">
+      <svg class="f-svg" viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path class="f-stroke" d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke-width="1.5" stroke-linejoin="round"/>
+        <rect class="f-glyph" x="34" y="55" width="52" height="26" rx="3" stroke-width="1.2"/>
+        <circle class="f-glyph" cx="60" cy="68" r="8" stroke-width="1.2"/>
+        <rect x="50" y="49" width="14" height="6" rx="1" fill="none" stroke="#1ec776" stroke-width="1.2" opacity="0.55"/>
+        <circle cx="80" cy="61" r="2.5" style="fill:#1ec776;opacity:0.45"/>
+      </svg>
+      <span class="folder-label">Photography</span>
+    </a>
+
+    <!-- RESUME -->
+    <a href="resume.html" class="folder-link">
+      <svg class="f-svg" viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path class="f-stroke" d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke-width="1.5" stroke-linejoin="round"/>
+        <rect class="f-glyph" x="36" y="47" width="48" height="36" rx="2" stroke-width="1.2"/>
+        <line class="f-glyph" x1="43" y1="57" x2="77" y2="57" stroke-width="1.1"/>
+        <line class="f-glyph" x1="43" y1="65" x2="70" y2="65" stroke-width="1.1"/>
+        <line class="f-glyph" x1="43" y1="73" x2="74" y2="73" stroke-width="1.1"/>
+      </svg>
+      <span class="folder-label">Resume / CV</span>
+    </a>
+
+    <!-- CONSULTING -->
+    <a href="consulting.html" class="folder-link">
+      <svg class="f-svg" viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path class="f-stroke" d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke-width="1.5" stroke-linejoin="round"/>
+        <rect class="f-glyph" x="24" y="50" width="72" height="34" rx="2" stroke-width="1.2"/>
+        <line class="f-glyph" x1="24" y1="60" x2="96" y2="60" stroke-width="1.1"/>
+        <text style="fill:#1ec776;opacity:0.55;font-size:10px;font-family:monospace" x="31" y="76">$ help --me</text>
+        <circle cx="30" cy="55" r="2" style="fill:#1ec776;opacity:0.5"/>
+        <circle cx="37" cy="55" r="2" style="fill:#1ec776;opacity:0.3"/>
+        <circle cx="44" cy="55" r="2" style="fill:#1ec776;opacity:0.15"/>
+      </svg>
+      <span class="folder-label">IT Consulting</span>
+    </a>
+
+  </nav>
+  </div>
+
+  <div class="portrait-wrap">
+    <img src="photos/portrait.png" alt="Brandon Sweat" style="width:100%;display:block;">
+  </div>
+
+</div>
+
+<!-- ── ABOUT PANEL ──────────────────────────────────────────── -->
+<section class="about-panel" id="about">
+  <p class="panel-kicker">// about</p>
+  <div class="about-grid">
+    <div>
+      <div class="bio-text">
+        <p>I'm a <em>cybersecurity enthusiast, IT consultant, and photographer</em> based in Southern Utah. My path into security started through years of IT helpdesk work — fielding everything from network outages to "why is my printer broken" — which gave me a ground-level understanding of the systems that attackers actually target.</p>
+        <p>These days I spend my time working through security labs and CTFs, building out my home lab, and sharpening my offensive and defensive skills across Windows and Linux environments. I'm interested in <em>network security, penetration testing, and OSINT</em> — and I document what I learn here to give back to the community that helped me get started.</p>
+        <p>Outside of security, I shoot <em>portrait and landscape photography</em> across the canyons of Southern Utah — Zion, Bryce, Snow Canyon, and everything in between. I also take on <em>freelance IT consulting</em> work, from hardware advice to emergency data recovery.</p>
+      </div>
+      <div class="interest-row">
+        <span class="interest-chip hi">Penetration Testing</span>
+        <span class="interest-chip hi">CTF</span>
+        <span class="interest-chip hi">OSINT</span>
+        <span class="interest-chip">Active Directory</span>
+        <span class="interest-chip">HomeLab</span>
+        <span class="interest-chip">Portrait Photography</span>
+        <span class="interest-chip">Landscape Photography</span>
+        <span class="interest-chip">IT Consulting</span>
+        <span class="interest-chip">Linux</span>
+        <span class="interest-chip">Windows</span>
+      </div>
+    </div>
+
+    <div class="term-card">
+      <div class="term-bar">
+        <span class="tdot r"></span>
+        <span class="tdot y"></span>
+        <span class="tdot g"></span>
+        <span class="term-title">brandon@personal ~</span>
+      </div>
+      <div class="term-body">
+        <div><span class="tp">$ </span>cat profile.json</div>
+        <br>
+        <div><span class="to">{</span></div>
+        <div>&nbsp;&nbsp;<span class="tk">"name"</span><span class="to">: </span><span class="tv">"Brandon Sweat"</span><span class="to">,</span></div>
+        <div>&nbsp;&nbsp;<span class="tk">"location"</span><span class="to">: </span><span class="tv">"St. George, Utah"</span><span class="to">,</span></div>
+        <div>&nbsp;&nbsp;<span class="tk">"role"</span><span class="to">: [</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"security researcher"</span><span class="to">,</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"IT consultant"</span><span class="to">,</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"photographer"</span></div>
+        <div>&nbsp;&nbsp;<span class="to">],</span></div>
+        <div>&nbsp;&nbsp;<span class="tk">"available"</span><span class="to">: </span><span style="color:#1ec776">true</span><span class="to">,</span></div>
+        <div>&nbsp;&nbsp;<span class="tk">"email"</span><span class="to">: </span><span class="tv">"<a href="mailto:brandonsweat@proton.me" class="tlink">brandonsweat<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@proton.me</a>"</span></div>
+        <div><span class="to">}</span></div>
+        <br>
+        <div><span class="tp">$ </span><span id="blink-cursor" style="color:#1ec776">▌</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <span><span class="gp">~</span> / root / brandon_sweat</span>
+  <a href="mailto:brandonsweat@proton.me">brandonsweat@proton.me</a>
+</footer>
+
+</div><!-- /.page-wrap -->
+
+<script>
+  // Typewriter
+  const text = '> security researcher · IT consultant · photographer';
+  const el = document.getElementById('tagline');
+  let i = 0;
+  function type() {
+    if (i <= text.length) {
+      el.innerHTML = text.slice(0, i) + '<span class="cursor"></span>';
+      i++;
+      setTimeout(type, i === 1 ? 500 : 28 + Math.random() * 22);
+    }
+  }
+  setTimeout(type, 700);
+
+  // Blink cursor in terminal card
+  const bc = document.getElementById('blink-cursor');
+  if (bc) setInterval(() => { bc.style.opacity = bc.style.opacity === '0' ? '1' : '0'; }, 530);
+</script>
+
+</body>
+</html>

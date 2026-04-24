@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — Brandon Sweat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0d0d0d; --fg:#eeeae2; --muted:#9a9490; --green:#1ec776; --accent:#c0392b; --border:#1e1e1e; --border2:#2a2a2a; }
+    body { background:var(--bg); color:var(--fg); font-family:'JetBrains Mono',monospace; min-height:100vh; }
+
+    .top-nav { display:flex; align-items:center; justify-content:space-between; padding:22px 52px; border-bottom:1px solid var(--border); }
+    .breadcrumb { display:flex; align-items:center; gap:8px; font-size:0.78rem; }
+    .back-link { color:var(--muted); text-decoration:none; transition:color 0.15s; }
+    .back-link:hover { color:var(--green); }
+    .sep { color:var(--border2); }
+    .current-page { color:var(--fg); font-weight:500; }
+    .nav-right { font-size:0.63rem; color:var(--muted); }
+
+    .folder-strip { display:flex; gap:0; padding:10px 44px; border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
+    .folder-strip::-webkit-scrollbar { display:none; }
+    .fstrip-item { display:flex; flex-direction:column; align-items:center; gap:5px; text-decoration:none; color:var(--muted); padding:6px 10px; transition:color 0.15s; min-width:56px; position:relative; }
+    .fstrip-item::after { content:''; position:absolute; bottom:0; left:10px; right:10px; height:1px; background:var(--green); transform:scaleX(0); transition:transform 0.2s; }
+    .fstrip-item:hover { color:var(--fg); }
+    .fstrip-item.active { color:var(--green); }
+    .fstrip-item.active::after { transform:scaleX(1); }
+    .fstrip-svg { width:40px; height:32px; }
+    .fstrip-label { font-size:0.52rem; letter-spacing:0.07em; text-transform:uppercase; text-align:center; white-space:nowrap; }
+
+    .content { padding:44px 52px; max-width:1100px; margin:0 auto; }
+    .page-header { margin-bottom:36px; }
+    .page-title { font-size:1.5rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:8px; }
+    .page-subtitle { font-size:0.73rem; color:var(--muted); }
+
+    .project-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1px; border:1px solid var(--border); max-width:1000px; }
+    .project-card { padding:26px 26px 22px; border-right:1px solid var(--border); border-bottom:1px solid var(--border); text-decoration:none; color:var(--fg); display:flex; flex-direction:column; gap:11px; transition:background 0.15s; position:relative; overflow:hidden; }
+    .project-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--green); transform:scaleY(0); transform-origin:bottom; transition:transform 0.25s cubic-bezier(.25,.8,.25,1); }
+    .project-card:hover::before { transform:scaleY(1); }
+    .project-card:hover { background:rgba(30,199,118,0.03); }
+
+    .project-num { font-size:0.6rem; color:var(--muted); letter-spacing:0.1em; }
+    .project-name { font-size:0.95rem; font-weight:600; letter-spacing:-0.01em; }
+    .project-desc { font-size:0.7rem; color:var(--muted); line-height:1.8; flex:1; }
+    .project-footer { display:flex; justify-content:space-between; align-items:flex-end; }
+    .stack { display:flex; gap:5px; flex-wrap:wrap; }
+    .stack-tag { font-size:0.57rem; letter-spacing:0.07em; text-transform:uppercase; padding:2px 6px; border:1px solid var(--border2); color:var(--muted); }
+    .stack-tag.hi { border-color:var(--green); color:var(--green); }
+    .project-link { font-size:0.63rem; color:var(--muted); text-decoration:none; transition:color 0.15s; white-space:nowrap; }
+    .project-card:hover .project-link { color:var(--green); }
+
+    .status-badge { font-size:0.57rem; letter-spacing:0.08em; text-transform:uppercase; padding:2px 8px; align-self:flex-start; }
+    .status-badge.active { border:1px solid var(--green); color:var(--green); }
+    .status-badge.wip { border:1px solid var(--accent); color:var(--accent); }
+    .status-badge.done { border:1px solid var(--border2); color:var(--muted); }
+
+    .page-wrap { max-width: 1400px; margin: 0 auto; }
+
+    @media (max-width:640px) {
+      .top-nav, .content { padding-left:24px; padding-right:24px; }
+      .folder-strip { padding-left:16px; }
+      .project-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="breadcrumb">
+    <a href="index.html" class="back-link">← Brandon Sweat</a>
+    <span class="sep">/</span>
+    <span class="current-page">Projects</span>
+  </div>
+  <span class="nav-right">// things I've built</span>
+</nav>
+
+<div class="folder-strip" id="folder-strip"></div>
+
+<div class="page-wrap">
+
+<main class="content">
+  <header class="page-header">
+    <h1 class="page-title">Projects</h1>
+    <p class="page-subtitle">Labs, tools, scripts, and side projects — security-focused and otherwise.</p>
+  </header>
+
+  <div class="project-grid" id="project-grid"></div>
+</main>
+
+</div><!-- /.page-wrap -->
+
+<script>
+  // ── PROJECT DATA — add new projects to this array ─────────────────────────
+  const projects = [
+    {
+      status: 'active',
+      name: 'Home Security Lab',
+      desc: 'Virtualized network environment running Proxmox with isolated attack/defend segments, Kali Linux, Windows AD domain, pfSense firewall, and intentionally vulnerable machines. Used for hands-on practice without touching production systems.',
+      stack: [
+        { label: 'Proxmox', hi: true },
+        { label: 'pfSense', hi: false },
+        { label: 'Kali', hi: false },
+        { label: 'Windows AD', hi: false },
+      ],
+      link: { text: 'view →', href: '#' },
+    },
+    {
+      status: 'wip',
+      name: 'Network Recon Toolkit',
+      desc: 'Python CLI tool wrapping nmap, whois, and Shodan into a single structured workflow. Outputs clean JSON reports and optionally renders a visual host map. Designed for CTFs and lab exercises.',
+      stack: [
+        { label: 'Python', hi: true },
+        { label: 'Nmap', hi: false },
+        { label: 'Shodan API', hi: false },
+      ],
+      link: { text: 'github →', href: '#' },
+    },
+    {
+      status: 'wip',
+      name: 'Phishing Email Analyzer',
+      desc: 'Python tool that ingests raw .eml files and analyzes them for phishing indicators — spoofed headers, SPF/DKIM failures, suspicious links, and known-bad domains. Outputs a structured threat report with a risk score.',
+      stack: [
+        { label: 'Python', hi: true },
+        { label: 'Email Parsing', hi: false },
+        { label: 'VirusTotal API', hi: false },
+      ],
+      link: { text: 'github →', href: '#' },
+    },
+    {
+      status: 'wip',
+      name: 'SSH Honeypot',
+      desc: 'Low-interaction SSH honeypot that presents a fake auth surface and logs every connection attempt — IP, username, password, and timestamp. Includes a lightweight dashboard to visualize attacker behavior and geographic origin.',
+      stack: [
+        { label: 'Python', hi: true },
+        { label: 'Paramiko', hi: false },
+        { label: 'Threat Detection', hi: false },
+      ],
+      link: { text: 'github →', href: '#' },
+    },
+    {
+      status: 'wip',
+      name: 'OSINT Automation Scripts',
+      desc: 'Collection of scripts for passive recon — email harvesting, subdomain enumeration, certificate transparency log parsing, and LinkedIn scraping for red team-style OSINT exercises.',
+      stack: [
+        { label: 'Python', hi: true },
+        { label: 'OSINT', hi: false },
+        { label: 'Recon', hi: false },
+      ],
+      link: { text: 'github →', href: '#' },
+    },
+    {
+      status: 'wip',
+      name: 'Log Analysis &amp; Threat Hunter',
+      desc: 'Python script that parses Linux auth.log and Windows Event Logs for indicators of compromise — brute force attempts, privilege escalation, lateral movement patterns. Flags suspicious sequences and generates a plain-English summary report.',
+      stack: [
+        { label: 'Python', hi: true },
+        { label: 'Blue Team', hi: false },
+        { label: 'SIEM', hi: false },
+      ],
+      link: { text: 'github →', href: '#' },
+    },
+  ];
+
+  const STATUS_LABELS = { active: 'Active', wip: 'In Progress', done: 'Done' };
+
+  (function renderProjects() {
+    const grid = document.getElementById('project-grid');
+    grid.innerHTML = projects.map((p, i) => {
+      const num = String(i + 1).padStart(2, '0');
+      const stackHTML = p.stack.map(s =>
+        `<span class="stack-tag${s.hi ? ' hi' : ''}">${s.label}</span>`
+      ).join('');
+      return `
+        <a href="${p.link.href}" class="project-card">
+          <span class="project-num">${num}</span>
+          <span class="status-badge ${p.status}">${STATUS_LABELS[p.status]}</span>
+          <div class="project-name">${p.name}</div>
+          <p class="project-desc">${p.desc}</p>
+          <div class="project-footer">
+            <div class="stack">${stackHTML}</div>
+            <span class="project-link">${p.link.text}</span>
+          </div>
+        </a>`;
+    }).join('');
+  })();
+
+  const FOLDERS = [
+    { label:'Blog', href:'blog.html', id:'blog' },
+    { label:'Projects', href:'projects.html', id:'projects' },
+    { label:'Photos', href:'photography.html', id:'photography' },
+    { label:'About', href:'about.html', id:'about' },
+    { label:'Resume', href:'resume.html', id:'resume' },
+    { label:'Consult', href:'consulting.html', id:'consulting' },
+  ];
+  const CURRENT = 'projects';
+  const fp = `<path d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>`;
+  document.getElementById('folder-strip').innerHTML = FOLDERS.map(f =>
+    `<a href="${f.href}" class="fstrip-item${f.id===CURRENT?' active':''}">
+      <svg class="fstrip-svg" viewBox="0 0 120 96" fill="none" xmlns="http://www.w3.org/2000/svg">${fp}</svg>
+      <span class="fstrip-label">${f.label}</span>
+    </a>`
+  ).join('');
+</script>
+
+</body>
+</html>

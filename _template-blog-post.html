@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog Post Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0d0d0d; --fg:#eeeae2; --muted:#9a9490; --green:#1ec776; --accent:#c0392b; --border:#1e1e1e; --border2:#2a2a2a; }
+    body { background:var(--bg); color:var(--fg); font-family:'JetBrains Mono',monospace; padding:48px 52px; max-width:900px; margin:0 auto; }
+
+    h1 { font-size:1.4rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:8px; }
+    .kicker { font-size:0.6rem; color:var(--green); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:16px; }
+    .subtitle { font-size:0.75rem; color:var(--muted); line-height:1.8; margin-bottom:40px; }
+
+    .section-title { font-size:0.6rem; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+    .section-title::before { content:'//'; color:var(--green); }
+
+    .step { display:flex; gap:16px; align-items:baseline; margin-bottom:14px; font-size:0.73rem; color:var(--muted); line-height:1.7; }
+    .step-num { color:var(--green); font-size:0.6rem; letter-spacing:0.1em; flex-shrink:0; }
+    .step em { color:var(--fg); font-style:normal; font-weight:500; }
+
+    /* Code block */
+    .code-wrap { background:#060606; border:1px solid var(--border2); border-left:3px solid var(--green); padding:28px; margin-bottom:40px; overflow-x:auto; }
+    .code-wrap pre { font-family:'JetBrains Mono',monospace; font-size:0.7rem; line-height:1.95; color:#b8f5d4; white-space:pre; }
+    .c-comment { color:#3a3a3a; font-style:italic; }
+    .c-key   { color:#1ec776; }
+    .c-str   { color:#b8f5d4; }
+    .c-str2  { color:#eeeae2; }
+    .c-muted { color:#555; }
+    .c-tag   { color:#9a9490; }
+    .c-html  { color:#98d9b0; }
+
+    /* Reference */
+    .ref-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:40px; }
+    .ref-box { background:#080808; border:1px solid var(--border2); padding:18px 20px; }
+    .ref-title { font-size:0.58rem; color:var(--green); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; }
+    .ref-row { display:flex; flex-direction:column; gap:3px; padding:8px 0; border-bottom:1px solid var(--border); font-size:0.66rem; }
+    .ref-row:last-child { border-bottom:none; }
+    .ref-code { color:#98d9b0; font-family:'JetBrains Mono',monospace; }
+    .ref-desc { color:var(--muted); font-size:0.62rem; }
+
+    /* Tag preview */
+    .tag-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:40px; align-items:center; }
+    .tag { font-size:0.58rem; letter-spacing:0.07em; text-transform:uppercase; padding:2px 7px; border:1px solid var(--border2); color:var(--muted); }
+    .tag.ctf { border-color:var(--accent); color:var(--accent); }
+    .tag.security { border-color:var(--green); color:var(--green); }
+    .tag-label { font-size:0.62rem; color:var(--muted); margin-left:4px; }
+
+    .note { border:1px dashed var(--border2); padding:16px 20px; font-size:0.7rem; color:var(--muted); line-height:1.85; margin-bottom:32px; }
+    .note strong { color:var(--green); }
+  </style>
+</head>
+<body>
+
+<p class="kicker">// bsweat.com · site template</p>
+<h1>Blog Post Template</h1>
+<p class="subtitle">Copy the object below, fill in your details, and paste it into the <em>posts array</em> in blog.html. Add it at the very top of the array so it appears first in the list.</p>
+
+<!-- ── HOW TO USE ──────────────────────────────────────────────── -->
+<p class="section-title">How to add a post</p>
+
+<div class="step"><span class="step-num">step_01</span><span>Open <em>blog.html</em> in any text editor.</span></div>
+<div class="step"><span class="step-num">step_02</span><span>Find the line <em>const posts = [</em> inside the &lt;script&gt; block.</span></div>
+<div class="step"><span class="step-num">step_03</span><span>Paste your filled-in object <em>immediately after the opening [</em> — before the first existing post. This puts it at the top of the list.</span></div>
+<div class="step"><span class="step-num">step_04</span><span>Set <em>id</em> to the highest existing id number plus 1. Check the current posts — as of writing the highest is <em>7</em>, so your next one is <em>8</em>.</span></div>
+<div class="step"><span class="step-num">step_05</span><span>Write the <em>body</em> content using the HTML elements in the reference section below. Save and open blog.html to verify.</span></div>
+
+<!-- ── TEMPLATE OBJECT ─────────────────────────────────────────── -->
+<p class="section-title">Template — copy and fill in</p>
+
+<div class="code-wrap"><pre><span class="c-comment">// ─── PASTE THIS AT THE TOP OF THE posts ARRAY, RIGHT AFTER:  const posts = [ ────</span>
+<span class="c-muted">{</span>
+  <span class="c-key">id</span><span class="c-muted">:</span> <span class="c-str2">8</span><span class="c-muted">,</span>                     <span class="c-comment">// increment from the highest id in the array (currently 7)</span>
+  <span class="c-key">date</span><span class="c-muted">:</span> <span class="c-str">'Apr 2026'</span><span class="c-muted">,</span>         <span class="c-comment">// format: 'Mon YYYY'</span>
+  <span class="c-key">title</span><span class="c-muted">:</span> <span class="c-str">'Your Post Title Here'</span><span class="c-muted">,</span>
+
+  <span class="c-key">excerpt</span><span class="c-muted">:</span> <span class="c-str">'One or two sentences shown in the post list. Keep it punchy — under 160 characters.'</span><span class="c-muted">,</span>
+
+  <span class="c-key">tags</span><span class="c-muted">:</span> <span class="c-str">'security'</span><span class="c-muted">,</span>           <span class="c-comment">// space-separated: 'security' | 'ctf' | 'tools' | 'general'</span>
+                              <span class="c-comment">// example with multiple: 'ctf security'</span>
+
+  <span class="c-key">tagHTML</span><span class="c-muted">:</span> <span class="c-str">'&lt;span class="tag security"&gt;Security&lt;/span&gt;'</span><span class="c-muted">,</span>
+                              <span class="c-comment">// see tag HTML reference below</span>
+
+  <span class="c-key">kicker</span><span class="c-muted">:</span> <span class="c-str">'// Category · Subcategory'</span><span class="c-muted">,</span>
+                              <span class="c-comment">// small label above the title, e.g. '// TryHackMe · CTF Writeup'</span>
+
+  <span class="c-key">body</span><span class="c-muted">: \`</span>
+    <span class="c-tag">&lt;h2&gt;</span><span class="c-html">Section Heading</span><span class="c-tag">&lt;/h2&gt;</span>
+    <span class="c-tag">&lt;p&gt;</span><span class="c-html">Paragraph text. Wrap key terms in </span><span class="c-tag">&lt;em&gt;</span><span class="c-html">emphasis tags</span><span class="c-tag">&lt;/em&gt;</span><span class="c-html"> — they render bold and bright.</span><span class="c-tag">&lt;/p&gt;</span>
+
+    <span class="c-tag">&lt;h2&gt;</span><span class="c-html">Code or Commands</span><span class="c-tag">&lt;/h2&gt;</span>
+    <span class="c-tag">&lt;pre&gt;</span><span class="c-html">nmap -sV -sC --open &lt;TARGET_IP&gt;</span><span class="c-tag">&lt;/pre&gt;</span>
+
+    <span class="c-tag">&lt;h2&gt;</span><span class="c-html">Bullet List</span><span class="c-tag">&lt;/h2&gt;</span>
+    <span class="c-tag">&lt;ul&gt;</span>
+      <span class="c-tag">&lt;li&gt;</span><span class="c-html">First point</span><span class="c-tag">&lt;/li&gt;</span>
+      <span class="c-tag">&lt;li&gt;</span><span class="c-html">Second point with </span><span class="c-tag">&lt;em&gt;</span><span class="c-html">emphasis</span><span class="c-tag">&lt;/em&gt;</span><span class="c-tag">&lt;/li&gt;</span>
+    <span class="c-tag">&lt;/ul&gt;</span>
+
+    <span class="c-tag">&lt;div class="note"&gt;&lt;strong&gt;</span><span class="c-html">// Note:</span><span class="c-tag">&lt;/strong&gt;</span><span class="c-html"> Callout or takeaway text goes here. Great for warnings, tips, or TL;DRs.</span><span class="c-tag">&lt;/div&gt;</span>
+  <span class="c-muted">\`,</span>
+<span class="c-muted">},</span>
+<span class="c-comment">// ─── END PASTE ─────────────────────────────────────────────────────────────────</span></pre></div>
+
+<!-- ── TAG REFERENCE ──────────────────────────────────────────── -->
+<p class="section-title">Tag HTML reference — copy the snippets you need</p>
+
+<div class="ref-grid">
+  <div class="ref-box">
+    <p class="ref-title">Filter tags (tags field)</p>
+    <div class="ref-row"><span class="ref-code">'security'</span><span class="ref-desc">General security topics, writeups, tools</span></div>
+    <div class="ref-row"><span class="ref-code">'ctf'</span><span class="ref-desc">Capture The Flag challenges</span></div>
+    <div class="ref-row"><span class="ref-code">'tools'</span><span class="ref-desc">Tool guides, lab setup, how-tos</span></div>
+    <div class="ref-row"><span class="ref-code">'general'</span><span class="ref-desc">Everything else</span></div>
+    <div class="ref-row"><span class="ref-code">'ctf security'</span><span class="ref-desc">Multiple tags — space-separated</span></div>
+  </div>
+  <div class="ref-box">
+    <p class="ref-title">tagHTML snippets</p>
+    <div class="ref-row">
+      <span class="ref-code">&lt;span class="tag security"&gt;Security&lt;/span&gt;</span>
+      <span class="ref-desc">green border</span>
+    </div>
+    <div class="ref-row">
+      <span class="ref-code">&lt;span class="tag ctf"&gt;CTF&lt;/span&gt;</span>
+      <span class="ref-desc">red border</span>
+    </div>
+    <div class="ref-row">
+      <span class="ref-code">&lt;span class="tag"&gt;HomeLab&lt;/span&gt;</span>
+      <span class="ref-desc">muted gray — any label</span>
+    </div>
+    <div class="ref-row">
+      <span class="ref-code">&lt;span class="tag"&gt;OSINT&lt;/span&gt;</span>
+      <span class="ref-desc">chain as many as you like</span>
+    </div>
+  </div>
+</div>
+
+<!-- Tag preview -->
+<div class="tag-row">
+  <span class="tag security">Security</span>
+  <span class="tag ctf">CTF</span>
+  <span class="tag">HomeLab</span>
+  <span class="tag">OSINT</span>
+  <span class="tag">Nmap</span>
+  <span class="tag-label">← live previews of each tag style</span>
+</div>
+
+<!-- ── BODY ELEMENT REFERENCE ─────────────────────────────────── -->
+<p class="section-title">Body HTML elements reference</p>
+
+<div class="ref-grid">
+  <div class="ref-box">
+    <p class="ref-title">Elements</p>
+    <div class="ref-row">
+      <span class="ref-code">&lt;h2&gt;Heading&lt;/h2&gt;</span>
+      <span class="ref-desc">Green uppercase section heading</span>
+    </div>
+    <div class="ref-row">
+      <span class="ref-code">&lt;h3&gt;Sub-heading&lt;/h3&gt;</span>
+      <span class="ref-desc">Smaller bold heading</span>
+    </div>
+    <div class="ref-row">
+      <span class="ref-code">&lt;p&gt;Text&lt;/p&gt;</span>
+      <span class="ref-desc">Body paragraph, muted color</span>
+    </div>
+    <div class="ref-row">
+      <span class="ref-code">&lt;em&gt;word&lt;/em&gt;</span>
+      <span class="ref-desc">Bold bright highlight inside a &lt;p&gt;</span>
+    </div>
+    <div class="ref-row">
+      <span class="ref-code">&lt;pre&gt;command&lt;/pre&gt;</span>
+      <span class="ref-desc">Dark code block with green left border</span>
+    </div>
+    <div class="ref-row">
+      <span class="ref-code">&lt;ul&gt;&lt;li&gt;...&lt;/li&gt;&lt;/ul&gt;</span>
+      <span class="ref-desc">Bullet list with → arrows</span>
+    </div>
+    <div class="ref-row">
+      <span class="ref-code">&lt;div class="note"&gt;...&lt;/div&gt;</span>
+      <span class="ref-desc">Dashed callout box</span>
+    </div>
+    <div class="ref-row">
+      <span class="ref-code">&lt;a href="..."&gt;link&lt;/a&gt;</span>
+      <span class="ref-desc">Green link, use target="_blank" for external</span>
+    </div>
+  </div>
+  <div class="ref-box">
+    <p class="ref-title">Kicker examples</p>
+    <div class="ref-row"><span class="ref-code">// TryHackMe · CTF Writeup</span></div>
+    <div class="ref-row"><span class="ref-code">// Vulnerability Scanning · HomeLab</span></div>
+    <div class="ref-row"><span class="ref-code">// Tool Guide · Nmap</span></div>
+    <div class="ref-row"><span class="ref-code">// TryHackMe · OSINT Writeup</span></div>
+    <div class="ref-row"><span class="ref-code">// Lab Setup · HomeLab</span></div>
+    <div class="ref-row"><span class="ref-code">// Active Directory · Lab</span></div>
+    <div class="ref-row"><span class="ref-code">// Study Notes · Certification</span></div>
+  </div>
+</div>
+
+<div class="note"><strong>// Reminder:</strong> Inside the body backtick string, if you need to write a literal backtick character, escape it as <em>\`</em>. Angle brackets in code blocks should be written as <em>&amp;lt;</em> and <em>&amp;gt;</em> so they don't get interpreted as HTML tags.</div>
+
+</body>
+</html>

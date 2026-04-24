@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT Consulting — Brandon Sweat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0d0d0d; --fg:#eeeae2; --muted:#9a9490; --green:#1ec776; --accent:#c0392b; --border:#1e1e1e; --border2:#2a2a2a; }
+    body { background:var(--bg); color:var(--fg); font-family:'JetBrains Mono',monospace; min-height:100vh; }
+
+    .top-nav { display:flex; align-items:center; justify-content:space-between; padding:22px 52px; border-bottom:1px solid var(--border); }
+    .breadcrumb { display:flex; align-items:center; gap:8px; font-size:0.78rem; }
+    .back-link { color:var(--muted); text-decoration:none; transition:color 0.15s; }
+    .back-link:hover { color:var(--green); }
+    .sep { color:var(--border2); }
+    .current-page { color:var(--fg); font-weight:500; }
+    .nav-right { font-size:0.63rem; color:var(--muted); }
+
+    .folder-strip { display:flex; gap:0; padding:10px 44px; border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
+    .folder-strip::-webkit-scrollbar { display:none; }
+    .fstrip-item { display:flex; flex-direction:column; align-items:center; gap:5px; text-decoration:none; color:var(--muted); padding:6px 10px; transition:color 0.15s; min-width:56px; position:relative; }
+    .fstrip-item::after { content:''; position:absolute; bottom:0; left:10px; right:10px; height:1px; background:var(--green); transform:scaleX(0); transition:transform 0.2s; }
+    .fstrip-item:hover { color:var(--fg); }
+    .fstrip-item.active { color:var(--green); }
+    .fstrip-item.active::after { transform:scaleX(1); }
+    .fstrip-svg { width:40px; height:32px; }
+    .fstrip-label { font-size:0.52rem; letter-spacing:0.07em; text-transform:uppercase; text-align:center; white-space:nowrap; }
+
+    /* HERO */
+    .hero { padding:48px 52px 42px; border-bottom:1px solid var(--border); display:grid; grid-template-columns:1fr 280px; gap:52px; align-items:center; }
+    .hero-left {}
+    .kicker { font-size:0.6rem; color:var(--green); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:14px; }
+    .hero-title { font-size:clamp(1.5rem,3.5vw,2.5rem); font-weight:700; letter-spacing:-0.025em; line-height:1.15; margin-bottom:16px; }
+    .hero-desc { font-size:0.76rem; color:var(--muted); line-height:1.95; }
+    .hero-desc em { color:var(--fg); font-style:normal; font-weight:500; }
+    .hero-illustration { display:flex; align-items:center; justify-content:center; }
+    .hero-illustration svg { width:100%; max-width:260px; opacity:0.85; }
+
+    /* SERVICES */
+    .services-wrap { padding:44px 52px; border-bottom:1px solid var(--border); }
+    .section-label { font-size:0.6rem; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:24px; }
+    .services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; border:1px solid var(--border); }
+    .service-card { padding:24px 22px 22px; border-right:1px solid var(--border); border-bottom:1px solid var(--border); position:relative; overflow:hidden; transition:background 0.15s; }
+    .service-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:1px; background:var(--green); transform:scaleX(0); transform-origin:left; transition:transform 0.25s cubic-bezier(.25,.8,.25,1); }
+    .service-card:hover::after { transform:scaleX(1); }
+    .service-card:hover { background:rgba(30,199,118,0.03); }
+    .service-num { font-size:0.58rem; color:var(--muted); margin-bottom:12px; letter-spacing:0.1em; }
+    .service-title { font-size:0.88rem; font-weight:600; margin-bottom:9px; letter-spacing:-0.01em; }
+    .service-desc { font-size:0.68rem; color:var(--muted); line-height:1.85; }
+
+    /* PROCESS */
+    .process-wrap { padding:44px 52px; border-bottom:1px solid var(--border); }
+    .process-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:24px; }
+    .process-step { padding:0 28px 0 0; position:relative; }
+    .process-step:not(:last-child)::after { content:'→'; position:absolute; right:6px; top:0; color:var(--border2); font-size:0.7rem; }
+    .step-num { font-size:0.58rem; color:var(--green); letter-spacing:0.1em; margin-bottom:8px; }
+    .step-title { font-size:0.78rem; font-weight:600; margin-bottom:5px; }
+    .step-desc { font-size:0.67rem; color:var(--muted); line-height:1.75; }
+
+    /* CONTEXT */
+    .context-wrap { padding:44px 52px; border-bottom:1px solid var(--border); display:grid; grid-template-columns:1fr 1fr; gap:52px; }
+    .context-title { font-size:0.6rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:14px; }
+    .context-list { list-style:none; }
+    .context-list li { font-size:0.71rem; color:var(--muted); padding:9px 0 9px 16px; border-bottom:1px solid var(--border); position:relative; line-height:1.6; }
+    .context-list li::before { content:'→'; position:absolute; left:0; color:var(--green); font-size:0.63rem; top:11px; }
+    .context-list li em { color:var(--fg); font-style:normal; }
+
+    /* CTA */
+    .cta-wrap { padding:48px 52px; display:grid; grid-template-columns:1fr auto; gap:40px; align-items:center; }
+    .cta-title { font-size:1.25rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:8px; }
+    .cta-sub { font-size:0.73rem; color:var(--muted); line-height:1.85; }
+    .cta-actions { display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+    .btn-primary { font-family:inherit; font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; padding:12px 22px; background:var(--green); color:#0d0d0d; border:1px solid var(--green); cursor:pointer; text-decoration:none; transition:all 0.15s; white-space:nowrap; font-weight:600; }
+    .btn-primary:hover { background:transparent; color:var(--green); }
+    .btn-secondary { font-family:inherit; font-size:0.66rem; letter-spacing:0.08em; text-transform:uppercase; padding:9px 22px; background:transparent; color:var(--muted); border:1px solid var(--border2); cursor:pointer; text-decoration:none; transition:all 0.15s; white-space:nowrap; }
+    .btn-secondary:hover { border-color:var(--muted); color:var(--fg); }
+
+    .page-wrap { max-width: 1400px; margin: 0 auto; }
+
+    @media (max-width:860px) {
+      .top-nav, .hero, .services-wrap, .process-wrap, .context-wrap, .cta-wrap { padding-left:24px; padding-right:24px; }
+      .folder-strip { padding-left:16px; }
+      .hero { grid-template-columns:1fr; }
+      .hero-illustration { display:none; }
+      .services-grid { grid-template-columns:1fr; }
+      .process-steps { grid-template-columns:1fr 1fr; gap:24px; }
+      .process-step::after { display:none; }
+      .context-wrap { grid-template-columns:1fr; }
+      .cta-wrap { grid-template-columns:1fr; }
+      .cta-actions { align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="breadcrumb">
+    <a href="index.html" class="back-link">← Brandon Sweat</a>
+    <span class="sep">/</span>
+    <span class="current-page">IT Consulting</span>
+  </div>
+  <span class="nav-right">// $ help --available</span>
+</nav>
+
+<div class="folder-strip" id="folder-strip"></div>
+
+<div class="page-wrap">
+
+<section class="hero">
+  <div class="hero-left">
+    <p class="kicker">// IT consulting &amp; freelancing</p>
+    <h1 class="hero-title">Practical IT help,<br>no jargon required.</h1>
+    <p class="hero-desc">Years of helpdesk experience means I've seen <em>everything</em> — from choosing the right gear to emergency data recovery to explaining what a VPN actually does. I work with individuals, families, and small businesses who need <em>real IT advice</em> from someone who listens first.</p>
+  </div>
+  <div class="hero-illustration" aria-hidden="true">
+    <svg viewBox="0 0 220 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Monitor outer frame -->
+      <rect x="14" y="26" width="192" height="130" rx="5" stroke="#1ec776" stroke-width="1.5"/>
+      <!-- Screen fill -->
+      <rect x="24" y="36" width="172" height="110" rx="2" fill="#060606"/>
+      <!-- Screen border -->
+      <rect x="24" y="36" width="172" height="110" rx="2" stroke="#1ec776" stroke-width="0.75" opacity="0.4"/>
+      <!-- Sad face -->
+      <text x="110" y="88" text-anchor="middle" font-family="monospace" font-size="36" fill="#1ec776" opacity="0.85">:(</text>
+      <!-- BSOD text -->
+      <text x="110" y="108" text-anchor="middle" font-family="monospace" font-size="7.5" fill="#1ec776" opacity="0.75" letter-spacing="1">YOUR PC RAN INTO A PROBLEM</text>
+      <text x="110" y="122" text-anchor="middle" font-family="monospace" font-size="6.5" fill="#1ec776" opacity="0.55" letter-spacing="0.5">STOP CODE: IT_CALLED_BRANDON</text>
+      <text x="110" y="138" text-anchor="middle" font-family="monospace" font-size="6" fill="#1ec776" opacity="0.35">0% complete</text>
+      <!-- Stand neck -->
+      <rect x="95" y="156" width="30" height="20" rx="1" stroke="#1ec776" stroke-width="1.3"/>
+      <!-- Stand base -->
+      <path d="M68 176 L152 176 L145 188 L75 188 Z" stroke="#1ec776" stroke-width="1.3" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</section>
+
+<section class="services-wrap">
+  <p class="section-label">// services</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <div class="service-title">General IT Support</div>
+      <p class="service-desc">Hardware issues, software troubleshooting, slow computers, virus removal, printer setup, email configuration — the full range of day-to-day IT problems, handled patiently.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <div class="service-title">Technology Advice</div>
+      <p class="service-desc">Not sure what laptop to buy, which cloud storage to use, or whether you need a NAS? I help you figure out what actually fits your use case — no upselling.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <div class="service-title">Network Setup &amp; Security</div>
+      <p class="service-desc">Home and small office networking — routers, Wi-Fi optimization, VPNs, and basic security hardening so your network isn't a liability.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">04</div>
+      <div class="service-title">Emergency Data Recovery</div>
+      <p class="service-desc">Deleted files, failed drives, ransomware, water-damaged devices — I've handled sensitive data situations with discretion. If it can be recovered, I'll find a path.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">05</div>
+      <div class="service-title">Creative Workflow IT</div>
+      <p class="service-desc">Setups for photographers and creatives: the right PC, storage, backup strategy, and cloud pipeline so you can focus on creating instead of babysitting your files.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">06</div>
+      <div class="service-title">Remote &amp; On-Site</div>
+      <p class="service-desc">Available for remote support via screen share, or in-person visits across Southern Utah. Some problems are faster to fix in the room — some are just as easy on a call.</p>
+    </div>
+  </div>
+</section>
+
+<section class="process-wrap">
+  <p class="section-label">// how it works</p>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-num">step_01</div>
+      <div class="step-title">Reach Out</div>
+      <p class="step-desc">Email me with a description of your problem or project. No long forms, no phone trees.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">step_02</div>
+      <div class="step-title">Quick Assessment</div>
+      <p class="step-desc">I'll ask a few clarifying questions to understand scope and figure out the best approach.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">step_03</div>
+      <div class="step-title">Get It Fixed</div>
+      <p class="step-desc">Remote session or in-person — whichever makes sense. Straightforward pricing, no surprises.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">step_04</div>
+      <div class="step-title">Follow-Up</div>
+      <p class="step-desc">I explain what happened and how to avoid it. You leave knowing more than when we started.</p>
+    </div>
+  </div>
+</section>
+
+<section class="context-wrap">
+  <div>
+    <p class="context-title">// who I work with</p>
+    <ul class="context-list">
+      <li>Individuals and families needing <em>reliable home IT support</em></li>
+      <li>Photographers needing <em>camera, PC, and storage advice</em></li>
+      <li>Small businesses without a dedicated IT person</li>
+      <li>Anyone dealing with a <em>data emergency</em> or security incident</li>
+      <li>People who just need someone to <em>explain it clearly</em></li>
+    </ul>
+  </div>
+  <div>
+    <p class="context-title">// what I bring</p>
+    <ul class="context-list">
+      <li><em>Years of helpdesk experience</em> across a wide range of problems</li>
+      <li>Security-aware mindset — I think about risks you might not</li>
+      <li>Plain-language communication — no jargon unless you want it</li>
+      <li>Discretion with <em>sensitive data and situations</em></li>
+      <li>Honest about what's worth fixing and what isn't</li>
+    </ul>
+  </div>
+</section>
+
+<section class="cta-wrap">
+  <div>
+    <h2 class="cta-title">Got an IT problem?</h2>
+    <p class="cta-sub">Reach out and describe what's going on. I'll respond quickly and we'll figure out the best path forward. Southern Utah area and remote support available.</p>
+  </div>
+  <div class="cta-actions">
+    <a href="mailto:brandonsweat@proton.me" class="btn-primary">Email Me →</a>
+    <a href="about.html" class="btn-secondary">Learn More</a>
+  </div>
+</section>
+
+</div><!-- /.page-wrap -->
+
+<script>
+  const FOLDERS = [
+    { label:'Blog', href:'blog.html', id:'blog' },
+    { label:'Projects', href:'projects.html', id:'projects' },
+    { label:'Photos', href:'photography.html', id:'photography' },
+    { label:'About', href:'about.html', id:'about' },
+    { label:'Resume', href:'resume.html', id:'resume' },
+    { label:'Consult', href:'consulting.html', id:'consulting' },
+  ];
+  const CURRENT = 'consulting';
+  const fp = `<path d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>`;
+  document.getElementById('folder-strip').innerHTML = FOLDERS.map(f =>
+    `<a href="${f.href}" class="fstrip-item${f.id===CURRENT?' active':''}">
+      <svg class="fstrip-svg" viewBox="0 0 120 96" fill="none" xmlns="http://www.w3.org/2000/svg">${fp}</svg>
+      <span class="fstrip-label">${f.label}</span>
+    </a>`
+  ).join('');
+</script>
+
+</body>
+</html>

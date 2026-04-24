@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Brandon Sweat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0d0d0d; --fg:#eeeae2; --muted:#9a9490; --green:#1ec776; --accent:#c0392b; --border:#1e1e1e; --border2:#2a2a2a; }
+    body { background:var(--bg); color:var(--fg); font-family:'JetBrains Mono',monospace; min-height:100vh; }
+
+    .top-nav { display:flex; align-items:center; justify-content:space-between; padding:22px 52px; border-bottom:1px solid var(--border); }
+    .breadcrumb { display:flex; align-items:center; gap:8px; font-size:0.78rem; }
+    .back-link { color:var(--muted); text-decoration:none; transition:color 0.15s; }
+    .back-link:hover { color:var(--green); }
+    .sep { color:var(--border2); }
+    .current-page { color:var(--fg); font-weight:500; }
+
+    .folder-strip { display:flex; gap:0; padding:10px 44px; border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
+    .folder-strip::-webkit-scrollbar { display:none; }
+    .fstrip-item { display:flex; flex-direction:column; align-items:center; gap:5px; text-decoration:none; color:var(--muted); padding:6px 10px; transition:color 0.15s; min-width:56px; position:relative; }
+    .fstrip-item::after { content:''; position:absolute; bottom:0; left:10px; right:10px; height:1px; background:var(--green); transform:scaleX(0); transition:transform 0.2s; }
+    .fstrip-item:hover { color:var(--fg); }
+    .fstrip-item.active { color:var(--green); }
+    .fstrip-item.active::after { transform:scaleX(1); }
+    .fstrip-svg { width:40px; height:32px; }
+    .fstrip-label { font-size:0.52rem; letter-spacing:0.07em; text-transform:uppercase; text-align:center; white-space:nowrap; }
+
+    .content { padding:52px 52px; display:grid; grid-template-columns:1fr 300px; gap:72px; max-width:1080px; margin:0 auto; }
+
+    .section-kicker { font-size:0.6rem; color:var(--green); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:16px; }
+    .bio-name { font-size:1.9rem; font-weight:700; letter-spacing:-0.025em; line-height:1.1; margin-bottom:22px; }
+    .bio-body { font-size:0.78rem; color:var(--muted); line-height:2; }
+    .bio-body p { margin-bottom:18px; }
+    .bio-body em { color:var(--fg); font-style:normal; font-weight:500; }
+    .bio-body a { color:var(--green); text-decoration:none; }
+
+    .interests { margin-top:40px; }
+    .interests-title { font-size:0.6rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:14px; padding-top:24px; border-top:1px solid var(--border); }
+    .interest-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; }
+    .interest-item { font-size:0.7rem; color:var(--muted); display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--border); }
+    .interest-item::before { content:'→'; color:var(--green); font-size:0.62rem; flex-shrink:0; }
+
+    /* PORTRAIT */
+    .portrait-wrap { margin-bottom:18px; }
+    .portrait-kicker { font-size:0.58rem; color:var(--green); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; }
+    .portrait-frame { border:1px solid var(--border2); overflow:hidden; position:relative; }
+    .portrait-frame img { width:100%; display:block; object-fit:cover; }
+    .portrait-placeholder { background:#080808; padding:0; aspect-ratio:3/4; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; }
+    .portrait-icon { opacity:0.18; }
+    .portrait-hint { font-size:0.58rem; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; opacity:0.5; }
+
+    /* TERMINAL CARD */
+    .term-card { background:#080808; border:1px solid var(--border2); align-self:start; position:sticky; top:32px; }
+    .term-bar { background:#111; padding:9px 14px; display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--border2); }
+    .tdot { width:8px; height:8px; border-radius:50%; }
+    .tdot.r { background:#c0392b; } .tdot.y { background:#e6a817; } .tdot.g { background:#1ec776; }
+    .term-title { font-size:0.58rem; color:#333; margin-left:auto; }
+    .term-body { padding:18px; font-size:0.68rem; color:#888; line-height:2.1; }
+    .tp { color:var(--green); } .tk { color:var(--green); } .tv { color:#bbb; } .to { color:#444; }
+    .tlink { color:var(--green); text-decoration:none; }
+    .tlink:hover { text-decoration:underline; }
+
+    .page-wrap { max-width: 1400px; margin: 0 auto; }
+
+    @media (max-width:820px) {
+      .content { grid-template-columns:1fr; gap:40px; }
+      .term-card { position:static; }
+      .top-nav, .content { padding-left:24px; padding-right:24px; }
+      .folder-strip { padding-left:16px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="breadcrumb">
+    <a href="index.html" class="back-link">← Brandon Sweat</a>
+    <span class="sep">/</span>
+    <span class="current-page">About</span>
+  </div>
+</nav>
+
+<div class="folder-strip" id="folder-strip"></div>
+
+<div class="page-wrap">
+
+<main class="content">
+  <div>
+    <p class="section-kicker">// whoami</p>
+    <h1 class="bio-name">Brandon Sweat</h1>
+    <div class="bio-body">
+      <p>I'm a <em>cybersecurity enthusiast, IT consultant, and photographer</em> based in Southern Utah. My path into security started through years of IT helpdesk work — fielding everything from network outages to "why is my printer blinking" — which gave me a ground-level understanding of the systems that attackers actually target.</p>
+      <p>These days I spend my time working through security labs and CTFs, building out my home lab, and sharpening my offensive and defensive skills across Windows and Linux environments. I'm interested in <em>network security, penetration testing, and OSINT</em> — and I document what I learn here to give back to the community that helped me get started.</p>
+      <p>Outside of security, I shoot <em>portrait and landscape photography</em> across the canyon country of Southern Utah — Zion, Bryce, Kanab, and everything in between. I also take on <em>freelance IT consulting</em> work, helping individuals and small businesses solve the full range of IT problems, from hardware advice to emergency data recovery.</p>
+      <p>If you want to talk security, book a session, or need IT help, reach out at <a href="mailto:brandonsweat@proton.me">brandonsweat@proton.me</a>.</p>
+    </div>
+    <div class="interests">
+      <p class="interests-title">// interests &amp; focus areas</p>
+      <div class="interest-grid">
+        <div class="interest-item">Network Pentesting</div>
+        <div class="interest-item">Portrait Photography</div>
+        <div class="interest-item">CTF Competitions</div>
+        <div class="interest-item">Landscape Photography</div>
+        <div class="interest-item">OSINT &amp; Recon</div>
+        <div class="interest-item">IT Consulting</div>
+        <div class="interest-item">Active Directory</div>
+        <div class="interest-item">Home Lab Building</div>
+        <div class="interest-item">Linux &amp; Windows</div>
+        <div class="interest-item">Hardware Advice</div>
+      </div>
+    </div>
+  </div>
+
+  <aside>
+    <div class="portrait-wrap">
+      <img src="photos/portrait.png" alt="Brandon Sweat" style="width:100%;display:block;">
+    </div>
+    <div class="term-card">
+      <div class="term-bar">
+        <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
+        <span class="term-title">brandon@personal ~</span>
+      </div>
+      <div class="term-body">
+        <div><span class="tp">$ </span>cat profile.json</div><br>
+        <div><span class="to">{</span></div>
+        <div>&nbsp;&nbsp;<span class="tk">"name"</span><span class="to">: </span><span class="tv">"Brandon Sweat"</span><span class="to">,</span></div>
+        <div>&nbsp;&nbsp;<span class="tk">"location"</span><span class="to">: </span><span class="tv">"Southern Utah"</span><span class="to">,</span></div>
+        <div>&nbsp;&nbsp;<span class="tk">"focus"</span><span class="to">: [</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"cybersecurity"</span><span class="to">,</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"IT consulting"</span><span class="to">,</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"photography"</span></div>
+        <div>&nbsp;&nbsp;<span class="to">],</span></div>
+        <div>&nbsp;&nbsp;<span class="tk">"available"</span><span class="to">: </span><span style="color:#1ec776">true</span><span class="to">,</span></div>
+        <div>&nbsp;&nbsp;<span class="tk">"email"</span><span class="to">: </span><span class="tv">"<a href="mailto:brandonsweat@proton.me" class="tlink">b@proton.me</a>"</span></div>
+        <div><span class="to">}</span></div><br>
+        <div><span class="tp">$ </span><a href="resume.html" class="tlink">open resume.html</a></div>
+        <div><span class="tp">$ </span><a href="consulting.html" class="tlink">open consulting.html</a></div>
+        <div><span class="tp">$ </span><a href="photography.html" class="tlink">open portfolio.html</a></div><br>
+        <div><span class="tp">$ </span><span id="bc" style="color:#1ec776">▌</span></div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+</div><!-- /.page-wrap -->
+
+<script>
+  const FOLDERS = [
+    { label:'Blog', href:'blog.html', id:'blog' },
+    { label:'Projects', href:'projects.html', id:'projects' },
+    { label:'Photos', href:'photography.html', id:'photography' },
+    { label:'About', href:'about.html', id:'about' },
+    { label:'Resume', href:'resume.html', id:'resume' },
+    { label:'Consult', href:'consulting.html', id:'consulting' },
+  ];
+  const CURRENT = 'about';
+  const fp = `<path d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>`;
+  document.getElementById('folder-strip').innerHTML = FOLDERS.map(f =>
+    `<a href="${f.href}" class="fstrip-item${f.id===CURRENT?' active':''}">
+      <svg class="fstrip-svg" viewBox="0 0 120 96" fill="none" xmlns="http://www.w3.org/2000/svg">${fp}</svg>
+      <span class="fstrip-label">${f.label}</span>
+    </a>`
+  ).join('');
+  const bc = document.getElementById('bc');
+  setInterval(() => { bc.style.opacity = bc.style.opacity === '0' ? '1' : '0'; }, 530);
+</script>
+
+</body>
+</html>

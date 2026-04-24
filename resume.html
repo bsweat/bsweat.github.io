@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume — Brandon Sweat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0d0d0d; --fg:#eeeae2; --muted:#9a9490; --green:#1ec776; --accent:#c0392b; --border:#1e1e1e; --border2:#2a2a2a; }
+    body { background:var(--bg); color:var(--fg); font-family:'JetBrains Mono',monospace; min-height:100vh; }
+
+    .top-nav { display:flex; align-items:center; justify-content:space-between; padding:22px 52px; border-bottom:1px solid var(--border); }
+    .breadcrumb { display:flex; align-items:center; gap:8px; font-size:0.78rem; }
+    .back-link { color:var(--muted); text-decoration:none; transition:color 0.15s; }
+    .back-link:hover { color:var(--green); }
+    .sep { color:var(--border2); }
+    .current-page { color:var(--fg); font-weight:500; }
+    .download-btn { font-family:inherit; font-size:0.63rem; letter-spacing:0.08em; text-transform:uppercase; padding:6px 14px; border:1px solid var(--border2); background:transparent; color:var(--muted); cursor:pointer; transition:all 0.15s; text-decoration:none; }
+    .download-btn:hover { border-color:var(--green); color:var(--green); }
+
+    .folder-strip { display:flex; gap:0; padding:10px 44px; border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
+    .folder-strip::-webkit-scrollbar { display:none; }
+    .fstrip-item { display:flex; flex-direction:column; align-items:center; gap:5px; text-decoration:none; color:var(--muted); padding:6px 10px; transition:color 0.15s; min-width:56px; position:relative; }
+    .fstrip-item::after { content:''; position:absolute; bottom:0; left:10px; right:10px; height:1px; background:var(--green); transform:scaleX(0); transition:transform 0.2s; }
+    .fstrip-item:hover { color:var(--fg); }
+    .fstrip-item.active { color:var(--green); }
+    .fstrip-item.active::after { transform:scaleX(1); }
+    .fstrip-svg { width:40px; height:32px; }
+    .fstrip-label { font-size:0.52rem; letter-spacing:0.07em; text-transform:uppercase; text-align:center; white-space:nowrap; }
+
+    .resume-wrap { padding:48px 52px; max-width:820px; margin:0 auto; }
+
+    .r-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:32px; padding-bottom:24px; border-bottom:1px solid var(--fg); }
+    .r-name { font-size:1.9rem; font-weight:700; letter-spacing:-0.025em; margin-bottom:5px; }
+    .r-tagline { font-size:0.7rem; color:var(--muted); }
+    .r-contact { text-align:right; font-size:0.66rem; color:var(--muted); line-height:2.1; }
+    .r-contact a { color:var(--fg); text-decoration:none; }
+    .r-contact a:hover { color:var(--green); }
+
+    .r-section { margin-bottom:32px; }
+    .r-section-title { font-size:0.6rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:14px; padding-bottom:8px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+    .r-section-title::before { content:'//'; color:var(--green); }
+
+    .r-entry { margin-bottom:22px; }
+    .r-entry-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px; }
+    .r-role { font-size:0.83rem; font-weight:600; }
+    .r-period { font-size:0.63rem; color:var(--muted); }
+    .r-org { font-size:0.7rem; color:var(--green); margin-bottom:9px; }
+    .r-bullets { list-style:none; }
+    .r-bullets li { font-size:0.7rem; color:var(--muted); line-height:1.8; padding-left:16px; position:relative; margin-bottom:3px; }
+    .r-bullets li::before { content:'→'; position:absolute; left:0; color:var(--green); font-size:0.63rem; top:2px; }
+
+    .skills-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .skill-group-title { font-size:0.6rem; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px; }
+    .skill-tags { display:flex; flex-wrap:wrap; gap:5px; }
+    .skill-tag { font-size:0.6rem; padding:2px 7px; border:1px solid var(--border2); color:var(--muted); }
+    .skill-tag.hi { border-color:var(--green); color:var(--green); }
+
+    .page-wrap { max-width: 1400px; margin: 0 auto; }
+
+    @media print {
+      body { background:#fff; color:#000; }
+      :root { --bg:#fff; --fg:#111; --muted:#555; --green:#0a7a3f; --border:#ccc; --border2:#ccc; }
+      .top-nav, .folder-strip { display:none; }
+      .resume-wrap { padding:0; }
+    }
+
+    @media (max-width:640px) {
+      .top-nav, .resume-wrap { padding-left:24px; padding-right:24px; }
+      .folder-strip { padding-left:16px; }
+      .r-header { flex-direction:column; gap:14px; }
+      .r-contact { text-align:left; }
+      .skills-grid { grid-template-columns:1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="breadcrumb">
+    <a href="index.html" class="back-link">← Brandon Sweat</a>
+    <span class="sep">/</span>
+    <span class="current-page">Resume / CV</span>
+  </div>
+  <a href="documents/resume.pdf" class="download-btn" target="_blank">↓ Download PDF</a>
+</nav>
+
+<div class="folder-strip" id="folder-strip"></div>
+
+<div class="page-wrap">
+
+<main class="resume-wrap">
+  <header class="r-header">
+    <div>
+      <div class="r-name">Brandon Sweat</div>
+      <div class="r-tagline">Cybersecurity · IT Consulting · Photography</div>
+    </div>
+    <div class="r-contact">
+      <div><a href="mailto:brandonsweat@proton.me">brandonsweat@proton.me</a></div>
+      <div>Southern Utah, USA</div>
+      <div><a href="index.html">bsweat.com</a></div>
+    </div>
+  </header>
+
+  <section class="r-section">
+    <h2 class="r-section-title">Experience</h2>
+    <div class="r-entry">
+      <div class="r-entry-header"><span class="r-role">IT Technician</span><span class="r-period">2024 – Present</span></div>
+      <div class="r-org">SkyWest Airlines — St. George, UT</div>
+      <ul class="r-bullets">
+        <li>Perform hardware configuration, software troubleshooting, and enterprise network management across airport and operations environments.</li>
+        <li>Administer user and group accounts in Microsoft Active Directory, Azure AD, and the Microsoft Admin Portal, including provisioning, access control, and policy enforcement.</li>
+        <li>Manage and monitor network infrastructure using ClearPass, NetDisco, and IPAM to maintain connectivity and enforce access policies across facilities.</li>
+      </ul>
+    </div>
+    <div class="r-entry">
+      <div class="r-entry-header"><span class="r-role">Head Coach</span><span class="r-period">2021 – 2024</span></div>
+      <div class="r-org">Contact Climbing Gym — St. George, UT</div>
+      <ul class="r-bullets">
+        <li>Coached competitive youth athletes ages 6–18, designing individualized long-term training plans and periodized programming tailored to each athlete's goals and development stage.</li>
+        <li>Communicated complex technical concepts clearly to large groups with varying skill levels, adapting instruction style for age, ability, and learning pace.</li>
+        <li>Guided team through regional and national competitions, cultivating discipline, goal-setting, and sustained athletic development.</li>
+      </ul>
+    </div>
+    <div class="r-entry">
+      <div class="r-entry-header"><span class="r-role">Gym Staff</span><span class="r-period">2019 – 2023</span></div>
+      <div class="r-org">Utah Tech Climbing Gym — St. George, UT</div>
+      <ul class="r-bullets">
+        <li>Authored the gym's foundational safety standards and operational procedures, establishing protocols that remain in use today.</li>
+        <li>Planned, budgeted, and managed construction of an IFSC-compliant speed climbing wall from initial concept through completion.</li>
+        <li>Maintained facility equipment and ensured ongoing compliance with climbing industry safety regulations.</li>
+      </ul>
+    </div>
+    <div class="r-entry">
+      <div class="r-entry-header"><span class="r-role">Freelance Photographer</span><span class="r-period">2020 – Present</span></div>
+      <div class="r-org">Self-Employed — Southern Utah</div>
+      <ul class="r-bullets">
+        <li>Portrait, couples, and landscape sessions across Zion, Bryce Canyon, Kanab, Snow Canyon, and surrounding areas.</li>
+        <li>Handle all aspects of client communication, session planning, on-location direction, and post-processing.</li>
+        <li>Designed and maintain a personal portfolio site for bookings and gallery display.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="r-section">
+    <h2 class="r-section-title">Security Projects &amp; Labs</h2>
+    <div class="r-entry">
+      <div class="r-entry-header"><span class="r-role">Home Security Lab</span><span class="r-period">Ongoing</span></div>
+      <div class="r-org">Self-directed — Proxmox / pfSense / Kali Linux</div>
+      <ul class="r-bullets">
+        <li>Built and maintain a virtualized attack/defend network environment for hands-on penetration testing practice.</li>
+        <li>Completed TryHackMe rooms including Blue, Mr. Robot, Advent of Cyber, and Jurassic Park.</li>
+        <li>Practicing Active Directory attack chains: Kerberoasting, Pass-the-Hash, LLMNR poisoning, and BloodHound enumeration.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="r-section">
+    <h2 class="r-section-title">Skills</h2>
+    <div class="skills-grid">
+      <div>
+        <div class="skill-group-title">Security</div>
+        <div class="skill-tags">
+          <span class="skill-tag hi">Nmap</span><span class="skill-tag hi">Metasploit</span>
+          <span class="skill-tag hi">Burp Suite</span><span class="skill-tag">Wireshark</span>
+          <span class="skill-tag">Hydra</span><span class="skill-tag">Gobuster</span>
+          <span class="skill-tag">BloodHound</span><span class="skill-tag">OSINT</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-title">Systems &amp; IT</div>
+        <div class="skill-tags">
+          <span class="skill-tag hi">Windows AD &amp; Azure AD</span><span class="skill-tag hi">Linux (Kali/Ubuntu)</span>
+          <span class="skill-tag hi">ClearPass</span><span class="skill-tag">NetDisco</span>
+          <span class="skill-tag">IPAM</span><span class="skill-tag">TCP/IP Networking</span>
+          <span class="skill-tag">Proxmox</span><span class="skill-tag">Hardware Repair</span>
+          <span class="skill-tag">Data Recovery</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-title">Other</div>
+        <div class="skill-tags">
+          <span class="skill-tag hi">Python (scripting)</span><span class="skill-tag">Bash</span>
+          <span class="skill-tag">HTML / CSS</span><span class="skill-tag">Photography</span>
+          <span class="skill-tag">Lightroom</span><span class="skill-tag">Client Comms</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="r-section">
+    <h2 class="r-section-title">Education &amp; Training</h2>
+    <div class="r-entry">
+      <div class="r-entry-header"><span class="r-role">CompTIA Security+</span><span class="r-period">2024</span></div>
+      <div class="r-org">CompTIA — Certified</div>
+    </div>
+    <div class="r-entry">
+      <div class="r-entry-header"><span class="r-role">TryHackMe — Top 5%</span><span class="r-period">Ongoing</span></div>
+      <div class="r-org">Self-directed cybersecurity training</div>
+    </div>
+  </section>
+</main>
+
+</div><!-- /.page-wrap -->
+
+<script>
+  const FOLDERS = [
+    { label:'Blog', href:'blog.html', id:'blog' },
+    { label:'Projects', href:'projects.html', id:'projects' },
+    { label:'Photos', href:'photography.html', id:'photography' },
+    { label:'About', href:'about.html', id:'about' },
+    { label:'Resume', href:'resume.html', id:'resume' },
+    { label:'Consult', href:'consulting.html', id:'consulting' },
+  ];
+  const CURRENT = 'resume';
+  const fp = `<path d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>`;
+  document.getElementById('folder-strip').innerHTML = FOLDERS.map(f =>
+    `<a href="${f.href}" class="fstrip-item${f.id===CURRENT?' active':''}">
+      <svg class="fstrip-svg" viewBox="0 0 120 96" fill="none" xmlns="http://www.w3.org/2000/svg">${fp}</svg>
+      <span class="fstrip-label">${f.label}</span>
+    </a>`
+  ).join('');
+</script>
+
+</body>
+</html>

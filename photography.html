@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photography — Brandon Sweat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0d0d0d; --fg:#eeeae2; --muted:#9a9490; --green:#1ec776; --accent:#c0392b; --border:#1e1e1e; --border2:#2a2a2a; }
+    body { background:var(--bg); color:var(--fg); font-family:'JetBrains Mono',monospace; min-height:100vh; }
+
+    .top-nav { display:flex; align-items:center; justify-content:space-between; padding:22px 52px; border-bottom:1px solid var(--border); }
+    .breadcrumb { display:flex; align-items:center; gap:8px; font-size:0.78rem; }
+    .back-link { color:var(--muted); text-decoration:none; transition:color 0.15s; }
+    .back-link:hover { color:var(--green); }
+    .sep { color:var(--border2); }
+    .current-page { color:var(--fg); font-weight:500; }
+
+    .folder-strip { display:flex; gap:0; padding:10px 44px; border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
+    .folder-strip::-webkit-scrollbar { display:none; }
+    .fstrip-item { display:flex; flex-direction:column; align-items:center; gap:5px; text-decoration:none; color:var(--muted); padding:6px 10px; transition:color 0.15s; min-width:56px; position:relative; }
+    .fstrip-item::after { content:''; position:absolute; bottom:0; left:10px; right:10px; height:1px; background:var(--green); transform:scaleX(0); transition:transform 0.2s; }
+    .fstrip-item:hover { color:var(--fg); }
+    .fstrip-item.active { color:var(--green); }
+    .fstrip-item.active::after { transform:scaleX(1); }
+    .fstrip-svg { width:40px; height:32px; }
+    .fstrip-label { font-size:0.52rem; letter-spacing:0.07em; text-transform:uppercase; text-align:center; white-space:nowrap; }
+
+    /* HERO */
+    .hero { padding:44px 52px 36px; border-bottom:1px solid var(--border); display:grid; grid-template-columns:1fr auto; gap:32px; align-items:end; }
+    .hero-title { font-size:clamp(1.4rem,3vw,2.2rem); font-weight:700; letter-spacing:-0.025em; line-height:1.15; margin-bottom:12px; }
+    .hero-desc { font-size:0.76rem; color:var(--muted); line-height:1.9; max-width:500px; }
+    .hero-desc em { color:var(--fg); font-style:normal; font-weight:500; }
+    .contact-block { text-align:right; }
+    .contact-label { font-size:0.6rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; }
+    .contact-email { font-size:0.8rem; color:var(--green); text-decoration:none; }
+    .contact-email:hover { opacity:0.7; }
+    .contact-note { font-size:0.6rem; color:var(--muted); margin-top:6px; line-height:1.7; }
+
+    /* CONTROLS */
+    .gallery-controls { display:flex; align-items:center; justify-content:space-between; padding:18px 52px; border-bottom:1px solid var(--border); }
+    .gallery-filters { display:flex; gap:6px; }
+    .filter-btn { font-family:inherit; font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; padding:4px 12px; border:1px solid var(--border2); background:transparent; color:var(--muted); cursor:pointer; transition:all 0.15s; }
+    .filter-btn.active, .filter-btn:hover { border-color:var(--green); color:var(--green); background:rgba(30,199,118,0.05); }
+    .photo-count { font-size:0.6rem; color:var(--muted); }
+
+    /* MASONRY */
+    .gallery-wrap { padding:28px 52px 52px; }
+    .gallery { columns:3 260px; gap:10px; }
+    .photo-item { break-inside:avoid; margin-bottom:10px; position:relative; overflow:hidden; cursor:pointer; }
+    .photo-item:hover .photo-overlay { opacity:1; }
+    .photo-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.75); display:flex; flex-direction:column; justify-content:flex-end; padding:14px; opacity:0; transition:opacity 0.2s; }
+    .photo-caption { font-size:0.65rem; color:var(--fg); line-height:1.5; }
+    .photo-tag { font-size:0.55rem; color:var(--green); letter-spacing:0.08em; text-transform:uppercase; margin-top:3px; }
+
+    /* LIGHTBOX */
+    .lightbox { position:fixed; inset:0; background:rgba(6,6,6,0.97); display:flex; align-items:center; justify-content:center; z-index:100; opacity:0; pointer-events:none; transition:opacity 0.2s; }
+    .lightbox.open { opacity:1; pointer-events:all; }
+    .lightbox-inner { max-width:82vw; max-height:90vh; position:relative; }
+    .lightbox-close { position:absolute; top:-34px; right:0; background:none; border:none; color:var(--muted); font-family:inherit; font-size:0.7rem; cursor:pointer; letter-spacing:0.08em; }
+    .lightbox-close:hover { color:var(--green); }
+
+    /* CTA */
+    .cta-strip { margin:0 52px 52px; padding:26px 30px; border:1px dashed var(--border2); display:flex; align-items:center; justify-content:space-between; gap:24px; }
+    .cta-text { font-size:0.76rem; line-height:1.8; }
+    .cta-text strong { color:var(--fg); }
+    .cta-text span { color:var(--muted); }
+    .cta-btn { font-family:inherit; font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; padding:10px 20px; border:1px solid var(--green); background:transparent; color:var(--green); cursor:pointer; text-decoration:none; transition:all 0.15s; white-space:nowrap; }
+    .cta-btn:hover { background:var(--green); color:#0d0d0d; }
+
+    .page-wrap { max-width: 1400px; margin: 0 auto; }
+
+    @media (max-width:640px) {
+      .top-nav, .hero, .gallery-controls, .gallery-wrap, .cta-strip { padding-left:24px; padding-right:24px; }
+      .folder-strip { padding-left:16px; }
+      .hero { grid-template-columns:1fr; }
+      .contact-block { text-align:left; }
+      .gallery { columns:2 140px; }
+      .cta-strip { flex-direction:column; align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="breadcrumb">
+    <a href="index.html" class="back-link">← Brandon Sweat</a>
+    <span class="sep">/</span>
+    <span class="current-page">Photography</span>
+  </div>
+</nav>
+
+<div class="folder-strip" id="folder-strip"></div>
+
+<div class="page-wrap">
+
+<section class="hero">
+  <div>
+    <h1 class="hero-title">Southern Utah<br>Portrait &amp; Landscape</h1>
+    <p class="hero-desc">Based in <em>Southern Utah</em>, I shoot <em>portraits, couples, and landscapes</em> across canyon country — from red rock formations to wide open desert skies. Every session is tailored to you and your location.</p>
+  </div>
+  <div class="contact-block">
+    <p class="contact-label">// book a session</p>
+    <a href="mailto:brandonsweat@proton.me" class="contact-email">brandonsweat@proton.me</a>
+    <p class="contact-note">Southern Utah &amp; surrounding areas<br>Portraits · Couples · Landscapes</p>
+  </div>
+</section>
+
+<div class="gallery-controls">
+  <div class="gallery-filters">
+    <button class="filter-btn active" onclick="filterGallery('all',this)">All</button>
+    <button class="filter-btn" onclick="filterGallery('portrait',this)">Portraits</button>
+    <button class="filter-btn" onclick="filterGallery('couple',this)">Couples</button>
+    <button class="filter-btn" onclick="filterGallery('landscape',this)">Landscape</button>
+  </div>
+  <span class="photo-count" id="photo-count">35 photos</span>
+</div>
+
+<div class="gallery-wrap">
+  <div class="gallery" id="gallery"></div>
+</div>
+
+<div class="cta-strip">
+  <div class="cta-text">
+    <strong>Ready to book?</strong><br>
+    <span>Sessions across Southern Utah — Zion, Bryce, Kanab, Snow Canyon, and surrounding areas.</span>
+  </div>
+  <a href="mailto:brandonsweat@proton.me" class="cta-btn">Get in Touch →</a>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()">[ close × ]</button>
+    <div id="lightbox-content"></div>
+  </div>
+</div>
+
+</div><!-- /.page-wrap -->
+
+<script>
+  // ── FOLDER STRIP ─────────────────────────────────────────────────────────
+  const FOLDERS = [
+    { label:'Blog', href:'blog.html', id:'blog' },
+    { label:'Projects', href:'projects.html', id:'projects' },
+    { label:'Photos', href:'photography.html', id:'photography' },
+    { label:'About', href:'about.html', id:'about' },
+    { label:'Resume', href:'resume.html', id:'resume' },
+    { label:'Consult', href:'consulting.html', id:'consulting' },
+  ];
+  const CURRENT = 'photography';
+  const fp = `<path d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>`;
+  document.getElementById('folder-strip').innerHTML = FOLDERS.map(f =>
+    `<a href="${f.href}" class="fstrip-item${f.id===CURRENT?' active':''}">
+      <svg class="fstrip-svg" viewBox="0 0 120 96" fill="none" xmlns="http://www.w3.org/2000/svg">${fp}</svg>
+      <span class="fstrip-label">${f.label}</span>
+    </a>`
+  ).join('');
+
+  // ── PHOTOS ───────────────────────────────────────────────────────────────
+  const photos = [
+    { cat:'portrait',  src:'photos/DSC04529.jpg', caption:'Zion golden hour portrait',              aspect:0.75 },
+    { cat:'landscape', src:'photos/DSC08004.jpg', caption:'Zion Canyon Valley, Southern Utah',      aspect:1.5  },
+    { cat:'couple',    src:'photos/DSC09524.jpg', caption:'Couple at Angels Landing, Zion',         aspect:1.5  },
+    { cat:'couple',    src:'photos/DSC05433.jpg', caption:'Engagement session, Snow Canyon',        aspect:0.75 },
+    { cat:'portrait',  src:'photos/DSC06262.jpg', caption:'Red rock portrait, Southern Utah',       aspect:0.75 },
+    { cat:'couple',    src:'photos/DSC05462.jpg', caption:'Couples session, Snow Canyon',           aspect:1.5  },
+    { cat:'landscape', src:'photos/DSC03664.jpg', caption:'Scottish highlands & loch',              aspect:0.67 },
+    { cat:'couple',    src:'photos/DSC03895.jpg', caption:'Proposal at glacier lagoon, Iceland',    aspect:0.75 },
+    { cat:'landscape', src:'photos/DSC04109.jpg', caption:'Bruarfoss waterfall, Iceland',           aspect:1.5  },
+    { cat:'portrait',  src:'photos/DSC06517.jpg', caption:'Snow Canyon portrait at golden hour',    aspect:0.75 },
+    { cat:'couple',    src:'photos/DSC06012.jpg', caption:'Wedding portrait, Southern Utah',        aspect:0.75 },
+    { cat:'landscape', src:'photos/DSC06311.jpg', caption:'Joshua Tree at sunrise',                 aspect:1.5  },
+    { cat:'portrait',  src:'photos/DSC00291.jpg', caption:'Graduation portrait',                    aspect:0.67 },
+    { cat:'couple',    src:'photos/DSC04508.jpg', caption:'Family session, Zion National Park',     aspect:1.5  },
+    { cat:'landscape', src:'photos/DSC03749.jpg', caption:'Gljúfrabúi waterfall cave, Iceland',     aspect:1.5  },
+    { cat:'portrait',  src:'photos/DSC00498.jpg', caption:'Graduation portraits',                   aspect:0.67 },
+    { cat:'couple',    src:'photos/DSC05395.jpg', caption:'Wedding first dance, Southern Utah',     aspect:0.75 },
+    { cat:'landscape', src:'photos/DSC04384.jpg', caption:'Eiffel Tower from the Seine, Paris',     aspect:0.67 },
+    { cat:'portrait',  src:'photos/DSC06388.jpg', caption:'Senior portrait, mountain creek',        aspect:0.75 },
+    { cat:'couple',    src:'photos/DSC08424.jpg', caption:'Family fall session, Southern Utah',     aspect:1.5  },
+    { cat:'landscape', src:'photos/DSC06326.jpg', caption:'Rock climbing, Red Rock Canyon',         aspect:1.5  },
+    { cat:'portrait',  src:'photos/DSC00907.jpg', caption:'Graduation portrait at the library',     aspect:0.67 },
+    { cat:'landscape', src:'photos/DSC08172.jpg', caption:'Wild horse, autumn colors',              aspect:0.67 },
+    { cat:'couple',    src:'photos/DSC02887.jpg', caption:'Couples session, outdoor garden',        aspect:0.75 },
+    { cat:'landscape', src:'photos/DSC04331.jpg', caption:'Louvre & Arc de Triomphe, Paris',        aspect:1.6  },
+    { cat:'portrait',  src:'photos/DSC02257.jpg', caption:'Floral portrait session',                aspect:0.75 },
+    { cat:'landscape', src:'photos/DSC06313.jpg', caption:'Joshua Tree boulders at dusk',           aspect:1.5  },
+    { cat:'couple',    src:'photos/DSC09218.jpg', caption:'Family session, autumn cottonwoods',     aspect:0.75 },
+    { cat:'landscape', src:'photos/DSC03425.jpg', caption:'Raven on the coastal cliffs, Iceland',   aspect:0.67 },
+    { cat:'portrait',  src:'photos/DSC06780.jpg', caption:'Graduation portrait, mountain meadow',   aspect:0.75 },
+    { cat:'landscape', src:'photos/DSC06442.jpg', caption:'Bouldering at Joshua Tree',              aspect:1.5  },
+    { cat:'landscape', src:'photos/DSC04208.jpg', caption:'Church at Vík, Iceland',                 aspect:0.67 },
+    { cat:'landscape', src:'photos/DSC06677.jpg', caption:'Joshua Tree desert, California',         aspect:1.5  },
+    { cat:'landscape', src:'photos/DSC04791.jpg', caption:'Snow-covered forest, Pacific Northwest', aspect:1.5  },
+    { cat:'landscape', src:'photos/DSC07778.jpg', caption:'Wigwam Motel, Route 66',                 aspect:1.6  },
+  ];
+
+  function renderGallery(filter) {
+    const gallery = document.getElementById('gallery');
+    const filtered = photos.filter(p => filter === 'all' || p.cat === filter);
+    document.getElementById('photo-count').textContent = filtered.length + ' photo' + (filtered.length !== 1 ? 's' : '');
+    gallery.innerHTML = filtered.map((p) => {
+      const idx = photos.indexOf(p);
+      return `<div class="photo-item" data-cat="${p.cat}" onclick="openLightbox(${idx})">
+        <img src="${p.src}" alt="${p.caption}" loading="lazy" style="display:block;width:100%;height:auto">
+        <div class="photo-overlay">
+          <div class="photo-caption">${p.caption}</div>
+          <div class="photo-tag">${p.cat}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function filterGallery(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderGallery(cat);
+  }
+
+  function openLightbox(idx) {
+    const p = photos[idx];
+    document.getElementById('lightbox-content').innerHTML =
+      `<img src="${p.src}" alt="${p.caption}" style="display:block;max-width:82vw;max-height:85vh;object-fit:contain">`;
+    document.getElementById('lightbox').classList.add('open');
+  }
+
+  function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  renderGallery('all');
+</script>
+
+</body>
+</html>

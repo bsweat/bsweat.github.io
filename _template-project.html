@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Card Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0d0d0d; --fg:#eeeae2; --muted:#9a9490; --green:#1ec776; --accent:#c0392b; --border:#1e1e1e; --border2:#2a2a2a; }
+    body { background:var(--bg); color:var(--fg); font-family:'JetBrains Mono',monospace; padding:48px 52px; max-width:900px; margin:0 auto; }
+
+    h1 { font-size:1.4rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:8px; }
+    .kicker { font-size:0.6rem; color:var(--green); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:16px; }
+    .subtitle { font-size:0.75rem; color:var(--muted); line-height:1.8; margin-bottom:40px; }
+
+    .section-title { font-size:0.6rem; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+    .section-title::before { content:'//'; color:var(--green); }
+
+    /* Code block */
+    .code-wrap { background:#060606; border:1px solid var(--border2); border-left:3px solid var(--green); padding:28px 28px; margin-bottom:40px; overflow-x:auto; }
+    .code-wrap pre { font-family:'JetBrains Mono',monospace; font-size:0.72rem; line-height:1.9; color:#b8f5d4; white-space:pre; }
+    .c-muted { color:#555; }
+    .c-key { color:#1ec776; }
+    .c-val { color:#eeeae2; }
+    .c-str { color:#98d9b0; }
+    .c-comment { color:#3a3a3a; font-style:italic; }
+
+    /* Reference table */
+    .ref-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:40px; }
+    .ref-box { background:#080808; border:1px solid var(--border2); padding:20px 22px; }
+    .ref-title { font-size:0.58rem; color:var(--green); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:14px; }
+    .ref-row { display:flex; align-items:baseline; gap:12px; padding:6px 0; border-bottom:1px solid var(--border); font-size:0.68rem; }
+    .ref-row:last-child { border-bottom:none; }
+    .ref-code { color:#98d9b0; font-family:'JetBrains Mono',monospace; flex-shrink:0; }
+    .ref-desc { color:var(--muted); }
+
+    /* Status badge preview */
+    .badge-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:40px; }
+    .status-badge { font-size:0.57rem; letter-spacing:0.08em; text-transform:uppercase; padding:3px 10px; }
+    .status-badge.active { border:1px solid var(--green); color:var(--green); }
+    .status-badge.wip { border:1px solid var(--accent); color:var(--accent); }
+    .status-badge.done { border:1px solid var(--border2); color:var(--muted); }
+
+    /* Stack tag preview */
+    .stack-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:40px; }
+    .stack-tag { font-size:0.6rem; letter-spacing:0.07em; text-transform:uppercase; padding:3px 8px; border:1px solid var(--border2); color:var(--muted); }
+    .stack-tag.hi { border-color:var(--green); color:var(--green); }
+
+    .note { border:1px dashed var(--border2); padding:16px 20px; font-size:0.7rem; color:var(--muted); line-height:1.85; margin-bottom:32px; }
+    .note strong { color:var(--green); }
+
+    .step { display:flex; gap:16px; align-items:baseline; margin-bottom:14px; font-size:0.73rem; color:var(--muted); line-height:1.7; }
+    .step-num { color:var(--green); font-size:0.6rem; letter-spacing:0.1em; flex-shrink:0; }
+    .step em { color:var(--fg); font-style:normal; font-weight:500; }
+  </style>
+</head>
+<body>
+
+<p class="kicker">// bsweat.com · site template</p>
+<h1>Project Card Template</h1>
+<p class="subtitle">Copy the object below, fill in your details, and paste it into the <em>projects array</em> in projects.html. Cards auto-number — just add to the bottom and the count updates itself.</p>
+
+<!-- ── HOW TO USE ──────────────────────────────────────────────── -->
+<p class="section-title">How to add a project</p>
+
+<div class="step"><span class="step-num">step_01</span><span>Open <em>projects.html</em> in any text editor.</span></div>
+<div class="step"><span class="step-num">step_02</span><span>Find the line that says <em>// ── PROJECT DATA — add new projects to this array</em> in the &lt;script&gt; block.</span></div>
+<div class="step"><span class="step-num">step_03</span><span>Scroll to the <em>end of the last object</em> in the array (look for the last <em>},</em> before the closing <em>];</em>).</span></div>
+<div class="step"><span class="step-num">step_04</span><span>Paste the filled-in template object <em>after that last },</em></span></div>
+<div class="step"><span class="step-num">step_05</span><span>Save. The new card appears automatically at the bottom of the grid, numbered correctly.</span></div>
+
+<!-- ── TEMPLATE OBJECT ─────────────────────────────────────────── -->
+<p class="section-title">Template — copy and fill in</p>
+
+<div class="code-wrap"><pre><span class="c-comment">// ─── PASTE THIS AFTER THE LAST }, IN THE projects ARRAY ───────────────────</span>
+<span class="c-muted">{</span>
+  <span class="c-key">status</span><span class="c-muted">:</span> <span class="c-str">'wip'</span><span class="c-muted">,</span>        <span class="c-comment">// 'active' | 'wip' | 'done'  — see badge reference below</span>
+
+  <span class="c-key">name</span><span class="c-muted">:</span> <span class="c-str">'Your Project Name'</span><span class="c-muted">,</span>
+
+  <span class="c-key">desc</span><span class="c-muted">:</span> <span class="c-str">'One or two sentences describing what the project does, the problem it</span>
+<span class="c-str">        solves, and anything interesting about how it works.'</span><span class="c-muted">,</span>
+
+  <span class="c-key">stack</span><span class="c-muted">: [</span>
+    <span class="c-muted">{</span> <span class="c-key">label</span><span class="c-muted">:</span> <span class="c-str">'Python'</span><span class="c-muted">,</span>  <span class="c-key">hi</span><span class="c-muted">:</span> <span class="c-val">true</span>  <span class="c-muted">},</span>  <span class="c-comment">// hi: true  = green highlighted tag (use for primary tech)</span>
+    <span class="c-muted">{</span> <span class="c-key">label</span><span class="c-muted">:</span> <span class="c-str">'Nmap'</span><span class="c-muted">,</span>    <span class="c-key">hi</span><span class="c-muted">:</span> <span class="c-val">false</span> <span class="c-muted">},</span>  <span class="c-comment">// hi: false = muted gray tag (use for secondary tech)</span>
+    <span class="c-muted">{</span> <span class="c-key">label</span><span class="c-muted">:</span> <span class="c-str">'Shodan'</span><span class="c-muted">,</span>  <span class="c-key">hi</span><span class="c-muted">:</span> <span class="c-val">false</span> <span class="c-muted">},</span>
+  <span class="c-muted">],</span>
+
+  <span class="c-key">link</span><span class="c-muted">: {</span>
+    <span class="c-key">text</span><span class="c-muted">:</span> <span class="c-str">'github →'</span><span class="c-muted">,</span>    <span class="c-comment">// 'github →' | 'view →' | 'demo →' | 'writeup →'</span>
+    <span class="c-key">href</span><span class="c-muted">:</span> <span class="c-str">'https://github.com/yourrepo'</span><span class="c-muted">,</span>  <span class="c-comment">// use '#' if not live yet</span>
+  <span class="c-muted">},</span>
+<span class="c-muted">},</span>
+<span class="c-comment">// ─── END PASTE ─────────────────────────────────────────────────────────────</span></pre></div>
+
+<!-- ── REFERENCE ──────────────────────────────────────────────── -->
+<p class="section-title">Status badge reference</p>
+<div class="badge-row">
+  <span class="status-badge active">Active</span>
+  <code style="font-size:0.65rem;color:var(--muted);align-self:center">status: 'active'</code>
+  &nbsp;&nbsp;
+  <span class="status-badge wip">In Progress</span>
+  <code style="font-size:0.65rem;color:var(--muted);align-self:center">status: 'wip'</code>
+  &nbsp;&nbsp;
+  <span class="status-badge done">Done</span>
+  <code style="font-size:0.65rem;color:var(--muted);align-self:center">status: 'done'</code>
+</div>
+
+<p class="section-title">Stack tag reference</p>
+<div class="stack-row">
+  <span class="stack-tag hi">Primary Tech</span>
+  <code style="font-size:0.65rem;color:var(--muted);align-self:center">hi: true</code>
+  &nbsp;&nbsp;
+  <span class="stack-tag">Secondary</span>
+  <code style="font-size:0.65rem;color:var(--muted);align-self:center">hi: false</code>
+</div>
+
+<div class="note"><strong>// Tip:</strong> Use one <em>hi: true</em> tag for the main language or tool, and <em>hi: false</em> for everything else. Keep the stack to 3–4 tags so the card stays readable.</div>
+
+</body>
+</html>
