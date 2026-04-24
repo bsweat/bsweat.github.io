@@ -197,14 +197,20 @@
     { cat:'landscape', src:'photos/DSC07778.jpg', caption:'Wigwam Motel, Route 66',                 aspect:1.6  },
   ];
 
+  // Derive optimised paths from the original src
+  function thumbSrc(s) { return s.replace('photos/', 'photos/thumbs/'); }
+  function medSrc(s)   { return s.replace('photos/', 'photos/medium/'); }
+
   function renderGallery(filter) {
     const gallery = document.getElementById('gallery');
     const filtered = photos.filter(p => filter === 'all' || p.cat === filter);
     document.getElementById('photo-count').textContent = filtered.length + ' photo' + (filtered.length !== 1 ? 's' : '');
-    gallery.innerHTML = filtered.map((p) => {
+    gallery.innerHTML = filtered.map((p, pos) => {
       const idx = photos.indexOf(p);
+      // First 6 images are likely above the fold — load them eagerly
+      const loadAttr = pos < 6 ? 'eager' : 'lazy';
       return `<div class="photo-item" data-cat="${p.cat}" onclick="openLightbox(${idx})">
-        <img src="${p.src}" alt="${p.caption}" loading="lazy" style="display:block;width:100%;height:auto">
+        <img src="${thumbSrc(p.src)}" alt="${p.caption}" loading="${loadAttr}" decoding="async" style="display:block;width:100%;height:auto">
         <div class="photo-overlay">
           <div class="photo-caption">${p.caption}</div>
           <div class="photo-tag">${p.cat}</div>
@@ -221,8 +227,9 @@
 
   function openLightbox(idx) {
     const p = photos[idx];
+    // Load medium-res version on demand (only when lightbox is opened)
     document.getElementById('lightbox-content').innerHTML =
-      `<img src="${p.src}" alt="${p.caption}" style="display:block;max-width:82vw;max-height:85vh;object-fit:contain">`;
+      `<img src="${medSrc(p.src)}" alt="${p.caption}" style="display:block;max-width:82vw;max-height:85vh;object-fit:contain">`;
     document.getElementById('lightbox').classList.add('open');
   }
 

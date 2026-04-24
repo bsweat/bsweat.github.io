@@ -79,6 +79,7 @@
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     /* ── DIVIDER ─────────────────────────────── */
+    .divider-wrap { padding: 0 52px; }
     .divider {
       border: none;
       border-top: 1px solid var(--border);
@@ -246,18 +247,56 @@
 
     @media (max-width: 900px) {
       .folder-grid { grid-template-columns: repeat(3, 1fr); }
+      .folders-section { grid-template-columns: 1fr; }
       .about-grid { grid-template-columns: 1fr; gap: 40px; }
       .term-card { display: none; }
       .portrait-wrap { display: none; }
     }
 
     @media (max-width: 600px) {
-      .top-bar, .folders-section, .about-panel, .site-footer { padding-left: 24px; padding-right: 24px; }
-      .about-panel { margin-left: 24px; margin-right: 24px; }
-      .site-footer { margin-left: 24px; margin-right: 24px; }
-      .folder-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
+      /* ── Header ── */
+      .top-bar { padding: 20px 20px 0; }
+      /* Reserve 2 lines so "photographer" wrapping never shifts the page */
+      .tagline { min-height: 3em; }
       .header-meta { display: none; }
+
+      /* ── Divider ── */
+      .divider-wrap { padding: 0 20px; }
+      .divider { margin: 18px 0; }
+
+      /* ── Folders section — kill the ghost 180px portrait column ── */
+      .folders-section {
+        grid-template-columns: 1fr;
+        padding: 0 16px;
+        gap: 0;
+      }
+      .section-label { margin-bottom: 14px; }
+
+      /* ── Folder grid — 2 columns, full-width, centered ── */
+      .folder-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px 12px;
+        justify-items: stretch;
+      }
+      .folder-link { width: 100%; }
+      /* Remove SVG size cap so icons fill their column */
+      .f-svg { max-width: none; }
+
+      /* Center the lone 5th folder in its own row */
+      .folder-link:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+        max-width: calc(50% - 6px);
+        margin: 0 auto;
+      }
+
+      /* ── Portrait ── */
       .portrait-wrap { display: none; }
+
+      /* ── About panel — peek just below the fold ── */
+      .about-panel { margin: 0 16px; padding: 20px 0 0; }
+
+      /* ── Footer ── */
+      .site-footer { margin: 52px 16px 0; }
     }
   </style>
 </head>
@@ -274,7 +313,7 @@
   </div>
 </div>
 
-<div style="padding: 0 52px;">
+<div class="divider-wrap">
   <hr class="divider">
 </div>
 
@@ -421,10 +460,10 @@
     if (i <= text.length) {
       el.innerHTML = text.slice(0, i) + '<span class="cursor"></span>';
       i++;
-      setTimeout(type, i === 1 ? 500 : 28 + Math.random() * 22);
+      setTimeout(type, i === 1 ? 250 : 12 + Math.random() * 8);
     }
   }
-  setTimeout(type, 700);
+  setTimeout(type, 350);
 
   // Blink cursor in terminal card
   const bc = document.getElementById('blink-cursor');
