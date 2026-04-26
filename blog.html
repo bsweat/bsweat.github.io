@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog / Writeups — Brandon Sweat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --bg:#0d0d0d; --bg2:#111; --fg:#eeeae2; --muted:#9a9490; --green:#1ec776; --green-glow:rgba(30,199,118,0.3); --accent:#c0392b; --border:#1e1e1e; --border2:#2a2a2a; }
@@ -99,8 +100,8 @@
     .article-date-nav { font-size: 0.63rem; color: var(--muted); }
 
     .article-body {
-      padding: 52px 52px 80px;
-      max-width: 760px;
+      padding: 52px 60px 80px;
+      max-width: 960px;
       margin: 0 auto;
     }
 
@@ -109,44 +110,83 @@
     .article-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:36px; padding-bottom:36px; border-bottom:1px solid var(--border); }
 
     /* Article prose */
-    .prose h2 { font-size:0.88rem; font-weight:700; color:var(--green); letter-spacing:0.06em; text-transform:uppercase; margin:36px 0 14px; }
-    .prose h3 { font-size:0.82rem; font-weight:600; margin:24px 0 10px; }
-    .prose p { font-size:0.76rem; color:var(--muted); line-height:2; margin-bottom:16px; }
-    .prose p em { color:var(--fg); font-style:normal; font-weight:500; }
-    .prose a { color:var(--green); text-decoration:none; }
-    .prose a:hover { text-decoration:underline; }
-    .prose ul { list-style:none; margin-bottom:16px; }
-    .prose ul li { font-size:0.76rem; color:var(--muted); line-height:1.9; padding-left:16px; position:relative; }
-    .prose ul li::before { content:'→'; position:absolute; left:0; color:var(--green); font-size:0.65rem; }
+    .prose h2 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--green);
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      margin: 52px 0 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .prose h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin: 32px 0 12px;
+    }
+    .prose p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9375rem;
+      color: #c4bfb8;
+      line-height: 1.85;
+      margin-bottom: 20px;
+    }
+    .prose p em { color: var(--fg); font-style: normal; font-weight: 600; }
+    .prose a { color: var(--green); text-decoration: none; }
+    .prose a:hover { text-decoration: underline; }
+    .prose ul { list-style: none; margin-bottom: 20px; }
+    .prose ul li {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9375rem;
+      color: #c4bfb8;
+      line-height: 1.85;
+      padding-left: 20px;
+      position: relative;
+      margin-bottom: 6px;
+    }
+    .prose ul li::before { content: '→'; position: absolute; left: 0; color: var(--green); font-size: 0.75rem; top: 3px; }
+    .prose ul li em { color: var(--fg); font-style: normal; font-weight: 600; }
     .prose pre {
       background: #060606;
       border: 1px solid var(--border2);
-      border-left: 2px solid var(--green);
-      padding: 18px 20px;
+      border-left: 3px solid var(--green);
+      padding: 22px 24px;
       overflow-x: auto;
-      margin: 20px 0;
-      font-size: 0.7rem;
+      margin: 24px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
       color: #b8f5d4;
-      line-height: 1.85;
+      line-height: 1.9;
     }
     .prose .note {
       border: 1px dashed var(--border2);
-      padding: 14px 18px;
-      margin: 20px 0;
-      font-size: 0.7rem;
-      color: var(--muted);
+      padding: 16px 20px;
+      margin: 24px 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      color: #9a9490;
       line-height: 1.85;
     }
-    .prose .note strong { color: var(--green); }
+    .prose .note strong { color: var(--green); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; }
 
     .page-wrap { max-width: 1400px; margin: 0 auto; }
+
+    @media (min-width: 1280px) {
+      .article-body { max-width: 1060px; padding: 64px 80px 100px; }
+    }
 
     @media (max-width:640px) {
       .top-nav, .content { padding-left:24px; padding-right:24px; }
       .folder-strip { padding-left:16px; padding-right:16px; }
       .post-card { grid-template-columns:1fr; gap:6px; }
       .post-arrow { display:none; }
-      .article-nav, .article-body { padding-left:24px; padding-right:24px; }
+      .article-nav { padding-left:24px; padding-right:24px; }
+      .article-body { padding-left:20px; padding-right:20px; }
+      .prose p, .prose ul li, .prose .note { font-size: 0.9375rem; }
     }
   </style>
 </head>
