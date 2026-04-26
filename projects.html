@@ -95,6 +95,19 @@
   const projects = [
     {
       status: 'active',
+      name: 'PhishLens — Threat Analyzer',
+      desc: 'Browser-based phishing IOC scanner. Paste a suspicious URL or raw email headers and get domain age, SSL check, redirect chain, lookalike/typosquatting scoring, VirusTotal lookup, and SPF/DKIM/DMARC analysis — all client-side. Also ships as a Chrome and Firefox extension.',
+      stack: [
+        { label: 'Vanilla JS', hi: true },
+        { label: 'VirusTotal API', hi: true },
+        { label: 'DNS-over-HTTPS', hi: false },
+        { label: 'RDAP', hi: false },
+        { label: 'MV3 Extension', hi: false },
+      ],
+      link: { text: 'open tool →', href: 'phishlens/' },
+    },
+    {
+      status: 'active',
       name: 'Home Security Lab',
       desc: 'Virtualized network environment running Proxmox with isolated attack/defend segments, Kali Linux, Windows AD domain, pfSense firewall, and intentionally vulnerable machines. Used for hands-on practice without touching production systems.',
       stack: [
@@ -113,17 +126,6 @@
         { label: 'Python', hi: true },
         { label: 'Nmap', hi: false },
         { label: 'Shodan API', hi: false },
-      ],
-      link: { text: 'github →', href: '#' },
-    },
-    {
-      status: 'wip',
-      name: 'Phishing Email Analyzer',
-      desc: 'Python tool that ingests raw .eml files and analyzes them for phishing indicators — spoofed headers, SPF/DKIM failures, suspicious links, and known-bad domains. Outputs a structured threat report with a risk score.',
-      stack: [
-        { label: 'Python', hi: true },
-        { label: 'Email Parsing', hi: false },
-        { label: 'VirusTotal API', hi: false },
       ],
       link: { text: 'github →', href: '#' },
     },
