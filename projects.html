@@ -143,13 +143,14 @@
     {
       status: 'active',
       name: 'ReconKit — OSINT Terminal',
-      desc: 'Passive intelligence terminal. Enter a name, username, email, or employer and get a live username sweep across 57 platforms, curated Google dork links, public records lookups, and email intel — all from the browser. Networks tab adds WHOIS, DNS, GeoIP, Shodan, VirusTotal, and subdomain enumeration.',
+      desc: 'Automated OSINT platform for CTF and recon. Provide a name, username, or email and the tool actively sweeps 485+ platforms, mines GitHub commit history for hidden emails, checks breach databases (HIBP), looks up Keybase linked accounts, and generates dynamic Google dorks pre-filled with discovered data. Progressive profiling: each scan feeds newly discovered info back into deeper searches automatically. Networks tab adds WHOIS, DNS, GeoIP, Shodan, VirusTotal, ASN/hosting lookup, tech stack fingerprinting, and Wayback Machine.',
       stack: [
         { label: 'Python', hi: true },
         { label: 'FastAPI', hi: true },
+        { label: 'React', hi: true },
         { label: 'OSINT', hi: false },
         { label: 'SSE', hi: false },
-        { label: 'Render', hi: false },
+        { label: 'Fly.io', hi: false },
       ],
       link: { text: 'open tool →', href: 'https://reconkit.fly.dev' },
     },
