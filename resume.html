@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resume — Brandon Sweat</title>
+  <title>Resume - Brandon Sweat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <style>
@@ -50,7 +50,7 @@
     .r-org { font-size:0.7rem; color:var(--green); margin-bottom:9px; }
     .r-bullets { list-style:none; }
     .r-bullets li { font-size:0.7rem; color:var(--muted); line-height:1.8; padding-left:16px; position:relative; margin-bottom:3px; }
-    .r-bullets li::before { content:'→'; position:absolute; left:0; color:var(--green); font-size:0.63rem; top:2px; }
+    .r-bullets li::before { content:'->'; position:absolute; left:0; color:var(--green); font-size:0.63rem; top:2px; }
 
     .skills-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
     .skill-group-title { font-size:0.6rem; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px; }
@@ -75,16 +75,17 @@
       .skills-grid { grid-template-columns:1fr 1fr; }
     }
   </style>
+  <link rel="stylesheet" href="assets/rebrand.css">
 </head>
-<body>
+<body class="resume-page">
 
 <nav class="top-nav">
   <div class="breadcrumb">
-    <a href="index.html" class="back-link">← Brandon Sweat</a>
+    <a href="index.html" class="back-link"><- Brandon Sweat</a>
     <span class="sep">/</span>
     <span class="current-page">Resume / CV</span>
   </div>
-  <a href="documents/resume.pdf" class="download-btn" target="_blank">↓ Download PDF</a>
+  <a href="documents/resume.pdf" class="download-btn" target="_blank"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Reddown_Arrow_Down.png" alt="" aria-hidden="true"> DOWNLOAD RESUME PDF NOW</a>
 </nav>
 
 <div class="folder-strip" id="folder-strip"></div>
@@ -95,7 +96,7 @@
   <header class="r-header">
     <div>
       <div class="r-name">Brandon Sweat</div>
-      <div class="r-tagline">Cybersecurity · IT Consulting · Photography</div>
+      <div class="r-tagline">Cybersecurity / Computer Help / Photography</div>
     </div>
     <div class="r-contact">
       <div><a href="mailto:brandonsweat@proton.me">brandonsweat@proton.me</a></div>
@@ -106,8 +107,8 @@
   <section class="r-section">
     <h2 class="r-section-title">Experience</h2>
     <div class="r-entry">
-      <div class="r-entry-header"><span class="r-role">IT Technician</span><span class="r-period">2024 – Present</span></div>
-      <div class="r-org">SkyWest Airlines — St. George, UT</div>
+      <div class="r-entry-header"><span class="r-role">IT Technician</span><span class="r-period">2024 - Present</span></div>
+      <div class="r-org">SkyWest Airlines - St. George, UT</div>
       <ul class="r-bullets">
         <li>Perform hardware configuration, software troubleshooting, and enterprise network management across airport and operations environments.</li>
         <li>Administer user and group accounts in Microsoft Active Directory, Azure AD, and the Microsoft Admin Portal, including provisioning, access control, and policy enforcement.</li>
@@ -115,17 +116,17 @@
       </ul>
     </div>
     <div class="r-entry">
-      <div class="r-entry-header"><span class="r-role">Head Coach</span><span class="r-period">2021 – 2024</span></div>
-      <div class="r-org">Contact Climbing Gym — St. George, UT</div>
+      <div class="r-entry-header"><span class="r-role">Head Coach</span><span class="r-period">2021 - 2024</span></div>
+      <div class="r-org">Contact Climbing Gym - St. George, UT</div>
       <ul class="r-bullets">
-        <li>Coached competitive youth athletes ages 6–18, designing individualized long-term training plans and periodized programming tailored to each athlete's goals and development stage.</li>
+        <li>Coached competitive youth athletes ages 6-18, designing individualized long-term training plans and periodized programming tailored to each athlete's goals and development stage.</li>
         <li>Communicated complex technical concepts clearly to large groups with varying skill levels, adapting instruction style for age, ability, and learning pace.</li>
         <li>Guided team through regional and national competitions, cultivating discipline, goal-setting, and an apprecation for the outdoors.</li>
       </ul>
     </div>
     <div class="r-entry">
-      <div class="r-entry-header"><span class="r-role">Gym Staff</span><span class="r-period">2019 – 2023</span></div>
-      <div class="r-org">Utah Tech Climbing Gym — St. George, UT</div>
+      <div class="r-entry-header"><span class="r-role">Gym Staff</span><span class="r-period">2019 - 2023</span></div>
+      <div class="r-org">Utah Tech Climbing Gym - St. George, UT</div>
       <ul class="r-bullets">
         <li>Authored the gym's foundational safety standards and operational procedures, establishing protocols that remain in use today.</li>
         <li>Planned, budgeted, and managed construction of an IFSC-compliant speed climbing wall from initial concept through completion.</li>
@@ -133,8 +134,8 @@
       </ul>
     </div>
     <div class="r-entry">
-      <div class="r-entry-header"><span class="r-role">Freelance Photographer</span><span class="r-period">2020 – Present</span></div>
-      <div class="r-org">Self-Employed — Southern Utah</div>
+      <div class="r-entry-header"><span class="r-role">Freelance Photographer</span><span class="r-period">2020 - Present</span></div>
+      <div class="r-org">Self-Employed - Southern Utah</div>
       <ul class="r-bullets">
         <li>Portrait, couples, and landscape sessions across Zion, Bryce Canyon, Kanab, Snow Canyon, and surrounding areas.</li>
         <li>Handle all aspects of client communication, session planning, on-location direction, and post-processing.</li>
@@ -147,7 +148,7 @@
     <h2 class="r-section-title">Security Projects &amp; Labs</h2>
     <div class="r-entry">
       <div class="r-entry-header"><span class="r-role">Home Security Lab</span><span class="r-period">Ongoing</span></div>
-      <div class="r-org">Self-directed — Proxmox / pfSense / Kali Linux</div>
+      <div class="r-org">Self-directed - Proxmox / pfSense / Kali Linux</div>
       <ul class="r-bullets">
         <li>Built and maintain a virtualized attack/defend network environment for hands-on penetration testing practice.</li>
         <li>Completed TryHackMe rooms including Blue, Mr. Robot, Advent of Cyber, and Jurassic Park.</li>
@@ -193,10 +194,10 @@
     <h2 class="r-section-title">Training &amp; Leadership</h2>
     <div class="r-entry">
       <div class="r-entry-header"><span class="r-role">CompTIA Security+</span><span class="r-period">2024</span></div>
-      <div class="r-org">CompTIA — Certified</div>
+      <div class="r-org">CompTIA - Certified</div>
     </div>
     <div class="r-entry">
-      <div class="r-entry-header"><span class="r-role">TryHackMe — Top 5%</span><span class="r-period">Ongoing</span></div>
+      <div class="r-entry-header"><span class="r-role">TryHackMe - Top 5%</span><span class="r-period">Ongoing</span></div>
       <div class="r-org">Self-directed cybersecurity training</div>
     </div>
     <div class="r-entry">
@@ -214,12 +215,11 @@
 
 <script>
   const FOLDERS = [
+    { label:'Home', href:'index.html', id:'home' },
     { label:'Blog', href:'blog.html', id:'blog' },
     { label:'Projects', href:'projects.html', id:'projects' },
-    { label:'Photos', href:'photography.html', id:'photography' },
-    { label:'About', href:'about.html', id:'about' },
+    { label:'Photography', href:'photography.html', id:'photography' },
     { label:'Resume', href:'resume.html', id:'resume' },
-    { label:'Consult', href:'consulting.html', id:'consulting' },
   ];
   const CURRENT = 'resume';
   const fp = `<path d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>`;
@@ -231,5 +231,23 @@
   ).join('');
 </script>
 
+<script>
+  (function randomRetroDetails(){
+    const colors = ['#fff7c7','#ffdff8','#dfffff','#e8ffd9','#ffe8d7','#eef0ff','#f4ffd9','#ffeef2'];
+    document.querySelectorAll('.fstrip-item, .left-nav a').forEach((el) => {
+      el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    });
+    const heads = document.querySelectorAll('.home-page h1, .home-page h2, .home-page h3');
+    const fonts = ['Arial Black, Arial, sans-serif','Impact, Arial, sans-serif','Trebuchet MS, Arial, sans-serif','Georgia, serif'];
+    const headColors = ['#008000','#cc0000','#0000ee','#b000b0','#ff6600'];
+    heads.forEach((h) => {
+      h.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+      h.style.color = headColors[Math.floor(Math.random() * headColors.length)];
+    });
+  })();
+</script>
 </body>
 </html>
+
+
+

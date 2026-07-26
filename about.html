@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About — Brandon Sweat</title>
+  <title>About - Brandon Sweat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <style>
@@ -41,7 +41,7 @@
     .interests-title { font-size:0.6rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:14px; padding-top:24px; border-top:1px solid var(--border); }
     .interest-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; }
     .interest-item { font-size:0.7rem; color:var(--muted); display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--border); }
-    .interest-item::before { content:'→'; color:var(--green); font-size:0.62rem; flex-shrink:0; }
+    .interest-item::before { content:'->'; color:var(--green); font-size:0.62rem; flex-shrink:0; }
 
     /* PORTRAIT */
     .portrait-wrap { margin-bottom:18px; }
@@ -72,15 +72,16 @@
       .folder-strip { padding-left:16px; }
     }
   </style>
+  <link rel="stylesheet" href="assets/rebrand.css">
 </head>
-<body>
-
+<body class="about-page">
 <nav class="top-nav">
   <div class="breadcrumb">
-    <a href="index.html" class="back-link">← Brandon Sweat</a>
+    <a href="index.html" class="back-link"><- Brandon Sweat</a>
     <span class="sep">/</span>
     <span class="current-page">About</span>
   </div>
+  <a class="corner-download about-tab" href="mailto:brandonsweat@proton.me"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/TH_home_icon.png" alt="" aria-hidden="true"> <span>EMAIL BRANDON</span></a>
 </nav>
 
 <div class="folder-strip" id="folder-strip"></div>
@@ -92,9 +93,9 @@
     <p class="section-kicker">// whoami</p>
     <h1 class="bio-name">Brandon Sweat</h1>
     <div class="bio-body">
-      <p>I'm a <em>cybersecurity enthusiast, IT professional, and photographer</em> based in Southern Utah. My path into security started through years of IT helpdesk work — fielding everything from network outages to "why is my printer broken" — which gave me a hands-on understanding of enterprise threat landscapes.</p>
-      <p>I'm always sharpening my skills through CTFs, building out my home lab, and security labs in both Windows and Linux. I'm interested in <em>network security, penetration testing, and OSINT</em> — and document what I find interesting here.</p>
-      <p>Outside of security, I shoot <em>portrait and landscape photography</em> across the canyon country of Southern Utah — Zion, Bryce, Kanab, and everything in between. I also take on <em>freelance IT consulting</em> work, helping individuals and small businesses solve the full range of IT problems, from setting up new laptops to urgent data exfil.</p>
+      <p>I'm a <em>cybersecurity enthusiast, IT professional, and photographer</em> based in Southern Utah. My path into security started through years of IT helpdesk work - fielding everything from network outages to "why is my printer broken" - which gave me a hands-on understanding of enterprise threat landscapes.</p>
+      <p>I'm always sharpening my skills through CTFs, building out my home lab, and security labs in both Windows and Linux. I'm interested in <em>network security, penetration testing, and OSINT</em> - and document what I find interesting here.</p>
+      <p>Outside of security, I shoot <em>portrait and landscape photography</em> across the canyon country of Southern Utah - Zion, Bryce, Kanab, and everything in between. I also help individuals and small businesses with <em>practical computer problems</em>, from new laptop setup to storage and recovery planning.</p>
       <p>If you'd like to work together, reach out at <a href="mailto:brandonsweat@proton.me">brandonsweat@proton.me</a>.</p>
     </div>
     <div class="interests">
@@ -105,7 +106,7 @@
         <div class="interest-item">CTFs</div>
         <div class="interest-item">Landscape Photography</div>
         <div class="interest-item">OSINT &amp; Recon</div>
-        <div class="interest-item">IT Consulting</div>
+        
         <div class="interest-item">Active Directory</div>
         <div class="interest-item">Home Lab Building</div>
         <div class="interest-item">Linux &amp; Windows</div>
@@ -130,16 +131,15 @@
         <div>&nbsp;&nbsp;<span class="tk">"location"</span><span class="to">: </span><span class="tv">"Southern Utah"</span><span class="to">,</span></div>
         <div>&nbsp;&nbsp;<span class="tk">"focus"</span><span class="to">: [</span></div>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"cybersecurity"</span><span class="to">,</span></div>
-        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"IT consulting"</span><span class="to">,</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"computer help"</span><span class="to">,</span></div>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"photography"</span></div>
         <div>&nbsp;&nbsp;<span class="to">],</span></div>
         <div>&nbsp;&nbsp;<span class="tk">"available"</span><span class="to">: </span><span style="color:#1ec776">true</span><span class="to">,</span></div>
         <div>&nbsp;&nbsp;<span class="tk">"email"</span><span class="to">: </span><span class="tv">"<a href="mailto:brandonsweat@proton.me" class="tlink">brandonsweat@proton.me</a>"</span></div>
         <div><span class="to">}</span></div><br>
         <div><span class="tp">$ </span><a href="resume.html" class="tlink">open resume.html</a></div>
-        <div><span class="tp">$ </span><a href="consulting.html" class="tlink">open consulting.html</a></div>
         <div><span class="tp">$ </span><a href="photography.html" class="tlink">open portfolio.html</a></div><br>
-        <div><span class="tp">$ </span><span id="bc" style="color:#1ec776">▌</span></div>
+        <div><span class="tp">$ </span><span id="bc" style="color:#1ec776">|</span></div>
       </div>
     </div>
   </aside>
@@ -149,12 +149,11 @@
 
 <script>
   const FOLDERS = [
+    { label:'Home', href:'index.html', id:'home' },
     { label:'Blog', href:'blog.html', id:'blog' },
     { label:'Projects', href:'projects.html', id:'projects' },
-    { label:'Photos', href:'photography.html', id:'photography' },
-    { label:'About', href:'about.html', id:'about' },
+    { label:'Photography', href:'photography.html', id:'photography' },
     { label:'Resume', href:'resume.html', id:'resume' },
-    { label:'Consult', href:'consulting.html', id:'consulting' },
   ];
   const CURRENT = 'about';
   const fp = `<path d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>`;
@@ -165,8 +164,28 @@
     </a>`
   ).join('');
   const bc = document.getElementById('bc');
-  setInterval(() => { bc.style.opacity = bc.style.opacity === '0' ? '1' : '0'; }, 530);
+  
 </script>
 
+<script>
+  (function randomRetroDetails(){
+    const colors = ['#fff7c7','#ffdff8','#dfffff','#e8ffd9','#ffe8d7','#eef0ff','#f4ffd9','#ffeef2'];
+    document.querySelectorAll('.fstrip-item, .left-nav a').forEach((el) => {
+      el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    });
+    const heads = document.querySelectorAll('.home-page h1, .home-page h2, .home-page h3');
+    const fonts = ['Arial Black, Arial, sans-serif','Impact, Arial, sans-serif','Trebuchet MS, Arial, sans-serif','Georgia, serif'];
+    const headColors = ['#008000','#cc0000','#0000ee','#b000b0','#ff6600'];
+    heads.forEach((h) => {
+      h.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+      h.style.color = headColors[Math.floor(Math.random() * headColors.length)];
+    });
+  })();
+</script>
 </body>
 </html>
+
+
+
+
+

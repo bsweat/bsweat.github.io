@@ -1,8 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://commons.wikimedia.org">
+  <link rel="preconnect" href="https://upload.wikimedia.org">
   <title>Brandon Sweat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
@@ -32,7 +34,7 @@
       min-height: 100vh;
     }
 
-    /* ── TOP BAR ─────────────────────────────── */
+    /* -- TOP BAR ------------------------------- */
     .top-bar {
       display: flex;
       justify-content: space-between;
@@ -78,7 +80,7 @@
     .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2.5s ease-in-out infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    /* ── DIVIDER ─────────────────────────────── */
+    /* -- DIVIDER ------------------------------- */
     .divider-wrap { padding: 0 52px; }
     .divider {
       border: none;
@@ -86,7 +88,7 @@
       margin: 28px 0;
     }
 
-    /* ── FOLDER GRID ─────────────────────────── */
+    /* -- FOLDER GRID --------------------------- */
     .folders-section {
       padding: 0 52px;
       display: grid;
@@ -144,7 +146,7 @@
 
     .folder-link.active .folder-label { color: var(--green); }
 
-    /* ── ABOUT PANEL ─────────────────────────── */
+    /* -- ABOUT PANEL --------------------------- */
     .about-panel {
       margin: 0 52px;
       padding: 44px 0 0;
@@ -227,7 +229,7 @@
     .tlink { color: var(--green); text-decoration: none; }
     .tlink:hover { text-decoration: underline; }
 
-    /* ── SCROLL HINT ────────────────────────── */
+    /* -- SCROLL HINT -------------------------- */
     .scroll-hint { display: none; }
 
     @keyframes hint-bounce {
@@ -250,7 +252,7 @@
     .site-footer a:hover { color: var(--green); }
     .gp { color: var(--green); }
 
-    /* ── RESPONSIVE ──────────────────────────── */
+    /* -- RESPONSIVE ---------------------------- */
     .page-wrap { max-width: 1400px; margin: 0 auto; }
 
     @media (max-width: 900px) {
@@ -262,17 +264,17 @@
     }
 
     @media (max-width: 600px) {
-      /* ── Header ── */
+      /* -- Header -- */
       .top-bar { padding: 20px 20px 0; }
       /* Reserve 2 lines so "photographer" wrapping never shifts the page */
       .tagline { min-height: 3em; }
       .header-meta { display: none; }
 
-      /* ── Divider ── */
+      /* -- Divider -- */
       .divider-wrap { padding: 0 20px; }
       .divider { margin: 18px 0; }
 
-      /* ── Folders section — kill the ghost 180px portrait column ── */
+      /* -- Folders section - kill the ghost 180px portrait column -- */
       .folders-section {
         grid-template-columns: 1fr;
         padding: 0 16px;
@@ -280,7 +282,7 @@
       }
       .section-label { margin-bottom: 14px; }
 
-      /* ── Folder grid — 2 columns, full-width, centered ── */
+      /* -- Folder grid - 2 columns, full-width, centered -- */
       .folder-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px 12px;
@@ -298,16 +300,16 @@
         margin: 0 auto;
       }
 
-      /* ── Portrait ── */
+      /* -- Portrait -- */
       .portrait-wrap { display: none; }
 
-      /* ── About panel — peek just below the fold ── */
+      /* -- About panel - peek just below the fold -- */
       .about-panel { margin: 0 16px; padding: 20px 0 0; }
 
-      /* ── Footer ── */
+      /* -- Footer -- */
       .site-footer { margin: 52px 16px 0; }
 
-      /* ── Scroll hint — fixed at bottom, fades out on scroll ── */
+      /* -- Scroll hint - fixed at bottom, fades out on scroll -- */
       .scroll-hint {
         display: block;
         position: fixed;
@@ -328,188 +330,123 @@
       .scroll-hint.hidden { opacity: 0; }
     }
   </style>
+  <link rel="stylesheet" href="assets/rebrand.css">
 </head>
-<body>
+<body class="home-page"><div class="home-shell">
+  <header class="site-head">
+    <section class="brand-box"><h1>BSWEAT</h1><small>personal web directory</small></section>
+    <section class="banner-box"><h2>Security / Photos / Projects</h2><p>Southern Utah personal web directory</p></section>
+    <section class="contact-box"><strong>Contact:</strong><br><a href="mailto:brandonsweat@proton.me">brandonsweat@proton.me</a><br>Available for photo sessions, projects, and security/IT conversation.</section>
+  </header>
 
-<div class="top-bar">
-  <div>
-    <h1 class="name">Brandon Sweat</h1>
-    <p class="tagline" id="tagline"><span class="cursor"></span></p>
+  <div class="layout">
+    <nav class="left-nav" aria-label="Main sections">
+      <a href="index.html">Home</a>
+      <a href="blog.html">Blog / Web Log</a>
+      <a href="projects.html">Projects</a>
+      <a href="photography.html">Photography</a>
+      <a href="resume.html">Resume</a>
+
+      <a href="#guestbook">Guest Book</a>
+    </nav>
+
+    <main class="main-grid">
+      <section class="hero-box">
+        <h2>Brandon Sweat</h2>
+        <p>Cybersecurity learner, IT technician, photographer, and home-lab note keeper based in Southern Utah.</p>
+        <div class="badge-row"><span>Security+</span><span>TryHackMe top 5%</span><span>Photo sessions open</span><span>Readable notes</span></div>
+      </section>
+      <article class="mini-box"><h3>New writeups</h3><p>CTF notes, OpenVAS scans, OSINT walkthroughs, Active Directory basics, and lab lessons.</p><a href="blog.html">Read the web log</a></article>
+      <article class="mini-box"><h3>Photo gallery</h3><p>Portraits, couples, landscapes, and session information across Southern Utah and beyond.</p><a href="photography.html">Open photos</a></article>
+      <article class="mini-box"><h3>Project garage</h3><p>Home lab, phishing analyzer, OSINT scripts, and experiments that are useful enough to keep.</p><a href="projects.html">View projects</a></article>
+      <article class="mini-box"><h3>Work History</h3><p>Experience, skills, certifications, security projects, and a downloadable PDF version.</p><a href="resume.html">Open resume</a></article>
+      <article class="mini-box portrait-carousel"><h3>Face Check!</h3><div class="carousel-stack"><img src="photos/thumbs/DSC04529.jpg" alt="Portrait session"><img src="photos/thumbs/DSC06262.jpg" alt="Red rock portrait"><img src="photos/thumbs/DSC06517.jpg" alt="Golden hour portrait"><img src="photos/thumbs/DSC06780.jpg" alt="Graduation portrait"></div><p><a href="photography.html">Open the full photo archive</a></p></article>
+      <article class="mini-box"><h3>Reach me :)</h3><p>Email is the best way to reach me. I work with individuals, families, creatives, and small businesses.</p><a href="mailto:brandonsweat@proton.me">Send email</a></article>
+      <article class="mini-box free-gif-box"><div class="free-gif-grid random-gif-grid" data-gif-count="4"></div></article>
+    </main>
+
+    <aside>
+      <section class="side-box"><h3>Quick facts</h3><p><strong>Location:</strong> Southern Utah</p><p><strong>Focus:</strong> security, photography, projects</p><p><strong>Style:</strong> clear notes, usable pages, no mystery buttons.</p></section>
+      <section class="side-gif-library"><div class="free-gif-grid random-gif-grid side-random-gifs" data-gif-count="4"></div></section>
+      <section class="guestbook-box" id="guestbook"><h3>Guest Book</h3><p>GitHub Pages cannot save this by itself. Easiest static option: link this box to a GitHub Discussions thread or a Formspree form.</p><form action="mailto:brandonsweat@proton.me" method="post" enctype="text/plain"><input name="name" placeholder="Your name"><textarea name="message" rows="4" placeholder="Leave a note"></textarea><button type="submit">Sign Guest Book</button></form></section>
+    </aside>
   </div>
-  <div class="header-meta">
-    <div class="status"><span class="dot"></span>available for work</div>
-    <div>brandonsweat@proton.me</div>
-  </div>
+
+  <footer class="home-footer"><span>Brandon Sweat</span><span>Hand-built personal website, janky on purpose, readable by requirement.</span></footer>
 </div>
-
-<div class="divider-wrap">
-  <hr class="divider">
-</div>
-
-<div class="page-wrap">
-
-<div class="folders-section">
-  <div class="folders-left">
-    <p class="section-label">// root directory</p>
-
-    <nav class="folder-grid" aria-label="Site navigation">
-
-    <!-- BLOG -->
-    <a href="blog.html" class="folder-link">
-      <svg class="f-svg" viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" fill="none">
-        <path class="f-stroke" d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke-width="1.5" stroke-linejoin="round"/>
-        <line class="f-glyph" x1="26" y1="52" x2="94" y2="52" stroke-width="1.2"/>
-        <line class="f-glyph" x1="26" y1="63" x2="76" y2="63" stroke-width="1.2"/>
-        <line class="f-glyph" x1="26" y1="74" x2="86" y2="74" stroke-width="1.2"/>
-      </svg>
-      <span class="folder-label">Blog /<br>Writeups</span>
-    </a>
-
-    <!-- PROJECTS -->
-    <a href="projects.html" class="folder-link">
-      <svg class="f-svg" viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" fill="none">
-        <path class="f-stroke" d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke-width="1.5" stroke-linejoin="round"/>
-        <text class="f-text" x="60" y="71" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="18" style="fill:#1ec776;opacity:0.6">&lt; / &gt;</text>
-      </svg>
-      <span class="folder-label">Projects</span>
-    </a>
-
-    <!-- PHOTOGRAPHY -->
-    <a href="photography.html" class="folder-link">
-      <svg class="f-svg" viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" fill="none">
-        <path class="f-stroke" d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke-width="1.5" stroke-linejoin="round"/>
-        <rect class="f-glyph" x="34" y="55" width="52" height="26" rx="3" stroke-width="1.2"/>
-        <circle class="f-glyph" cx="60" cy="68" r="8" stroke-width="1.2"/>
-        <rect x="50" y="49" width="14" height="6" rx="1" fill="none" stroke="#1ec776" stroke-width="1.2" opacity="0.55"/>
-        <circle cx="80" cy="61" r="2.5" style="fill:#1ec776;opacity:0.45"/>
-      </svg>
-      <span class="folder-label">Photography</span>
-    </a>
-
-    <!-- RESUME -->
-    <a href="resume.html" class="folder-link">
-      <svg class="f-svg" viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" fill="none">
-        <path class="f-stroke" d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke-width="1.5" stroke-linejoin="round"/>
-        <rect class="f-glyph" x="36" y="47" width="48" height="36" rx="2" stroke-width="1.2"/>
-        <line class="f-glyph" x1="43" y1="57" x2="77" y2="57" stroke-width="1.1"/>
-        <line class="f-glyph" x1="43" y1="65" x2="70" y2="65" stroke-width="1.1"/>
-        <line class="f-glyph" x1="43" y1="73" x2="74" y2="73" stroke-width="1.1"/>
-      </svg>
-      <span class="folder-label">Resume / CV</span>
-    </a>
-
-    <!-- CONSULTING -->
-    <a href="consulting.html" class="folder-link">
-      <svg class="f-svg" viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" fill="none">
-        <path class="f-stroke" d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke-width="1.5" stroke-linejoin="round"/>
-        <rect class="f-glyph" x="24" y="50" width="72" height="34" rx="2" stroke-width="1.2"/>
-        <line class="f-glyph" x1="24" y1="60" x2="96" y2="60" stroke-width="1.1"/>
-        <text style="fill:#1ec776;opacity:0.55;font-size:10px;font-family:monospace" x="31" y="76">$ help --me</text>
-        <circle cx="30" cy="55" r="2" style="fill:#1ec776;opacity:0.5"/>
-        <circle cx="37" cy="55" r="2" style="fill:#1ec776;opacity:0.3"/>
-        <circle cx="44" cy="55" r="2" style="fill:#1ec776;opacity:0.15"/>
-      </svg>
-      <span class="folder-label">IT Consulting</span>
-    </a>
-
-  </nav>
-  </div>
-
-  <div class="portrait-wrap">
-    <img src="photos/portrait.png" alt="Brandon Sweat" style="width:100%;display:block;">
-  </div>
-
-</div>
-
-<!-- ── ABOUT PANEL ──────────────────────────────────────────── -->
-<section class="about-panel" id="about">
-  <p class="panel-kicker">// about</p>
-  <div class="about-grid">
-    <div>
-      <div class="bio-text">
-        <p>I'm a <em>cybersecurity enthusiast, IT consultant, and photographer</em> based in Southern Utah. My path into security started through years of IT helpdesk work — fielding everything from network outages to "why is my printer broken" — which gave me a ground-level understanding of the systems that attackers actually target.</p>
-        <p>These days I spend my time working through security labs and CTFs, building out my home lab, and sharpening my offensive and defensive skills across Windows and Linux environments. I'm interested in <em>network security, penetration testing, and OSINT</em> — and I document what I learn here to give back to the community that helped me get started.</p>
-        <p>Outside of security, I shoot <em>portrait and landscape photography</em> across the canyons of Southern Utah — Zion, Bryce, Snow Canyon, and everything in between. I also take on <em>freelance IT consulting</em> work, from hardware advice to emergency data recovery.</p>
-      </div>
-      <div class="interest-row">
-        <span class="interest-chip hi">Penetration Testing</span>
-        <span class="interest-chip hi">CTF</span>
-        <span class="interest-chip hi">OSINT</span>
-        <span class="interest-chip">Active Directory</span>
-        <span class="interest-chip">HomeLab</span>
-        <span class="interest-chip">Portrait Photography</span>
-        <span class="interest-chip">Landscape Photography</span>
-        <span class="interest-chip">IT Consulting</span>
-        <span class="interest-chip">Linux</span>
-        <span class="interest-chip">Windows</span>
-      </div>
-    </div>
-
-    <div class="term-card">
-      <div class="term-bar">
-        <span class="tdot r"></span>
-        <span class="tdot y"></span>
-        <span class="tdot g"></span>
-        <span class="term-title">brandon@personal ~</span>
-      </div>
-      <div class="term-body">
-        <div><span class="tp">$ </span>cat profile.json</div>
-        <br>
-        <div><span class="to">{</span></div>
-        <div>&nbsp;&nbsp;<span class="tk">"name"</span><span class="to">: </span><span class="tv">"Brandon Sweat"</span><span class="to">,</span></div>
-        <div>&nbsp;&nbsp;<span class="tk">"location"</span><span class="to">: </span><span class="tv">"St. George, Utah"</span><span class="to">,</span></div>
-        <div>&nbsp;&nbsp;<span class="tk">"role"</span><span class="to">: [</span></div>
-        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"security researcher"</span><span class="to">,</span></div>
-        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"IT consultant"</span><span class="to">,</span></div>
-        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"photographer"</span></div>
-        <div>&nbsp;&nbsp;<span class="to">],</span></div>
-        <div>&nbsp;&nbsp;<span class="tk">"available"</span><span class="to">: </span><span style="color:#1ec776">true</span><span class="to">,</span></div>
-        <div>&nbsp;&nbsp;<span class="tk">"email"</span><span class="to">: </span><span class="tv">"<a href="mailto:brandonsweat@proton.me" class="tlink">brandonsweat<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@proton.me</a>"</span></div>
-        <div><span class="to">}</span></div>
-        <br>
-        <div><span class="tp">$ </span><span id="blink-cursor" style="color:#1ec776">▌</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer class="site-footer">
-  <span><span class="gp">~</span> / root / brandon_sweat</span>
-  <a href="mailto:brandonsweat@proton.me">brandonsweat@proton.me</a>
-</footer>
-
-</div><!-- /.page-wrap -->
-
-<div class="scroll-hint" id="scroll-hint">▾ scroll</div>
-
 <script>
-  // Typewriter
-  const text = '> security researcher · IT consultant · photographer';
-  const el = document.getElementById('tagline');
-  let i = 0;
-  function type() {
-    if (i <= text.length) {
-      el.innerHTML = text.slice(0, i) + '<span class="cursor"></span>';
-      i++;
-      setTimeout(type, i === 1 ? 250 : 12 + Math.random() * 8);
-    }
+  // Add more GIFs here later. Use fast: true for small files that should appear in the homepage slots.
+  const gifLibrary = [
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Star.gif', fast: true },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Globe_rotating.gif', fast: true },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/HH30-animated.gif', fast: true },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Auto.gif', fast: true },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Animated_flower.GIF', fast: true },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Water-Fall.gif', fast: true },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Animalien-smiley.gif', fast: true },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ani_blinking_heart.gif', fast: true },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Computer.gif', fast: true },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/CPU.gif', fast: true },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Sunflower_as_gif_websafe.gif', fast: true },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Animexample.gif', fast: true },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Loading2.gif', fast: true },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Camera_Flat_Icon_GIF_Animation.gif', fast: false },
+    { src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Animated_display.gif', fast: false }
+  ];
+  function getRandomGifs(count) {
+    const fastPool = gifLibrary.filter((gif) => gif.fast !== false);
+    const pool = fastPool.length >= count ? fastPool : gifLibrary;
+    return [...pool].sort(() => Math.random() - 0.5).slice(0, count);
   }
-  setTimeout(type, 350);
-
-  // Blink cursor in terminal card
-  const bc = document.getElementById('blink-cursor');
-  if (bc) setInterval(() => { bc.style.opacity = bc.style.opacity === '0' ? '1' : '0'; }, 530);
-
-  // Scroll hint — fade out and remove once the user scrolls
-  const hint = document.getElementById('scroll-hint');
-  if (hint) {
-    const hideHint = () => {
-      hint.classList.add('hidden');
-      window.removeEventListener('scroll', hideHint);
-    };
-    window.addEventListener('scroll', hideHint, { passive: true });
+  function fillRandomGifGrids() {
+    document.querySelectorAll('.random-gif-grid').forEach((grid) => {
+      const count = Number(grid.dataset.gifCount || 4);
+      grid.innerHTML = getRandomGifs(count)
+        .map((gif) => `<img src="${gif.src}" alt="" loading="eager" decoding="async" fetchpriority="low">`)
+        .join('');
+    });
   }
+  function randomizeHomeTiles() {
+    const colors = ['#fff7c7','#ffdff8','#dfffff','#e8ffd9','#ffe8d7','#eef0ff','#f4ffd9','#ffeef2'];
+    document.querySelectorAll('.mini-box').forEach((box) => {
+      box.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    });
+  }
+  function rotatePortraits() {
+    const imgs = Array.from(document.querySelectorAll('.carousel-stack img'));
+    if (!imgs.length) return;
+    let idx = 0;
+    imgs.forEach((img, i) => img.classList.toggle('active', i === 0));
+    setInterval(() => {
+      imgs[idx].classList.remove('active');
+      idx = (idx + 1) % imgs.length;
+      imgs[idx].classList.add('active');
+    }, 2400);
+  }
+  fillRandomGifGrids();
+  randomizeHomeTiles();
+  const fonts = ['Arial Black, Arial, sans-serif','Impact, Arial, sans-serif','Trebuchet MS, Arial, sans-serif','Georgia, serif','Verdana, Geneva, sans-serif','Tahoma, Geneva, sans-serif','Comic Sans MS, Comic Sans, cursive','Courier New, monospace','Lucida Console, Monaco, monospace','Palatino Linotype, Georgia, serif'];
+  const lightTabs = ['#fff7c7','#ffdff8','#dfffff','#e8ffd9','#ffe8d7','#eef0ff','#f4ffd9','#ffeef2','#d7f6ff','#fff0a8'];
+  const headColors = ['#008000','#cc0000','#0000ee','#b000b0','#9a4a00'];
+  document.querySelectorAll('.home-page h1, .home-page h2').forEach((h) => {
+    h.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+    h.style.color = headColors[Math.floor(Math.random() * headColors.length)];
+  });
+  document.querySelectorAll('.mini-box h3').forEach((h) => {
+    h.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+    h.style.backgroundColor = lightTabs[Math.floor(Math.random() * lightTabs.length)];
+    h.style.color = '#000';
+  });
+  rotatePortraits();
 </script>
-
 </body>
 </html>
+
+
+
+
+
+
+
+
+

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Photography — Brandon Sweat</title>
+  <title>Photography - Brandon Sweat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <style>
@@ -81,15 +81,16 @@
       .cta-strip { flex-direction:column; align-items:flex-start; }
     }
   </style>
+  <link rel="stylesheet" href="assets/rebrand.css">
 </head>
-<body>
-
+<body class="photo-page">
 <nav class="top-nav">
   <div class="breadcrumb">
-    <a href="index.html" class="back-link">← Brandon Sweat</a>
+    <a href="index.html" class="back-link"><- Brandon Sweat</a>
     <span class="sep">/</span>
     <span class="current-page">Photography</span>
   </div>
+  <a class="corner-download photography-tab" href="mailto:brandonsweat@proton.me"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Camera_Flat_Icon_GIF_Animation.gif" alt="" aria-hidden="true"> <span>EMAIL FOR BOOKING</span></a>
 </nav>
 
 <div class="folder-strip" id="folder-strip"></div>
@@ -98,13 +99,13 @@
 
 <section class="hero">
   <div>
-    <h1 class="hero-title">Southern Utah<br>Portrait &amp; Landscape</h1>
+    <h1 class="hero-title">Southern Utah Portrait &amp; Landscape</h1>
     <p class="hero-desc">Based in <em>Southern Utah</em>, I shoot <em>portraits, couples, and landscapes</em> across this beautiful state. My standard package is a 1 hour shoot, 1 location with 20-40 deliverable photos at a rate of 200$.</p>
   </div>
   <div class="contact-block">
     <p class="contact-label">// book a session</p>
     <a href="mailto:brandonsweat@proton.me" class="contact-email">brandonsweat@proton.me</a>
-    <p class="contact-note">Southern Utah &amp; surrounding areas<br>Portraits · Couples · Landscapes</p>
+    <p class="contact-note">Southern Utah &amp; surrounding areas<br>Portraits / Couples / Landscapes</p>
   </div>
 </section>
 
@@ -125,14 +126,14 @@
 <div class="cta-strip">
   <div class="cta-text">
     <strong>Ready to book?</strong><br>
-    <span>Sessions across Southern Utah — Zion, Bryce, Kanab, Snow Canyon, and surrounding areas.</span>
+    <span>Sessions across Southern Utah - Zion, Bryce, Kanab, Snow Canyon, and surrounding areas.</span>
   </div>
-  <a href="mailto:brandonsweat@proton.me" class="cta-btn">Get in Touch →</a>
+  <a href="mailto:brandonsweat@proton.me" class="cta-btn">Get in Touch -></a>
 </div>
 
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <div class="lightbox-inner">
-    <button class="lightbox-close" onclick="closeLightbox()">[ close × ]</button>
+    <button class="lightbox-close" onclick="closeLightbox()">[ close Ã— ]</button>
     <div id="lightbox-content"></div>
   </div>
 </div>
@@ -140,14 +141,13 @@
 </div><!-- /.page-wrap -->
 
 <script>
-  // ── FOLDER STRIP ─────────────────────────────────────────────────────────
+  // -- FOLDER STRIP ---------------------------------------------------------
   const FOLDERS = [
+    { label:'Home', href:'index.html', id:'home' },
     { label:'Blog', href:'blog.html', id:'blog' },
     { label:'Projects', href:'projects.html', id:'projects' },
-    { label:'Photos', href:'photography.html', id:'photography' },
-    { label:'About', href:'about.html', id:'about' },
+    { label:'Photography', href:'photography.html', id:'photography' },
     { label:'Resume', href:'resume.html', id:'resume' },
-    { label:'Consult', href:'consulting.html', id:'consulting' },
   ];
   const CURRENT = 'photography';
   const fp = `<path d="M8 32 L8 22 Q8 20 10 20 L38 20 Q42 20 44 24 L50 32 L112 32 Q114 32 114 34 L114 88 Q114 90 112 90 L8 90 Q6 90 6 88 L6 34 Q6 32 8 32 Z" fill="#0f0f0f" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>`;
@@ -158,7 +158,7 @@
     </a>`
   ).join('');
 
-  // ── PHOTOS ───────────────────────────────────────────────────────────────
+  // -- PHOTOS ---------------------------------------------------------------
   const photos = [
     { cat:'portrait',  src:'photos/DSC04529.jpg', caption:'Zion golden hour portrait',              aspect:0.75 },
     { cat:'landscape', src:'photos/DSC08004.jpg', caption:'Zion Canyon Valley, Southern Utah',      aspect:1.5  },
@@ -174,7 +174,7 @@
     { cat:'landscape', src:'photos/DSC06311.jpg', caption:'Joshua Tree at sunrise',                 aspect:1.5  },
     { cat:'portrait',  src:'photos/DSC00291.jpg', caption:'Graduation portrait',                    aspect:0.67 },
     { cat:'couple',    src:'photos/DSC04508.jpg', caption:'Family session, Zion National Park',     aspect:1.5  },
-    { cat:'landscape', src:'photos/DSC03749.jpg', caption:'Gljúfrabúi waterfall cave, Iceland',     aspect:1.5  },
+    { cat:'landscape', src:'photos/DSC03749.jpg', caption:'GljÃºfrabÃºi waterfall cave, Iceland',     aspect:1.5  },
     { cat:'portrait',  src:'photos/DSC00498.jpg', caption:'Graduation portraits',                   aspect:0.67 },
     { cat:'couple',    src:'photos/DSC05395.jpg', caption:'Wedding first dance, Southern Utah',     aspect:0.75 },
     { cat:'landscape', src:'photos/DSC04384.jpg', caption:'Eiffel Tower from the Seine, Paris',     aspect:0.67 },
@@ -191,7 +191,7 @@
     { cat:'landscape', src:'photos/DSC03425.jpg', caption:'Raven on the coastal cliffs, Iceland',   aspect:0.67 },
     { cat:'portrait',  src:'photos/DSC06780.jpg', caption:'Graduation portrait, mountain meadow',   aspect:0.75 },
     { cat:'landscape', src:'photos/DSC06442.jpg', caption:'Bouldering at Joshua Tree',              aspect:1.5  },
-    { cat:'landscape', src:'photos/DSC04208.jpg', caption:'Church at Vík, Iceland',                 aspect:0.67 },
+    { cat:'landscape', src:'photos/DSC04208.jpg', caption:'Church at VÃ­k, Iceland',                 aspect:0.67 },
     { cat:'landscape', src:'photos/DSC06677.jpg', caption:'Joshua Tree desert, California',         aspect:1.5  },
     { cat:'landscape', src:'photos/DSC04791.jpg', caption:'Snow-covered forest, Pacific Northwest', aspect:1.5  },
     { cat:'landscape', src:'photos/DSC07778.jpg', caption:'Wigwam Motel, Route 66',                 aspect:1.6  },
@@ -207,7 +207,7 @@
     document.getElementById('photo-count').textContent = filtered.length + ' photo' + (filtered.length !== 1 ? 's' : '');
     gallery.innerHTML = filtered.map((p, pos) => {
       const idx = photos.indexOf(p);
-      // First 6 images are likely above the fold — load them eagerly
+      // First 6 images are likely above the fold - load them eagerly
       const loadAttr = pos < 6 ? 'eager' : 'lazy';
       return `<div class="photo-item" data-cat="${p.cat}" onclick="openLightbox(${idx})">
         <img src="${thumbSrc(p.src)}" alt="${p.caption}" loading="${loadAttr}" decoding="async" style="display:block;width:100%;height:auto">
@@ -239,5 +239,26 @@
   renderGallery('all');
 </script>
 
+<script>
+  (function randomRetroDetails(){
+    const colors = ['#fff7c7','#ffdff8','#dfffff','#e8ffd9','#ffe8d7','#eef0ff','#f4ffd9','#ffeef2'];
+    document.querySelectorAll('.fstrip-item, .left-nav a').forEach((el) => {
+      el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    });
+    const heads = document.querySelectorAll('.home-page h1, .home-page h2, .home-page h3');
+    const fonts = ['Arial Black, Arial, sans-serif','Impact, Arial, sans-serif','Trebuchet MS, Arial, sans-serif','Georgia, serif'];
+    const headColors = ['#008000','#cc0000','#0000ee','#b000b0','#ff6600'];
+    heads.forEach((h) => {
+      h.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+      h.style.color = headColors[Math.floor(Math.random() * headColors.length)];
+    });
+  })();
+</script>
 </body>
 </html>
+
+
+
+
+
+
