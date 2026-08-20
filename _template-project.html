@@ -1,79 +1,18 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Card Template</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; padding: 8px; background: #fff; color: #000; font: 16px/1.45 Arial, Helvetica, sans-serif; }
-    a { color: #0000ee; }
-    .shell { max-width: 980px; margin: 0 auto; }
-    .top-nav { display: grid; grid-template-columns: 1fr auto; gap: 6px; margin-bottom: 8px; }
-    .breadcrumb, .action { border: 2px solid #000; background: #ffffcc; padding: 8px 10px; font-weight: 700; }
-    .action { background: linear-gradient(90deg,#b8ffb8,#00e676); text-align: center; }
-    .folder-strip { display: flex; justify-content: center; gap: 4px; border: 2px solid #000; background: #eee; padding: 4px; margin-bottom: 8px; }
-    .folder-strip span { flex: 1 1 150px; max-width: 190px; border: 2px outset #fff; background: #dfffff; padding: 8px; text-align: center; font-weight: 700; }
-    .page-header, .panel { border: 2px solid #000; background: #fff; padding: 10px; margin-bottom: 8px; }
-    .page-header { background: #e8ffff; }
-    .projects-title-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
-    h1 { margin: 0; font: 900 34px Arial, Helvetica, sans-serif; }
-    h2 { margin: 0 0 8px; font: 900 18px Arial, Helvetica, sans-serif; text-decoration: underline; }
-    .page-subtitle { margin: 0; font-size: 16px; }
-    .kicker { display: inline-block; background: #fff200; border: 1px solid #000; padding: 2px 5px; font: 700 13px Arial, Helvetica, sans-serif; text-transform: uppercase; margin-bottom: 8px; }
-    .step { margin: 7px 0; }
-    .step b { background: #ffdff8; border: 1px solid #000; padding: 2px 5px; }
-    pre { margin: 0; padding: 12px; overflow-x: auto; background: #000; color: #00ff66; border: 2px solid #000; font: 13px/1.45 "Courier New", Consolas, monospace; white-space: pre; }
-    code { background: #ffffcc; border: 1px solid #000; padding: 0 3px; }
-    .status-badge, .stack-tag { display: inline-block; background: #fff200; border: 1px solid #000; color: #000; padding: 2px 6px; font-weight: 700; font-size: 13px; }
-    .note { background: #ffffcc; border: 2px dashed #000; padding: 10px; }
-    @media (max-width: 700px) { .top-nav { grid-template-columns: 1fr; } .folder-strip { overflow-x: auto; justify-content: flex-start; } }
-  </style>
-</head>
-<body>
-<div class="shell">
-  <nav class="top-nav">
-    <div class="breadcrumb"><a href="projects.html"><- Projects</a> / Template</div>
-    <div class="action">MY GITHUB</div>
-  </nav>
-
-  <div class="folder-strip" aria-label="site sections"><span>Home</span><span>Blog</span><span>Projects</span><span>Photography</span><span>Resume</span></div>
-
-  <header class="page-header">
-    <span class="kicker">copy-paste helper</span>
-    <div class="projects-title-row"><h1>Projects</h1><p class="page-subtitle">Labs, tools, scripts, and side projects - security-focused and otherwise.</p></div>
-  </header>
-
-  <section class="panel">
-    <h2>How To Add A Project</h2>
-    <p class="step"><b>step_01</b> Open <code>projects.html</code>.</p>
-    <p class="step"><b>step_02</b> Find <code>const projects = [</code>.</p>
-    <p class="step"><b>step_03</b> Add your filled object before the closing <code>];</code>. Add a comma after the previous object if needed.</p>
-    <p class="step"><b>step_04</b> The page auto-numbers cards based on array order.</p>
-  </section>
-
-  <section class="panel">
-    <h2>Template Object</h2>
-<pre>{
-  status: "wip",
-  name: "Your Project Name",
-  desc: "One or two sentences describing what the project does, the problem it solves, and what makes it useful.",
+﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Project Card Template</title><link rel="stylesheet" href="assets/css/site.css"></head><body><header class="site-header signal-nav"><a class="brand-mark" href="index.html"><span class="brand-chip">B</span><span>Brandon Sweat</span></a><nav class="site-nav" data-nav></nav><div class="header-right"><span class="signal-dot"></span><span>template</span></div></header><main class="page"><section class="page-hero"><h1 class="page-title">Add a project.</h1><p class="page-desc">Copy the object below, fill in your details, and paste it into the projects array in projects.html. Cards auto-number, so just add to the bottom.</p></section><section class="resume-doc"><h2 class="r-section-title">How to add a project</h2><p class="prose">Open projects.html, find the projects array, paste the filled-in object after the last object, save, and refresh the page.</p><pre class="code-wrap">{
+  status: 'wip',
+  name: 'Your Project Name',
+  desc: 'One or two sentences describing what the project does, the problem it solves, and anything interesting about how it works.',
   stack: [
-    { label: "Python", hi: true },
-    { label: "Nmap", hi: false },
-    { label: "Security", hi: false },
+    { label: 'Python', hi: true },
+    { label: 'Nmap', hi: false },
+    { label: 'Shodan', hi: false },
   ],
-  link: { text: "github ->", href: "https://github.com/bsweat/your-repo" },
-},</pre>
-  </section>
+  link: {
+    text: 'github ->',
+    href: 'https://github.com/yourrepo',
+  },
+},</pre><h2 class="r-section-title">References</h2><p><span class="status-badge active">Active</span> <span class="status-badge wip">In Progress</span> <span class="status-badge done">Done</span></p><p style="margin-top:12px"><span class="stack-tag hi">Primary Tech</span> <span class="stack-tag">Secondary</span></p></section></main><script src="assets/js/site.js"></script><div class="page-transition-overlay" aria-hidden="true"></div></body></html>
 
-  <section class="panel">
-    <h2>Quick Reference</h2>
-    <p><strong>Status values:</strong> <span class="status-badge">active</span> <span class="status-badge">wip</span> <span class="status-badge">done</span></p>
-    <p><strong>Stack tags:</strong> set <code>hi: true</code> on the main language/tool and <code>hi: false</code> on the rest. Keep it to about 3-4 tags.</p>
-    <p><strong>Links:</strong> common button text is <code>github -></code>, <code>view -></code>, <code>demo -></code>, or <code>writeup -></code>. Use <code>#</code> for drafts.</p>
-    <p class="note"><strong>// Current setup:</strong> The project page renders every object in <code>projects</code> as a clickable card. No separate HTML card markup is needed.</p>
-  </section>
-</div>
-</body>
-</html>
+
+
+

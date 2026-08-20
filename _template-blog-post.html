@@ -1,91 +1,19 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog Post Template</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; padding: 8px; background: #fff; color: #000; font: 16px/1.45 Arial, Helvetica, sans-serif; }
-    a { color: #0000ee; }
-    .shell { max-width: 980px; margin: 0 auto; }
-    .top-nav { display: grid; grid-template-columns: 1fr auto; gap: 6px; margin-bottom: 8px; }
-    .breadcrumb, .action { border: 2px solid #000; background: #ffffcc; padding: 8px 10px; font-weight: 700; }
-    .action { background: linear-gradient(90deg,#fff200,#ff9b00); text-align: center; }
-    .folder-strip { display: flex; justify-content: center; gap: 4px; border: 2px solid #000; background: #eee; padding: 4px; margin-bottom: 8px; }
-    .folder-strip span { flex: 1 1 150px; max-width: 190px; border: 2px outset #fff; background: #dfffff; padding: 8px; text-align: center; font-weight: 700; }
-    .page-header, .panel { border: 2px solid #000; background: #fff; padding: 10px; margin-bottom: 8px; }
-    .page-header { background: #e8ffff; }
-    h1 { margin: 0 0 4px; font: 900 34px Arial, Helvetica, sans-serif; }
-    h2 { margin: 0 0 8px; font: 900 18px Arial, Helvetica, sans-serif; text-decoration: underline; }
-    .kicker { display: inline-block; background: #fff200; border: 1px solid #000; padding: 2px 5px; font: 700 13px Arial, Helvetica, sans-serif; text-transform: uppercase; }
-    .step { margin: 7px 0; }
-    .step b { background: #ffdff8; border: 1px solid #000; padding: 2px 5px; }
-    pre { margin: 0; padding: 12px; overflow-x: auto; background: #000; color: #00ff66; border: 2px solid #000; font: 13px/1.45 "Courier New", Consolas, monospace; white-space: pre; }
-    code { background: #ffffcc; border: 1px solid #000; padding: 0 3px; }
-    .tag { display: inline-block; background: #fff200; border: 1px solid #000; color: #000; padding: 2px 6px; font-weight: 700; font-size: 13px; }
-    .note { background: #ffffcc; border: 2px dashed #000; padding: 10px; }
-    @media (max-width: 700px) { .top-nav { grid-template-columns: 1fr; } .folder-strip { overflow-x: auto; justify-content: flex-start; } }
-  </style>
-</head>
-<body>
-<div class="shell">
-  <nav class="top-nav">
-    <div class="breadcrumb"><a href="blog.html"><- Blog</a> / Template</div>
-    <div class="action">THANKS FOR READING!</div>
-  </nav>
-
-  <div class="folder-strip" aria-label="site sections"><span>Home</span><span>Blog</span><span>Projects</span><span>Photography</span><span>Resume</span></div>
-
-  <header class="page-header">
-    <span class="kicker">copy-paste helper</span>
-    <h1>Blog Post Template</h1>
-    <p>Use this when adding a new object to the <code>posts</code> array in <code>blog.html</code>. The current highest post id is <code>7</code>, so the next one should usually be <code>8</code>.</p>
-  </header>
-
-  <section class="panel">
-    <h2>How To Add A Post</h2>
-    <p class="step"><b>step_01</b> Open <code>blog.html</code>.</p>
-    <p class="step"><b>step_02</b> Find <code>const posts = [</code>.</p>
-    <p class="step"><b>step_03</b> Paste the filled object immediately after the opening bracket so the newest post appears first.</p>
-    <p class="step"><b>step_04</b> Increment <code>id</code>, keep <code>tags</code> space-separated, and use the examples below for <code>tagHTML</code>.</p>
-  </section>
-
-  <section class="panel">
-    <h2>Template Object</h2>
-<pre>{
+﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Blog Post Template</title><link rel="stylesheet" href="assets/css/site.css"></head><body><header class="site-header signal-nav"><a class="brand-mark" href="index.html"><span class="brand-chip">B</span><span>Brandon Sweat</span></a><nav class="site-nav" data-nav></nav><div class="header-right"><span class="signal-dot"></span><span>template</span></div></header><main class="page"><section class="page-hero"><h1 class="page-title">Add a writeup.</h1><p class="page-desc">Copy the object below, fill it in, and paste it at the top of the posts array in blog.html so the newest post appears first.</p></section><section class="resume-doc"><h2 class="r-section-title">Template object</h2><pre class="code-wrap">{
   id: 8,
-  date: 'Jul 2026',
+  date: 'Apr 2026',
   title: 'Your Post Title Here',
-  excerpt: 'One or two readable sentences shown on the blog index. Keep this under roughly 160 characters.',
+  excerpt: 'One or two sentences shown in the post list. Keep it punchy.',
   tags: 'security',
-  tagHTML: '&lt;span class="tag security"&gt;Security&lt;/span&gt;&lt;span class="tag"&gt;HomeLab&lt;/span&gt;',
+  tagHTML: '&lt;span class="tag security"&gt;Security&lt;/span&gt;',
   kicker: '// Category / Subcategory',
   body: `
-    &lt;div class="note"&gt;&lt;strong&gt;// Note:&lt;/strong&gt; Optional callout text goes here.&lt;/div&gt;
-
     &lt;h2&gt;Section Heading&lt;/h2&gt;
-    &lt;p&gt;Paragraph text goes here. Use &lt;em&gt;emphasis&lt;/em&gt; for important terms.&lt;/p&gt;
-
-    &lt;h2&gt;Commands&lt;/h2&gt;
-    &lt;pre&gt;nmap -sV -sC --open &amp;lt;TARGET_IP&amp;gt;&lt;/pre&gt;
-
-    &lt;h2&gt;Takeaways&lt;/h2&gt;
-    &lt;ul&gt;
-      &lt;li&gt;First point&lt;/li&gt;
-      &lt;li&gt;Second point&lt;/li&gt;
-    &lt;/ul&gt;
+    &lt;p&gt;Paragraph text with &lt;em&gt;emphasis&lt;/em&gt; where needed.&lt;/p&gt;
+    &lt;pre&gt;nmap -sV -sC --open &lt;TARGET_IP&gt;&lt;/pre&gt;
+    &lt;div class="note"&gt;&lt;strong&gt;// Note:&lt;/strong&gt; Callout text goes here.&lt;/div&gt;
   `,
-},</pre>
-  </section>
+},</pre><h2 class="r-section-title">Tag reference</h2><p><span class="tag security">Security</span> <span class="tag ctf">CTF</span> <span class="tag">HomeLab</span> <span class="tag">OSINT</span></p><div class="note" style="margin-top:18px"><strong>Reminder:</strong> Inside the body backtick string, escape literal backticks as \` and write angle brackets in code blocks as entities.</div></section></main><script src="assets/js/site.js"></script><div class="page-transition-overlay" aria-hidden="true"></div></body></html>
 
-  <section class="panel">
-    <h2>Quick Reference</h2>
-    <p><strong>Filter tags:</strong> <code>security</code>, <code>ctf</code>, <code>tools</code>, <code>general</code>. Combine with spaces, like <code>ctf security</code>.</p>
-    <p><strong>Visible tags:</strong> <span class="tag security">Security</span> <span class="tag ctf">CTF</span> <span class="tag">HomeLab</span> <span class="tag">OSINT</span></p>
-    <p><strong>Code blocks:</strong> use <code>&lt;pre&gt;...&lt;/pre&gt;</code>. They now render as smaller terminal-green text on black.</p>
-    <p class="note"><strong>// Reminder:</strong> The <code>body</code> field is a backtick string. If you need a literal backtick inside it, escape it as <code>\`</code>.</p>
-  </section>
-</div>
-</body>
-</html>
+
+
+
