@@ -220,14 +220,19 @@
   draw();
 
   if (matchMedia('(pointer: coarse)').matches) {
-    toggle.hidden = true;
+    toggle.textContent = 'touch: ' + mode;
+    toggle.addEventListener('click', () => {
+      setTimeout(() => { toggle.textContent = 'touch: ' + mode; }, 0);
+    });
     let t = 0;
     setInterval(() => {
+      if (points.length > 8) return;
       t += .7;
       addPoint(innerWidth * (.5 + Math.cos(t) * .22), innerHeight * (.48 + Math.sin(t * .8) * .18));
-    }, 120);
+    }, 180);
   }
 })();
+
 
 
 

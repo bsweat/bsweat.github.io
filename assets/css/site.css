@@ -868,3 +868,26 @@ body.page-loaded .feature-card { animation-duration: .4s; }
   text-transform: uppercase;
   text-align: right;
 }
+
+/* Mobile landing cursor support */
+@media (pointer: coarse) {
+  .landing .cursor-canvas,
+  .landing .cursor-orb {
+    display: block;
+  }
+  .landing .cursor-toggle {
+    display: block;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    padding: 10px 13px;
+    font-size: 10px;
+  }
+  .landing[data-cursor-mode="orb"] .cursor-orb {
+    opacity: .9;
+  }
+}
+@media (max-width: 520px) {
+  .landing .cursor-canvas,
+  .landing .cursor-orb {
+    display: block;
+  }
+}
