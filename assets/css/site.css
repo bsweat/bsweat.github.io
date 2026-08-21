@@ -378,28 +378,32 @@ button, input { font: inherit; }
 .project-card:nth-child(3n+2):hover { background: var(--purple); color: var(--paper); }
 .project-card:nth-child(3n+3):hover { background: var(--rainbow-orange); }
 .projects-page .project-card:hover {
-  background: #dff5fb;
+  background: #f6fbfc;
   color: var(--ink);
 }
 .projects-page .project-card:nth-child(3n+1):hover {
-  background: #dff5fb;
+  background: #f6fbfc;
 }
 .projects-page .project-card:nth-child(3n+2):hover {
-  background: #f3e4f0;
+  background: #fcf7fb;
   color: var(--ink);
 }
 .projects-page .project-card:nth-child(3n+3):hover {
-  background: #ffe8c4;
+  background: #fffaf2;
 }
-.projects-page .project-card:hover .project-desc,
-.projects-page .project-card:hover .project-num,
+.projects-page .project-card:hover,
+.projects-page .project-card:hover * {
+  color: var(--ink) !important;
+}
+.projects-page .project-card:hover .tag,
 .projects-page .project-card:hover .stack-tag,
 .projects-page .project-card:hover .status-badge {
-  color: var(--ink);
+  background: rgba(255,255,255,.7);
+  border-color: rgba(21,21,21,.65);
 }
 .projects-page .page-title {
-  max-width: 9.2ch;
-  font-size: clamp(56px, 10vw, 142px);
+  max-width: 12ch;
+  font-size: clamp(56px, 8.5vw, 128px);
 }
 .project-top { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
 .project-num { font-family: var(--mono); color: var(--soft-ink); font-size: 12px; }
