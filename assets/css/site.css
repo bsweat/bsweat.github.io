@@ -567,9 +567,11 @@ button, input { font: inherit; }
 .signal-nav .site-nav a.nav-red { --nav-color: var(--red); }
 .signal-nav .site-nav a.nav-green { --nav-color: var(--green); }
 .signal-nav .site-nav a.nav-orange { --nav-color: var(--orange); }
+.signal-nav .site-nav a.nav-blue { --nav-color: var(--blue); }
 .signal-nav .site-nav a.dot-red { --dot-color: var(--red); }
 .signal-nav .site-nav a.dot-green { --dot-color: var(--green); }
 .signal-nav .site-nav a.dot-orange { --dot-color: var(--orange); }
+.signal-nav .site-nav a.dot-blue { --dot-color: var(--blue); }
 .signal-nav .site-nav a:hover,
 .signal-nav .site-nav a.active { color: var(--nav-color); }
 .signal-nav .site-nav a.active::before { background: var(--dot-color); }

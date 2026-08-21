@@ -3,7 +3,7 @@
   { href: "blog.html", label: "Blog", color: "green", dot: "red" },
   { href: "resume.html", label: "Resume", color: "red", dot: "green" },
   { href: "photography.html", label: "Photos", color: "orange", dot: "red" },
-  { href: "projects.html", label: "Project", color: "green", dot: "orange" },
+  { href: "projects.html", label: "Project", color: "blue", dot: "blue" },
 ];
 
 function currentPageName() {
