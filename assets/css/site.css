@@ -377,6 +377,30 @@ button, input { font: inherit; }
 .project-card:nth-child(3n+1):hover { background: var(--blue); }
 .project-card:nth-child(3n+2):hover { background: var(--purple); color: var(--paper); }
 .project-card:nth-child(3n+3):hover { background: var(--rainbow-orange); }
+.projects-page .project-card:hover {
+  background: #dff5fb;
+  color: var(--ink);
+}
+.projects-page .project-card:nth-child(3n+1):hover {
+  background: #dff5fb;
+}
+.projects-page .project-card:nth-child(3n+2):hover {
+  background: #f3e4f0;
+  color: var(--ink);
+}
+.projects-page .project-card:nth-child(3n+3):hover {
+  background: #ffe8c4;
+}
+.projects-page .project-card:hover .project-desc,
+.projects-page .project-card:hover .project-num,
+.projects-page .project-card:hover .stack-tag,
+.projects-page .project-card:hover .status-badge {
+  color: var(--ink);
+}
+.projects-page .page-title {
+  max-width: 9.2ch;
+  font-size: clamp(56px, 10vw, 142px);
+}
 .project-top { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
 .project-num { font-family: var(--mono); color: var(--soft-ink); font-size: 12px; }
 .project-name { font-size: clamp(26px, 3vw, 42px); line-height: .95; font-weight: 760; }
@@ -576,6 +600,19 @@ button, input { font: inherit; }
 .signal-nav .site-nav a.active { color: var(--nav-color); }
 .signal-nav .site-nav a.active::before { background: var(--dot-color); }
 .signal-nav .site-nav a.nav-glow { animation: nav-glow .62s ease-out; }
+.signal-nav .site-nav a[href="projects.html"],
+.signal-nav .site-nav a[href="projects.html"]:hover {
+  --nav-color: var(--blue);
+  --dot-color: var(--blue);
+  color: var(--blue);
+}
+.signal-nav .site-nav a[href="projects.html"].active {
+  background: var(--blue);
+  color: var(--paper);
+}
+.signal-nav .site-nav a[href="projects.html"].active:hover {
+  color: var(--paper);
+}
 @keyframes nav-glow {
   0% { text-shadow: 0 0 0 var(--nav-color); filter: brightness(1); }
   35% { text-shadow: 0 0 14px var(--nav-color), 0 0 34px var(--nav-color); filter: brightness(1.22); }
