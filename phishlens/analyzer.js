@@ -25,7 +25,7 @@ const TOP_BRANDS = [
 const HOMOGLYPH_MAP = {
   '@':'a','4':'a','а':'a',
   '3':'e','е':'e',
-  '1':'i','l':'i','|':'i','!':'i',
+  '1':'l','|':'i','!':'i',
   '0':'o','о':'o','ο':'o',
   '5':'s','$':'s',
   '9':'g','6':'b','8':'b','+':'t','7':'t',
@@ -36,11 +36,6 @@ const SUSPICIOUS_TLDS = new Set([
   'biz','work','loan','win','accountant','science','download',
   'racing','review','party','trade','webcam','date','faith',
 ]);
-
-const DKIM_SELECTORS = [
-  'default','google','mail','email','dkim','selector1','selector2',
-  'k1','s1','s2','mandrill','sendgrid','amazonses',
-];
 
 const SUSPICIOUS_PATH_KEYWORDS = [
   'login','signin','sign-in','verify','verification','account','secure',
@@ -72,21 +67,29 @@ function normalizeHomoglyphs(text) {
 
 async function dohQuery(name, type) {
   try {
-    const r = await fetch(
+    const r = await timedFetch(
       `https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(name)}&type=${type}`,
       { headers: { Accept: 'application/dns-json' } }
     );
-    if (!r.ok) return [];
+    if (!r.ok) throw new Error(`DNS lookup returned HTTP ${r.status}`);
     const data = await r.json();
-    return (data.Answer || []).map(a =>
+    if (![0,3].includes(data.Status)) throw new Error(`DNS lookup failed (status ${data.Status})`);
+    return (data.Answer || []).filter(a => a.type === 16).map(a =>
       (a.data || '').replace(/^"+|"+$/g, '').replace(/"\s+"/g, '')
     );
-  } catch { return []; }
+  } catch (error) { throw new Error(`DNS lookup unavailable: ${error.message}`); }
+}
+
+async function timedFetch(url, options = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 12000);
+  try { return await fetch(url, {...options, signal:controller.signal}); }
+  finally { clearTimeout(timer); }
 }
 
 // ── Check 1: URL Structure (pure JS, no network) ──────────────────────────────
 
-function checkURLStructure(url) {
+function checkURLStructureBase(url) {
   const label = 'URL Structure';
   try {
     const parsed    = new URL(url);
@@ -94,7 +97,7 @@ function checkURLStructure(url) {
     const pathFull  = (parsed.pathname + parsed.search).toLowerCase();
     const hostParts = hostname.split('.');
 
-    const hasAtSign          = url.includes('@');
+    const hasAtSign          = !!(parsed.username || parsed.password);
     const isIPAddress        = /^\d{1,3}(\.\d{1,3}){3}$/.test(hostname);
     const subdomainCount     = Math.max(0, hostParts.length - 2);
     const excessiveSubdomain = subdomainCount >= 3;
@@ -134,12 +137,14 @@ function checkURLStructure(url) {
 
 async function checkDomainAge(domain) {
   const label = 'Domain Age';
+  domain = domainParts(domain, false).registered;
+  if (isIPHost(domain)) return {status:'skipped',label,summary:'IP addresses do not have a domain registration age'};
   try {
-    const resp = await fetch(`https://rdap.org/domain/${domain}`, {
+    const resp = await timedFetch(`https://rdap.org/domain/${domain}`, {
       headers: { Accept: 'application/json' },
     });
     if (resp.status === 404) {
-      return { status: 'danger', label, summary: 'Domain not found in RDAP — may be brand new or use private WHOIS', ageDays: null };
+      return { status: 'skipped', label, summary: 'No RDAP record found — registration age could not be verified', ageDays: null };
     }
     if (!resp.ok) throw new Error(`RDAP ${resp.status}`);
     const data = await resp.json();
@@ -166,7 +171,7 @@ async function checkDomainAge(domain) {
       status = 'safe'; summary = `${ageDays} days old (~${yrs} year${yrs !== 1 ? 's' : ''})`;
     }
 
-    return { status, label, summary, ageDays, registered, expires };
+    return { status, label, summary, ageDays, registered, expires, domain, registrar: (data.entities || []).filter(e => e.roles?.includes('registrar')).flatMap(e => e.vcardArray?.[1] || []).find(v => v[0] === 'fn')?.[3] || null, registration_status: data.status || [] };
   } catch (e) {
     return { status: 'error', label, summary: `RDAP lookup failed: ${e.message}` };
   }
@@ -174,70 +179,26 @@ async function checkDomainAge(domain) {
 
 // ── Check 3: HTTPS / SSL ──────────────────────────────────────────────────────
 
-async function checkSSL(url, domain) {
-  const label = 'HTTPS / SSL';
-  if (!url.startsWith('https://')) {
-    return { status: 'danger', label, summary: 'No HTTPS — traffic transmitted in plaintext (HTTP)', valid: false };
-  }
-  try {
-    await fetch(`https://${domain}`, { method: 'HEAD', redirect: 'follow' });
-    return { status: 'safe', label, summary: 'HTTPS active — encrypted with a browser-trusted certificate', valid: true };
-  } catch (e) {
-    const msg = (e.message || '').toLowerCase();
-    if (msg.includes('ssl') || msg.includes('cert') || msg.includes('tls')) {
-      return { status: 'critical', label, summary: 'SSL certificate error — browser rejected the certificate', valid: false };
-    }
-    return { status: 'safe', label, summary: 'HTTPS used — connection is encrypted', valid: true };
-  }
-}
-
-// ── Check 4: Redirect Chain ───────────────────────────────────────────────────
-
-async function checkRedirects(url) {
-  const label = 'Redirect Chain';
-  try {
-    const resp = await fetch(url, {
-      method: 'GET', redirect: 'follow',
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; PhishLens/1.0)' },
-    });
-    const finalUrl    = resp.url || url;
-    const redirected  = resp.redirected || (finalUrl !== url);
-    const origDomain  = new URL(url).hostname;
-    const finalDomain = (() => { try { return new URL(finalUrl).hostname; } catch { return origDomain; } })();
-    const crossDomain = origDomain !== finalDomain;
-
-    let status, summary;
-    if (!redirected)      { status = 'safe';    summary = 'No redirects — direct link'; }
-    else if (crossDomain) { status = 'warning'; summary = `Redirects to a different domain: ${finalDomain}`; }
-    else                  { status = 'safe';    summary = 'Redirects within the same domain'; }
-
-    return { status, label, summary, redirected, final_url: finalUrl, final_domain: finalDomain, cross_domain: crossDomain };
-  } catch (e) {
-    // CORS or network failure — don't penalise, just note it
-    return { status: 'skipped', label, summary: 'Could not follow redirects from browser context (CORS)' };
-  }
-}
-
 // ── Check 5: Lookalike / Typosquatting ────────────────────────────────────────
 
-function checkLookalike(domain) {
+function checkLookalikeBase(domain) {
   const label = 'Lookalike Detection';
-  const parts = domain.toLowerCase().split('.');
+  const parts = domainParts(domain).registered.split('.');
   const tld   = parts.at(-1) || '';
-  const base  = parts.length >= 2 ? parts.at(-2) : parts[0];
+  const base = domainParts(domain).label;
 
   const normalized    = normalizeHomoglyphs(base);
-  const hasHomoglyphs  = normalized !== base;
+  const substituted = normalized !== base;
   const hasNumberSub   = /\d/.test(base);
   const isPunycode     = domain.includes('xn--');
   const suspiciousTld  = SUSPICIOUS_TLDS.has(tld);
 
   let bestBrand = null, bestScore = 0, bestDist = 0;
   for (const brand of TOP_BRANDS) {
-    if (base === brand) {
+    if (domainParts(domain).registered === `${brand}.com`) {
       return {
         status: 'safe', label,
-        summary: `Exact match for '${brand}' — appears legitimate`,
+        summary: `Matches the known '${brand}.com' domain`,
         is_lookalike: false, best_match: null, similarity_score: 100,
         has_homoglyphs: false, has_number_substitution: hasNumberSub,
         is_punycode: isPunycode, suspicious_tld: suspiciousTld, tld, indicators: [],
@@ -249,18 +210,22 @@ function checkLookalike(domain) {
     if (score > bestScore) { bestScore = score; bestBrand = brand; bestDist = dist; }
   }
 
-  const isLookalike = bestScore >= 75 && bestBrand !== null && bestBrand !== base;
+  const embeddedBrand = TOP_BRANDS.find(brand => base !== brand && (base.startsWith(brand + '-') || base.endsWith('-' + brand)));
+  if (embeddedBrand) { bestBrand = embeddedBrand; bestScore = 90; }
+  const isLookalike = (bestScore >= 75 && bestBrand !== null && bestBrand !== base) || TOP_BRANDS.includes(base);
+  const hasHomoglyphs = substituted && (isLookalike || /[а-еоο|!@$+]/i.test(base));
   const indicators  = [];
   if (isLookalike)                 indicators.push(`${bestScore.toFixed(0)}% match to '${bestBrand}.com'`);
   if (hasHomoglyphs)               indicators.push('lookalike/homoglyph characters (e.g. 0→o, 1→l)');
   if (hasNumberSub && isLookalike) indicators.push('digit substitution detected');
   if (isPunycode)                  indicators.push('punycode / IDN encoding');
-  if (suspiciousTld)               indicators.push(`high-risk free TLD (.${tld})`);
+  if (suspiciousTld)               indicators.push(`TLD risk indicator (.${tld})`);
 
   let status;
   if      (isLookalike && hasHomoglyphs)              status = 'critical';
   else if (isLookalike)                               status = 'danger';
-  else if (hasHomoglyphs || isPunycode)               status = 'danger';
+  else if (hasHomoglyphs)                            status = 'danger';
+  else if (isPunycode)                                status = 'warning';
   else if (suspiciousTld)                             status = 'warning';
   else                                                status = 'safe';
 
@@ -282,7 +247,9 @@ function checkLookalike(domain) {
 // ── Check 6: DNS Security (SPF / DKIM / DMARC via DoH) ───────────────────────
 
 async function checkDNS(domain) {
-  const label = 'DNS Security (SPF/DKIM/DMARC)';
+  domain = domainParts(domain, false).registered;
+  const label = 'Email DNS policies';
+  if(isIPHost(domain)) return {status:'skipped',label,summary:'Email DNS policies apply to domain names, not IP literals'};
   const [txtRecords, dmarcRecords] = await Promise.all([
     dohQuery(domain, 'TXT'),
     dohQuery(`_dmarc.${domain}`, 'TXT'),
@@ -304,74 +271,25 @@ async function checkDNS(domain) {
   }
   const dmarc = { found: dmarcHits.length > 0, record: dmarcHits[0] || null, policy };
 
-  // DKIM — check 6 most common selectors in parallel
-  const dkimResults = await Promise.all(
-    DKIM_SELECTORS.slice(0, 6).map(sel =>
-      dohQuery(`${sel}._domainkey.${domain}`, 'TXT').then(recs => ({
-        sel, found: recs.some(r => r.includes('v=DKIM1') || (r.includes('p=') && r.length > 20)),
-      }))
-    )
-  );
-  const dkimHit = dkimResults.find(r => r.found);
-  const dkim    = { found: !!dkimHit, selector: dkimHit?.sel || null };
+  // DKIM keys require the signing domain and selector from a real email.
+  // Guessing selector names cannot establish that DKIM is absent.
+  const dkim = { found: null, selector: null, status: 'unverified' };
 
   const flags = [];
   if (!spf.found)                        flags.push('no SPF record');
   else if (!spf.strict && !spf.softfail) flags.push('SPF missing enforcement policy (-all / ~all)');
   if (!dmarc.found)                      flags.push('no DMARC record');
   else if (dmarc.policy === 'none')      flags.push("DMARC policy set to 'none' — no enforcement");
-  if (!dkim.found)                       flags.push('no DKIM key found on common selectors');
 
-  const status  = flags.length === 0 ? 'safe' : flags.length >= 3 ? 'danger' : 'warning';
+  const status  = flags.length === 0 ? 'safe' : flags.length >= 2 ? 'danger' : 'warning';
   const summary = flags.length === 0
-    ? 'SPF ✓  DKIM ✓  DMARC ✓ — strong email authentication'
+    ? 'SPF and DMARC policies found — DKIM needs an email signature to check'
     : flags.join('; ');
 
   return { status, label, summary, spf, dmarc, dkim, flags };
 }
 
 // ── Check 7: VirusTotal ───────────────────────────────────────────────────────
-
-async function checkVirusTotal(url, apiKey) {
-  const label = 'VirusTotal';
-  if (!apiKey) {
-    return { status: 'skipped', label, summary: 'No API key — add yours in ⚙ Settings (free at virustotal.com)' };
-  }
-  try {
-    const urlId = btoa(url).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
-    const resp  = await fetch(`https://www.virustotal.com/api/v3/urls/${urlId}`, {
-      headers: { 'x-apikey': apiKey },
-    });
-    if (resp.status === 404) {
-      await fetch('https://www.virustotal.com/api/v3/urls', {
-        method: 'POST',
-        headers: { 'x-apikey': apiKey, 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `url=${encodeURIComponent(url)}`,
-      });
-      return { status: 'warning', label, summary: 'URL submitted for scanning — check back in ~60s' };
-    }
-    if (resp.status === 401) return { status: 'error', label, summary: 'Invalid VirusTotal API key' };
-    if (resp.status === 429) return { status: 'warning', label, summary: 'VT rate limit hit — free tier: 4 req/min' };
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-
-    const data  = await resp.json();
-    const stats = data.data?.attributes?.last_analysis_stats || {};
-    const mal = stats.malicious || 0, sus = stats.suspicious || 0,
-          har = stats.harmless  || 0, und = stats.undetected || 0;
-    const total = mal + sus + har + und;
-
-    let status, summary;
-    if      (mal >= 5)  { status = 'critical'; summary = `${mal}/${total} engines flagged as MALICIOUS`; }
-    else if (mal >= 2)  { status = 'danger';   summary = `${mal}/${total} engines flagged as malicious`; }
-    else if (mal === 1) { status = 'warning';  summary = `1/${total} engine flagged — treat with caution`; }
-    else if (sus > 0)   { status = 'warning';  summary = `${sus}/${total} engines flagged as suspicious`; }
-    else                { status = 'safe';     summary = `0/${total} engines — no known threats`; }
-
-    return { status, label, summary, malicious: mal, suspicious: sus, harmless: har, undetected: und, total_engines: total };
-  } catch (e) {
-    return { status: 'error', label, summary: `VirusTotal check failed: ${e.message}` };
-  }
-}
 
 // ── Risk scoring ──────────────────────────────────────────────────────────────
 // Conservative by design: one confirmed red flag = NOT TRUSTED.
@@ -391,7 +309,7 @@ function calcRiskScore(checks) {
 
   // Domain age (0-30)
   const age = da.ageDays;
-  if (age == null)    s += 14;
+  if (age == null)    s += 0;
   else if (age < 7)   s += 30;
   else if (age < 30)  s += 25;
   else if (age < 90)  s += 16;
@@ -419,11 +337,13 @@ function calcRiskScore(checks) {
   }
 
   // DNS (0-14)
-  if (!dns.spf?.found)   s += 7;
-  if (!dns.dmarc?.found) s += 7;
+  if (checks.email_header && dns.spf && !dns.spf.found) s += 7;
+  if (checks.email_header && dns.dmarc && !dns.dmarc.found) s += 7;
 
   // Redirects (0-14)
-  if (rd.cross_domain) s += 14;
+  if (rd.cross_domain && rd.source !== 'VirusTotal historical report') s += 8;
+  if (checks.url_analysis?.executable_download) s += 12;
+  if (checks.url_analysis?.deceptive_subdomain) s += 20;
 
   let raw = Math.min(s, 100);
 
@@ -431,7 +351,7 @@ function calcRiskScore(checks) {
   // Any single critical check → score cannot be below 72 (HIGH/CRITICAL territory)
   // Any single danger check → score cannot be below 48 (NOT TRUSTED)
   // Any two warnings → score cannot be below 30 (CAUTION)
-  const statuses = Object.values(checks).map(c => c?.status).filter(Boolean);
+  const statuses = Object.entries(checks).filter(([name]) => name !== 'dns' || checks.email_header).map(([,c]) => c?.status).filter(Boolean);
   const hasCrit   = statuses.includes('critical');
   const dangerCt  = statuses.filter(s => s === 'danger').length;
   const warnCt    = statuses.filter(s => s === 'warning').length;
@@ -450,7 +370,7 @@ function getRiskLevel(score) {
   if (score >= 70) return 'DANGEROUS';
   if (score >= 45) return 'NOT TRUSTED';
   if (score >= 20) return 'CAUTION';
-  return 'LIKELY SAFE';
+  return 'LOW RISK';
 }
 
 // ── Report generator (used by both popup and web app) ─────────────────────────

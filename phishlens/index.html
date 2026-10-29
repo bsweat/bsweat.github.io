@@ -4,55 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PhishLens — Threat Analysis</title>
-  <meta name="description" content="Instant phishing threat analysis. Paste a suspicious URL or email header and get a full IOC report in seconds. Runs entirely in your browser." />
+  <meta name="description" content="Browser-only URL and email-header analysis with DNS, domain registration, lookalike detection and optional VirusTotal reports." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <div class="bg-grid" aria-hidden="true"></div>
-  <canvas id="particles-canvas" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#scanner-card">Skip to scanner</a>
 
   <!-- ─── HEADER ─────────────────────────────────────────────────────────── -->
   <header class="site-header">
-    <div class="header-inner">
-      <a class="logo" href="/">
-        <svg class="logo-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <circle cx="13" cy="13" r="9" stroke="currentColor" stroke-width="2.5" />
-          <line x1="19.5" y1="19.5" x2="29" y2="29" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="13" y1="4"  x2="13" y2="7"  stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="13" y1="19" x2="13" y2="22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="4"  y1="13" x2="7"  y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="19" y1="13" x2="22" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="13" cy="13" r="1.5" fill="currentColor"/>
-        </svg>
-        <span>PHISHLENS</span>
-      </a>
-      <div class="header-meta">
-        <span class="tag">v1.2.0</span>
-        <span class="tag">No server · Runs in browser</span>
-        <a class="tag tag-link" href="https://bsweat.github.io" target="_blank" rel="noopener">bsweat</a>
-      </div>
-    </div>
+    <nav class="header-inner" aria-label="Main navigation">
+      <a class="logo" href="https://bsweat.github.io/">brandon sweat<span>↗</span></a>
+      <a class="nav-link tone-blue" href="https://bsweat.github.io/blog.html">blog <span>↗</span></a>
+      <a class="nav-link tone-purple" href="https://bsweat.github.io/about.html">resume <span>↗</span></a>
+      <a class="nav-link tone-orange" href="https://bsweat.github.io/photography.html">photo <span>↗</span></a>
+      <a class="nav-link tone-green" href="https://bsweat.github.io/projects.html">projects <span>↗</span></a>
+    </nav>
+    <div class="status-strip"><span>001 / tools / phishlens</span><span>v2.0 · browser-only analysis</span></div>
   </header>
-
-  <!-- ─── HERO ───────────────────────────────────────────────────────────── -->
-  <section class="hero">
-    <p class="hero-eyebrow">[ IOC · THREAT ANALYSIS · BLUE TEAM ]</p>
-    <h1 class="hero-title">
-      Spot phishing.<br/>
-      <span class="accent">Instantly.</span>
-    </h1>
-    <p class="hero-sub">
-      Paste a suspicious URL or raw email headers. Get domain age, HTTPS/SSL, redirect chain,
-      lookalike scoring, VirusTotal, and SPF/DKIM/DMARC — all in your browser. Zero data leaves your device.
-    </p>
+  <section class="hero" aria-labelledby="hero-title">
+    <h1 class="hero-title" id="hero-title">phishlens<span class="title-period">.</span></h1>
+    <span class="hero-fish" role="img" aria-label="Fish">🐟</span>
   </section>
-
   <!-- ─── SCANNER ────────────────────────────────────────────────────────── -->
   <main class="scanner-wrap">
-    <div class="scanner-card" id="scanner-card">
+    <div class="scanner-card" id="scanner-card" tabindex="-1">
+      <div class="scanner-heading"><h2>analyze a link</h2></div>
 
       <!-- Mode tabs -->
       <div class="mode-tabs" role="tablist">
@@ -82,6 +61,8 @@
         </div>
       </div>
 
+      <div id="email-import" class="email-import hidden"><label for="email-file">Or load an .eml file locally</label><input type="file" id="email-file" accept=".eml,.txt,message/rfc822,text/plain" /><span id="file-status" aria-live="polite"></span></div>
+
       <!-- VirusTotal API key -->
       <div class="vt-toggle-row">
         <button class="vt-toggle" id="vt-toggle" aria-expanded="false">
@@ -89,25 +70,37 @@
           VirusTotal API Key
           <span class="vt-chevron" aria-hidden="true">▸</span>
         </button>
-        <a class="vt-get-key" href="https://www.virustotal.com/gui/sign-in" target="_blank" rel="noopener">Get free key →</a>
+        <a class="vt-get-key" href="https://www.virustotal.com/gui/sign-in" target="_blank" rel="noopener">This works better with VirusTotal. Get your key here -&gt;</a>
       </div>
       <div class="vt-key-area hidden" id="vt-key-area">
         <input type="password" id="vt-key" class="options-input"
-          placeholder="Paste your VirusTotal API key (stored locally, never sent to any server)" autocomplete="off" />
-        <p class="helper-text">Free tier: 4 requests/min · Key stays in localStorage only</p>
+          placeholder="Paste your VirusTotal API key" autocomplete="off" />
+        <p class="helper-text">Key stays in this tab and is sent only to VirusTotal. Up to 2 requests per scan; repeated reports cached for 5 minutes.</p>
       </div>
 
-      <!-- Examples -->
-      <div class="examples-row">
-        <span class="examples-label">Try an example:</span>
-        <button class="example-chip" data-url="http://paypa1-secure.xyz/signin">paypa1-secure.xyz</button>
-        <button class="example-chip" data-url="https://google.com">google.com (safe)</button>
-        <button class="example-chip" data-url="http://amaz0n-update.tk/account">amaz0n-update.tk</button>
+      <p class="lookup-note">Live DNS and registration checks use Cloudflare and RDAP. With a key, URLs and domains are sent to VirusTotal for existing reports. Target pages are never opened.</p>
+      <!-- Examples fill the input only; threat sites are never navigated to. -->
+      <div class="example-library" aria-label="Analysis examples">
+        <div class="example-group"><span class="example-group-label">Safe references</span><div class="examples-row">
+          <button type="button" class="example-chip example-safe" data-url="https://google.com/">google.com <span>safe</span></button>
+          <button type="button" class="example-chip example-safe" data-url="https://www.wikipedia.org/">wikipedia.org <span>safe</span></button>
+        </div></div>
+        <div class="example-group"><span class="example-group-label">Legitimate login · may trigger caution</span><div class="examples-row">
+          <button type="button" class="example-chip example-medium" data-url="https://accounts.google.com/v3/signin/identifier">Google sign-in <span>legit login</span></button>
+        </div></div>
+        <div class="example-group"><span class="example-group-label">Real phishing · feed-reported active</span><div class="examples-row">
+          <button type="button" class="example-chip example-threat" data-url="https://instagram-login-support.vercel.app" title="Phishunt observation: 2026-10-29T11:30:10.661909+00:00 · fills input only">instagram-login-support[.]vercel[.]app <span>instagram lure</span></button>
+          <button type="button" class="example-chip example-threat" data-url="https://148.72.244.125/yahoo/login.html" title="Phishunt observation: 2026-10-29T11:30:10.661909+00:00 · fills input only">148[.]72[.]244[.]125 <span>yahoo lure</span></button>
+          <button type="button" class="example-chip example-threat" data-url="https://outlook-silk-nine.vercel.app" title="Phishunt observation: 2026-10-29T11:30:10.661909+00:00 · fills input only">outlook-silk-nine[.]vercel[.]app <span>microsoft lure</span></button>
+          <button type="button" class="example-chip example-threat" data-url="http://xfinityservices.vercel.app" title="Phishunt observation: 2026-10-29T11:30:10.661909+00:00 · fills input only">xfinityservices[.]vercel[.]app <span>xfinity lure</span></button>
+          <button type="button" class="example-chip example-threat" data-url="https://prod.deepaul.co" title="Phishunt observation: 2026-10-29T11:30:10.661909+00:00 · fills input only">prod[.]deepaul[.]co</button>
+        </div></div>
+        <p class="example-source"><a href="https://github.com/0xDanielLopez/phishunt-feed" target="_blank" rel="noopener noreferrer">Live phishunt threat feed</a> · feed updated Oct 29, 2026, 7:02 a.m. MDT. Links can go offline. Reference labels do not override scan results.</p>
       </div>
 
       <!-- Scan button -->
       <button class="scan-btn" id="scan-btn" aria-label="Run threat scan">
-        <span class="scan-btn-label">ANALYZE THREAT</span>
+        <span class="scan-btn-label">Analyze threat ↗</span>
         <div class="scan-btn-glow"></div>
       </button>
 
@@ -159,14 +152,12 @@
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5" stroke="currentColor" stroke-width="1.5"/></svg>
               Copy Report
             </button>
-            <button class="report-email-btn" id="report-email-btn">
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 2h12v10H9l-3 3v-3H2V2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><line x1="5" y1="5" x2="11" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="5" y1="8" x2="9" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-              Report to Security Team
-            </button>
           </div>
         </div>
       </div>
 
+      <p class="coverage-note" id="coverage-note" aria-live="polite"></p>
+      <div class="report-links" id="report-links"></div>
       <!-- Check cards grid -->
       <div class="checks-grid" id="checks-grid"></div>
 
@@ -175,16 +166,12 @@
   </main>
 
   <!-- ─── FOOTER ─────────────────────────────────────────────────────────── -->
-  <footer class="site-footer">
-    <span>PHISHLENS v1.2 · For blue-team and educational use</span>
-    <span>·</span>
-    <a href="https://bsweat.github.io" target="_blank" rel="noopener">Brandon Sweat</a>
-    <span>·</span>
-    <a href="https://github.com/bsweat" target="_blank" rel="noopener">GitHub</a>
-  </footer>
+  <footer class="site-footer"><a href="https://bsweat.github.io/">brandon sweat ↗</a><span>phishlens / for blue-team & educational use</span><a href="https://github.com/bsweat">github ↗</a></footer>
 
   <!-- analyzer.js must load before app.js -->
+  <script src="public-suffix.js"></script>
   <script src="analyzer.js"></script>
+  <script src="browser-checks.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

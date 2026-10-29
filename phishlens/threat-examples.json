@@ -1,0 +1,70 @@
+{
+  "source": "Phishunt rolling 24-hour feed",
+  "source_url": "https://github.com/0xDanielLopez/phishunt-feed",
+  "snapshot_url": "https://raw.githubusercontent.com/0xDanielLopez/phishunt-feed/f4b076edcc5505f0d02f7ee210581768e95fd912/feed.json",
+  "feed_updated_at": "2026-10-29T13:02:48Z",
+  "retrieved_at": "2026-10-29T20:07:01.735Z",
+  "activity": "Feed-reported active; target sites were not visited. Availability can change.",
+  "examples": [
+    {
+      "url": "https://instagram-login-support.vercel.app",
+      "brand": "instagram",
+      "feed_observed_at": "2026-10-29T11:30:10.661909+00:00",
+      "feed_verdict": "high",
+      "feed_score": 75,
+      "feed_signals": {
+        "google": true,
+        "phishtank": true,
+        "urlscan": false
+      }
+    },
+    {
+      "url": "https://148.72.244.125/yahoo/login.html",
+      "brand": "yahoo",
+      "feed_observed_at": "2026-10-29T11:30:10.661909+00:00",
+      "feed_verdict": "critical",
+      "feed_score": 95,
+      "feed_signals": {
+        "google": true,
+        "phishtank": true,
+        "urlscan": false
+      }
+    },
+    {
+      "url": "https://outlook-silk-nine.vercel.app",
+      "brand": "microsoft",
+      "feed_observed_at": "2026-10-29T11:30:10.661909+00:00",
+      "feed_verdict": "high",
+      "feed_score": 75,
+      "feed_signals": {
+        "google": true,
+        "phishtank": false,
+        "urlscan": false
+      }
+    },
+    {
+      "url": "http://xfinityservices.vercel.app",
+      "brand": "xfinity",
+      "feed_observed_at": "2026-10-29T11:30:10.661909+00:00",
+      "feed_verdict": "high",
+      "feed_score": 75,
+      "feed_signals": {
+        "google": true,
+        "phishtank": false,
+        "urlscan": true
+      }
+    },
+    {
+      "url": "https://prod.deepaul.co",
+      "brand": null,
+      "feed_observed_at": "2026-10-29T11:30:10.661909+00:00",
+      "feed_verdict": "critical",
+      "feed_score": 95,
+      "feed_signals": {
+        "google": true,
+        "phishtank": true,
+        "urlscan": false
+      }
+    }
+  ]
+}
