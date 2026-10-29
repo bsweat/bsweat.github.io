@@ -1,24 +1,24 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog / Writeups - Brandon Sweat</title>
-  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="stylesheet" href="assets/css/editorial.css">
 </head>
 <body>
-<header class="site-header signal-nav"><a class="brand-mark" href="index.html"><span class="brand-chip">B</span><span>Brandon Sweat</span></a><nav class="site-nav" data-nav></nav><div class="header-right"><span class="signal-dot"></span><span>knowledge base</span></div></header>
-<main class="page">
-  <section class="page-hero"><h1 class="page-title blog-title"><span>Notes from</span><br><span>the lab.</span></h1><p class="page-desc">Security research, CTF solutions, tool notes, and other things I've learned. Same posts, same voice, cleaner place to read.</p></section>
-  <div class="toolbar"><div class="filters"><button class="filter-btn active" onclick="filterPosts('all',this)">All</button><button class="filter-btn" onclick="filterPosts('security',this)">Security</button><button class="filter-btn" onclick="filterPosts('ctf',this)">CTF</button><button class="filter-btn" onclick="filterPosts('tools',this)">Tools & Lab</button><button class="filter-btn" onclick="filterPosts('general',this)">General</button></div><span class="count">click a note to open</span></div>
+<header class="masthead" data-masthead></header>
+<main class="page" id="main">
+
+  <div class="toolbar"><div class="filters"><button class="filter-btn active" onclick="filterPosts('all',this)">All</button><button class="filter-btn" onclick="filterPosts('security',this)">Security</button><button class="filter-btn" onclick="filterPosts('ctf',this)">CTF</button><button class="filter-btn" onclick="filterPosts('tools',this)">Tools & Lab</button><button class="filter-btn" onclick="filterPosts('general',this)">General</button></div><span class="count">Field notes / Archive</span></div>
   <section class="post-list" id="post-list"></section>
 </main>
-<div class="article-overlay" id="article-overlay">
+<div class="article-overlay" id="article-overlay" role="dialog" aria-modal="true" aria-labelledby="article-title" tabindex="-1">
   <nav class="article-nav"><button class="article-back" onclick="closeArticle()">Back to posts</button><span class="article-date-nav count" id="article-date-nav"></span></nav>
   <article class="article-body"><p class="article-kicker" id="article-kicker"></p><h1 class="article-title" id="article-title"></h1><div class="article-tags" id="article-tags"></div><div class="prose" id="article-prose"></div></article>
 </div>
-<footer class="site-footer"><div><div class="footer-name">Blog</div><p>Writeups, notes, and useful scraps from security practice.</p></div><a href="_template-blog-post.html">Post template</a></footer>
-<script src="assets/js/site.js"></script>
+<footer class="site-footer" data-footer></footer>
+<script src="assets/js/editorial.js"></script>
 <script>
 const posts = [
     {
@@ -458,10 +458,10 @@ nmap -p 22,80,443,445 --open 192.168.1.0/24</pre>
 function renderPosts(filter) {
   const list = document.getElementById('post-list');
   const filtered = posts.filter(p => filter === 'all' || p.tags.includes(filter));
-  list.innerHTML = filtered.map(p => '<article class="post-card" data-tags="' + p.tags + '" onclick="openArticle(' + p.id + ')">' +
+  list.innerHTML = filtered.map(p => '<button type="button" class="post-card" data-tags="' + p.tags + '" onclick="openArticle(' + p.id + ')">' +
     '<span class="post-date">' + p.date + '</span>' +
     '<span><span class="post-title">' + p.title + '</span><span class="post-excerpt">' + p.excerpt + '</span><span class="post-tags">' + p.tagHTML + '</span></span>' +
-    '<span class="post-arrow">Open</span></article>').join('');
+    '<span class="post-arrow">Open</span></button>').join('');
 }
 function filterPosts(tag, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -475,14 +475,15 @@ function openArticle(id) {
   document.getElementById('article-tags').innerHTML = p.tagHTML;
   document.getElementById('article-prose').innerHTML = p.body;
   document.getElementById('article-date-nav').textContent = p.date;
-  document.getElementById('article-overlay').classList.add('open');
+  document.getElementById('article-overlay').classList.add('open'); window.articleReturnFocus = document.activeElement; document.getElementById('article-overlay').scrollTop = 0; document.querySelector('.article-back').focus(); history.replaceState(null, '', '#post-' + id);
   document.body.style.overflow = 'hidden';
 }
-function closeArticle() { document.getElementById('article-overlay').classList.remove('open'); document.body.style.overflow = ''; }
+function closeArticle() { document.getElementById('article-overlay').classList.remove('open'); document.body.style.overflow = ''; history.replaceState(null, '', location.pathname); window.articleReturnFocus?.focus(); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeArticle(); });
 renderPosts('all');
+if (/^#post-\d+$/.test(location.hash)) { const id=Number(location.hash.slice(6)); if(posts.some(p=>p.id===id)) openArticle(id); }
 </script>
-<div class="page-transition-overlay" aria-hidden="true"></div></body>
+</body>
 </html>
 
 

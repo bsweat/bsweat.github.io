@@ -18,11 +18,14 @@
     });
   });
   const ctx = canvas.getContext('2d');
-  const washColors = ['rgba(121,191,67,.2)', 'rgba(244,173,47,.18)', 'rgba(211,74,63,.16)', 'rgba(255,253,248,.22)'];
-  const pixelColors = ['#79bf43', '#f4ad2f', '#d34a3f', '#858683', '#fffdf8'];
-  const matrixColors = ['#79bf43', '#79bf43', '#f4ad2f', '#d34a3f'];
+  const palette = ['#00A3E0', '#8E44AD', '#E53935', '#FB8C00', '#FBC02D', '#4CAF50'];
+  const washColors = palette.map(color => color + '88');
+  const pixelColors = palette;
+  const matrixColors = palette;
   const modes = ['ink', 'orb', 'pixel', 'matrix'];
-  let mode = 'ink';
+  let mode = 'pixel';
+  landing.dataset.cursorMode = mode;
+  toggle.textContent = 'cursor: ' + mode;
   let points = [];
   let ripples = [];
 
@@ -91,21 +94,19 @@
         }
       } else if (r.pixelated) {
         const unit = 10;
-        const steps = Math.max(20, Math.floor(r.radius / 3));
-        ctx.globalAlpha = Math.min(r.life, .82);
         ctx.fillStyle = r.color;
-        for (let i = 0; i < steps; i++) {
-          const angle = (Math.PI * 2 * i) / steps;
-          const x = Math.round((r.x + Math.cos(angle) * r.radius) / unit) * unit;
-          const y = Math.round((r.y + Math.sin(angle) * r.radius) / unit) * unit;
-          ctx.fillRect(x, y, unit, unit);
-        }
-        ctx.globalAlpha = r.life * .16;
-        for (let i = 0; i < Math.floor(steps / 2); i++) {
-          const angle = (Math.PI * 2 * i) / (steps / 2);
-          const x = Math.round((r.x + Math.cos(angle) * r.radius * .48) / unit) * unit;
-          const y = Math.round((r.y + Math.sin(angle) * r.radius * .48) / unit) * unit;
-          ctx.fillRect(x, y, unit, unit);
+        // Four perpendicular rays share one rotation for the entire burst.
+        // A short moving tail makes each arm radiate away from the click.
+        for (let arm = 0; arm < 4; arm++) {
+          const angle = r.rotation + arm * Math.PI / 2;
+          for (let trail = 0; trail < 9; trail++) {
+            const distance = r.radius - trail * unit * 1.2;
+            if (distance < 0) continue;
+            ctx.globalAlpha = Math.min(r.life, .9) * (1 - trail / 9);
+            const x = r.x + Math.round(Math.cos(angle) * distance / unit) * unit;
+            const y = r.y + Math.round(Math.sin(angle) * distance / unit) * unit;
+            ctx.fillRect(x - unit / 2, y - unit / 2, unit, unit);
+          }
         }
       } else {
         ctx.globalAlpha = Math.min(r.life, .72);
@@ -201,12 +202,15 @@
       x: event.clientX,
       y: event.clientY,
       radius: 8,
+      rotation: Math.random() * Math.PI / 2,
       life: 1,
-      color: mode === 'matrix' ? (Math.random() > .5 ? 'rgba(121,191,67,.95)' : 'rgba(211,74,63,.9)') : 'rgba(255,253,248,.85)',
+      color: palette[Math.floor(Math.random() * palette.length)],
       pixelated: mode === 'pixel',
       binary: mode === 'matrix',
     });
-    for (let i = 0; i < 10; i++) addPoint(event.clientX + (Math.random() - .5) * 42, event.clientY + (Math.random() - .5) * 42);
+    if (mode !== 'pixel') {
+      for (let i = 0; i < 10; i++) addPoint(event.clientX + (Math.random() - .5) * 42, event.clientY + (Math.random() - .5) * 42);
+    }
   }, { passive: true });
   if (info) {
     info.addEventListener('click', () => {

@@ -1,21 +1,21 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Photography - Brandon Sweat</title>
-  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="stylesheet" href="assets/css/editorial.css">
 </head>
 <body>
-<header class="site-header signal-nav"><a class="brand-mark" href="index.html"><span class="brand-chip">B</span><span>Brandon Sweat</span></a><nav class="site-nav" data-nav></nav><div class="header-right"><span class="signal-dot"></span><span>35 image collection</span></div></header>
-<main class="page">
-  <section class="page-hero"><h1 class="page-title">Collected light.</h1><p class="page-desc">Portraits, couples, landscapes, travel frames, and the occasional strange little roadside scene. This page is built for wandering through the collections, not rushing to a checkout button.</p></section>
+<header class="masthead" data-masthead></header>
+<main class="page" id="main"><h1 class="sr-only">Photographs</h1>
+
   <div class="toolbar"><div class="filters"><button class="filter-btn active" onclick="filterGallery('all',this)">All</button><button class="filter-btn" onclick="filterGallery('portrait',this)">Portraits</button><button class="filter-btn" onclick="filterGallery('couple',this)">Couples</button><button class="filter-btn" onclick="filterGallery('landscape',this)">Landscape</button></div><span class="count" id="photo-count">35 photos</span></div>
   <section class="photo-grid" id="gallery" aria-live="polite"></section>
 </main>
-<div class="lightbox" id="lightbox" onclick="closeLightbox()"><div class="lightbox-inner" onclick="event.stopPropagation()"><button class="lightbox-close" onclick="closeLightbox()">Close</button><div id="lightbox-content"></div></div></div>
-<footer class="site-footer"><div><div class="footer-name">Photos</div><p>Southern Utah and elsewhere, held loosely.</p></div><a href="mailto:brandonsweat@proton.me">brandonsweat@proton.me</a></footer>
-<script src="assets/js/site.js"></script>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photograph viewer" tabindex="-1" onclick="closeLightbox()"><div class="lightbox-inner" onclick="event.stopPropagation()"><button class="lightbox-close" onclick="closeLightbox()">Close</button><div id="lightbox-content"></div></div></div>
+<footer class="site-footer" data-footer></footer>
+<script src="assets/js/editorial.js"></script>
 <script>
   const photos = [
     { cat:'portrait',  src:'photos/DSC04529.jpg', caption:'Zion golden hour portrait',              aspect:0.75 },
@@ -56,13 +56,13 @@
   ];
   function thumbSrc(s) { return s.replace('photos/', 'photos/thumbs/'); }
   function medSrc(s) { return s.replace('photos/', 'photos/medium/'); }
-  function tagColor(idx) { return ['tag-red', 'tag-green', 'tag-orange'][idx % 3]; }
+
   function renderGallery(filter) {
     const filtered = photos.filter(p => filter === 'all' || p.cat === filter);
     document.getElementById('photo-count').textContent = filtered.length + ' photo' + (filtered.length !== 1 ? 's' : '');
     document.getElementById('gallery').innerHTML = filtered.map((p, pos) => {
       const idx = photos.indexOf(p);
-      return `<button class="photo-item" data-cat="${p.cat}" onclick="openLightbox(${idx})"><img src="${thumbSrc(p.src)}" alt="${p.caption}" loading="${pos < 8 ? 'eager' : 'lazy'}" decoding="async"><span class="photo-overlay"><span class="photo-caption">${p.caption}</span><span class="photo-tag ${tagColor(idx)}">${p.cat}</span></span></button>`;
+      return `<button class="photo-item" data-cat="${p.cat}" onclick="openLightbox(${idx})"><img src="${thumbSrc(p.src)}" alt="${p.caption}" loading="${pos < 8 ? 'eager' : 'lazy'}" decoding="async"><span class="photo-overlay"><span class="photo-caption">${p.caption}</span></span></button>`;
     }).join('');
   }
   function filterGallery(cat, btn) {
@@ -73,14 +73,15 @@
   function openLightbox(idx) {
     const p = photos[idx];
     document.getElementById('lightbox-content').innerHTML = `<img src="${medSrc(p.src)}" alt="${p.caption}">`;
-    document.getElementById('lightbox').classList.add('open');
+    document.getElementById('lightbox').classList.add('open'); window.photoReturnFocus = document.activeElement; document.querySelector('.lightbox-close').focus(); document.getElementById('lightbox-content').insertAdjacentHTML('beforeend', '<p class="lightbox-caption">' + p.caption + '</p>');
     document.body.style.overflow = 'hidden';
   }
-  function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow = ''; }
+  function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow = ''; window.photoReturnFocus?.focus(); }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
   renderGallery('all');
+if (['portrait','couple','landscape'].includes(location.hash.slice(1))) { const cat=location.hash.slice(1); const buttons=[...document.querySelectorAll('.filter-btn')]; filterGallery(cat, buttons[['all','portrait','couple','landscape'].indexOf(cat)]); }
 </script>
-<div class="page-transition-overlay" aria-hidden="true"></div></body>
+</body>
 </html>
 
 
