@@ -23,9 +23,11 @@
   const pixelColors = palette;
   const matrixColors = palette;
   const modes = ['ink', 'orb', 'pixel', 'matrix'];
+  const touchInput = matchMedia('(pointer: coarse)').matches;
+  const inputLabel = touchInput ? 'touch: ' : 'cursor: ';
   let mode = 'pixel';
   landing.dataset.cursorMode = mode;
-  toggle.textContent = 'cursor: ' + mode;
+  toggle.textContent = inputLabel + mode;
   let points = [];
   let ripples = [];
 
@@ -191,13 +193,13 @@
   function setMode(next) {
     mode = next;
     landing.dataset.cursorMode = mode;
-    toggle.textContent = 'cursor: ' + mode;
+    toggle.textContent = inputLabel + mode;
     points = [];
   }
 
   toggle.addEventListener('click', () => setMode(modes[(modes.indexOf(mode) + 1) % modes.length]));
-  addEventListener('pointermove', move, { passive: true });
-  addEventListener('pointerdown', (event) => {
+  function burst(event) {
+    move(event);
     ripples.push({
       x: event.clientX,
       y: event.clientY,
@@ -208,10 +210,25 @@
       pixelated: mode === 'pixel',
       binary: mode === 'matrix',
     });
+    if (ripples.length > 24) ripples.splice(0, ripples.length - 24);
     if (mode !== 'pixel') {
       for (let i = 0; i < 10; i++) addPoint(event.clientX + (Math.random() - .5) * 42, event.clientY + (Math.random() - .5) * 42);
     }
-  }, { passive: true });
+  }
+  // Pointer events cover current mobile browsers; touch events support older ones.
+  if ('PointerEvent' in window) {
+    landing.addEventListener('pointermove', move, { passive: true });
+    landing.addEventListener('pointerdown', burst, { passive: true });
+  } else {
+    landing.addEventListener('touchstart', event => {
+      for (const touch of event.changedTouches) burst(touch);
+    }, { passive: true });
+    landing.addEventListener('touchmove', event => {
+      for (const touch of event.changedTouches) move(touch);
+    }, { passive: true });
+    landing.addEventListener('mousemove', move, { passive: true });
+    landing.addEventListener('mousedown', burst, { passive: true });
+  }
   if (info) {
     info.addEventListener('click', () => {
       info.classList.remove('shine');
@@ -223,18 +240,6 @@
   resize();
   draw();
 
-  if (matchMedia('(pointer: coarse)').matches) {
-    toggle.textContent = 'touch: ' + mode;
-    toggle.addEventListener('click', () => {
-      setTimeout(() => { toggle.textContent = 'touch: ' + mode; }, 0);
-    });
-    let t = 0;
-    setInterval(() => {
-      if (points.length > 8) return;
-      t += .7;
-      addPoint(innerWidth * (.5 + Math.cos(t) * .22), innerHeight * (.48 + Math.sin(t * .8) * .18));
-    }, 180);
-  }
 })();
 
 
