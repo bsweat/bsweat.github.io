@@ -10,12 +10,11 @@
 <header class="masthead" data-masthead></header>
 <main class="page" id="main">
 
-  <div class="toolbar"><div class="filters"><button class="filter-btn active" onclick="filterPosts('all',this)">All</button><button class="filter-btn" onclick="filterPosts('security',this)">Security</button><button class="filter-btn" onclick="filterPosts('ctf',this)">CTF</button><button class="filter-btn" onclick="filterPosts('tools',this)">Tools & Lab</button><button class="filter-btn" onclick="filterPosts('general',this)">General</button></div><span class="count">Field notes / Archive</span></div>
   <section class="post-list" id="post-list"></section>
 </main>
 <div class="article-overlay" id="article-overlay" role="dialog" aria-modal="true" aria-labelledby="article-title" tabindex="-1">
   <nav class="article-nav"><button class="article-back" onclick="closeArticle()">Back to posts</button><span class="article-date-nav count" id="article-date-nav"></span></nav>
-  <article class="article-body"><p class="article-kicker" id="article-kicker"></p><h1 class="article-title" id="article-title"></h1><div class="article-tags" id="article-tags"></div><div class="prose" id="article-prose"></div></article>
+  <article class="article-body"><p class="article-kicker" id="article-kicker"></p><h1 class="article-title" id="article-title"></h1><div class="prose" id="article-prose"></div></article>
 </div>
 <footer class="site-footer" data-footer></footer>
 <script src="assets/js/editorial.js"></script>
@@ -26,8 +25,6 @@ const posts = [
       date: 'Apr 2026',
       title: 'TryHackMe: OhSINT - Open-Source Intelligence Walkthrough',
       excerpt: 'A Windows XP wallpaper with hidden EXIF data kicks off a chain of OSINT discoveries across Twitter, GitHub, Wigle.net, and WordPress. Also I got the flag and then typo\'d it. Heartbreaking.',
-      tags: 'ctf security',
-      tagHTML: '<span class="tag ctf">CTF</span><span class="tag security">OSINT</span><span class="tag">TryHackMe</span>',
       kicker: '// TryHackMe / OSINT Writeup',
       body: `
         <div class="note"><strong>// Spoiler Warning:</strong> This writeup covers the full solution to TryHackMe's OhSINT room, including anything connected to the GitHub <em>OWoodfl1nt</em> and Twitter <em>@OWoodflint</em>. Stop here if you want to try it yourself first. Also let the record show I finished this room correctly the first time and then typo'd the final flag. Heartbreaking.</div>
@@ -88,8 +85,6 @@ const posts = [
       date: 'Apr 2026',
       title: 'OpenVAS on Metasploitable - My First Vulnerability Scan',
       excerpt: 'Standing up OpenVAS by Greenbone in a VirtualBox lab, running a full scan against Metasploitable, and digging into CVE-2011-3556 - an RCE in Java RMI that takes five commands to exploit.',
-      tags: 'security tools',
-      tagHTML: '<span class="tag security">Vuln Scan</span><span class="tag">OpenVAS</span><span class="tag">Lab</span>',
       kicker: '// Vulnerability Scanning / HomeLab',
       body: `
         <h2>Overview</h2>
@@ -150,8 +145,6 @@ nc -lvnp 4445
       date: 'Apr 2025',
       title: 'TryHackMe: Blue - EternalBlue Exploitation Walkthrough',
       excerpt: 'Step-by-step exploitation of MS17-010 using Metasploit, followed by post-exploitation enumeration and privilege escalation on Windows 7.',
-      tags: 'ctf security',
-      tagHTML: '<span class="tag ctf">CTF</span><span class="tag security">Exploit</span><span class="tag">Windows</span>',
       kicker: '// TryHackMe / CTF Writeup',
       body: `
         <h2>Overview</h2>
@@ -198,8 +191,6 @@ run</pre>
       date: 'Mar 2025',
       title: 'Building a Home Security Lab on a Budget',
       excerpt: 'How I set up a functional pentesting lab using Proxmox, pfSense, and vulnerable VMs - total cost under $200.',
-      tags: 'tools general',
-      tagHTML: '<span class="tag">HomeLab</span><span class="tag">Proxmox</span><span class="tag">Networking</span>',
       kicker: '// Lab Setup / HomeLab',
       body: `
         <h2>Why Build a Home Lab?</h2>
@@ -256,8 +247,6 @@ iface vmbr1 inet static
       date: 'Feb 2025',
       title: 'Active Directory 101: Attacks and Defenses for Beginners',
       excerpt: 'Common AD misconfigurations - Kerberoasting, Pass-the-Hash, LLMNR poisoning - explained from an offensive and defensive lens.',
-      tags: 'security',
-      tagHTML: '<span class="tag security">Security</span><span class="tag">Active Directory</span><span class="tag">Windows</span>',
       kicker: '// Security Concepts / Active Directory',
       body: `
         <h2>Why Active Directory Matters</h2>
@@ -299,8 +288,6 @@ crackmapexec smb &lt;TARGET_IP&gt; -u Administrator -H &lt;NTLM_HASH&gt;</pre>
       date: 'Jan 2025',
       title: 'TryHackMe: Mr. Robot CTF - Full Walkthrough',
       excerpt: 'All three flags via web enumeration, Hydra brute force, and GTFObins privilege escalation through nmap SUID.',
-      tags: 'ctf',
-      tagHTML: '<span class="tag ctf">CTF</span><span class="tag">Linux</span><span class="tag">Web</span>',
       kicker: '// TryHackMe / CTF Writeup',
       body: `
         <h2>Overview</h2>
@@ -344,8 +331,6 @@ whoami
       date: 'Dec 2024',
       title: 'Nmap Cheat Sheet: The Scans I Actually Use',
       excerpt: 'Moving past -sV and -A - practical nmap flags, NSE scripts, and timing options for real engagements and CTFs.',
-      tags: 'tools',
-      tagHTML: '<span class="tag">Tools</span><span class="tag">Nmap</span><span class="tag">Recon</span>',
       kicker: '// Tools & Reference / Nmap',
       body: `
         <h2>The Basics (That Everyone Knows)</h2>
@@ -412,8 +397,6 @@ nmap -p 22,80,443,445 --open 192.168.1.0/24</pre>
       date: 'Nov 2024',
       title: 'What I Learned Studying for CompTIA Security+',
       excerpt: 'Resources, study strategies, and the things that actually showed up on the exam - plus what I\'d do differently.',
-      tags: 'general',
-      tagHTML: '<span class="tag">Security+</span><span class="tag">Certs</span>',
       kicker: '// Certifications / Study Notes',
       body: `
         <h2>Background</h2>
@@ -455,24 +438,18 @@ nmap -p 22,80,443,445 --open 192.168.1.0/24</pre>
       `
     }
   ];
-function renderPosts(filter) {
+function renderPosts() {
   const list = document.getElementById('post-list');
-  const filtered = posts.filter(p => filter === 'all' || p.tags.includes(filter));
-  list.innerHTML = filtered.map(p => '<button type="button" class="post-card" data-tags="' + p.tags + '" onclick="openArticle(' + p.id + ')">' +
+  list.innerHTML = posts.map(p => '<button type="button" class="post-card" onclick="openArticle(' + p.id + ')">' +
     '<span class="post-date">' + p.date + '</span>' +
-    '<span><span class="post-title">' + p.title + '</span><span class="post-excerpt">' + p.excerpt + '</span><span class="post-tags">' + p.tagHTML + '</span></span>' +
+    '<span><span class="post-title">' + p.title + '</span><span class="post-excerpt">' + p.excerpt + '</span></span>' +
     '<span class="post-arrow">Open</span></button>').join('');
 }
-function filterPosts(tag, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderPosts(tag);
-}
+
 function openArticle(id) {
   const p = posts.find(x => x.id === id);
   document.getElementById('article-kicker').textContent = p.kicker;
   document.getElementById('article-title').textContent = p.title;
-  document.getElementById('article-tags').innerHTML = p.tagHTML;
   document.getElementById('article-prose').innerHTML = p.body;
   document.getElementById('article-date-nav').textContent = p.date;
   document.getElementById('article-overlay').classList.add('open'); window.articleReturnFocus = document.activeElement; document.getElementById('article-overlay').scrollTop = 0; document.querySelector('.article-back').focus(); history.replaceState(null, '', '#post-' + id);
@@ -480,7 +457,7 @@ function openArticle(id) {
 }
 function closeArticle() { document.getElementById('article-overlay').classList.remove('open'); document.body.style.overflow = ''; history.replaceState(null, '', location.pathname); window.articleReturnFocus?.focus(); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeArticle(); });
-renderPosts('all');
+renderPosts();
 if (/^#post-\d+$/.test(location.hash)) { const id=Number(location.hash.slice(6)); if(posts.some(p=>p.id===id)) openArticle(id); }
 </script>
 </body>
