@@ -1,7 +1,7 @@
 const activeFile=location.pathname.split('/').pop()||'index.html';
-const navItems=[['Work','projects.html','blue'],['Journal','blog.html','green'],['Photographs','photography.html','orange'],['About','about.html','purple']];
+const navItems=[['projects','projects.html','blue'],['journal','blog.html','green'],['photo','photography.html','orange'],['about','about.html','purple']];
 const shell=document.querySelector('[data-masthead]');
-if(shell){shell.innerHTML='<a class="skip-link" href="#main">Skip to content</a><nav class="nav-frame" aria-label="Main navigation"><a class="nav-brand" href="index.html">Brandon Sweat</a>'+navItems.map(([label,url,color])=>'<a class="nav-direct tone-'+color+'" href="'+url+'" '+((activeFile===url||(label==='About'&&activeFile==='resume.html'))?'aria-current="page"':'')+'>'+label+'<span aria-hidden="true">↗</span></a>').join('')+'</nav>';addEventListener('scroll',()=>shell.classList.toggle('scrolled',scrollY>36),{passive:true});}
+if(shell){shell.innerHTML='<a class="skip-link" href="#main">Skip to content</a><nav class="nav-frame" aria-label="Main navigation"><a class="nav-brand" href="index.html">Brandon Sweat</a>'+navItems.map(([label,url,color])=>'<a class="nav-direct tone-'+color+'" href="'+url+'" '+((activeFile===url||(label==='about'&&activeFile==='resume.html'))?'aria-current="page"':'')+'>'+label+'<span aria-hidden="true">↗</span></a>').join('')+'</nav>';addEventListener('scroll',()=>shell.classList.toggle('scrolled',scrollY>36),{passive:true});}
 const footer=document.querySelector('[data-footer]');if(footer)footer.innerHTML=`<div class="footer-bottom"><span>© ${new Date().getFullYear()} Brandon Sweat</span><div class="footer-actions"><a href="mailto:brandonsweat@proton.me">Email ↗</a><a href="resume.html">Résumé ↗</a></div></div>`;
 function magneticCards(){} // Compatibility for retained content renderers.
 // Keep modal readers within keyboard reach without exposing the page behind them.

@@ -54,6 +54,11 @@
     { cat:'landscape', src:'photos/DSC04791.jpg', caption:'Snow-covered forest, Pacific Northwest', aspect:1.5  },
     { cat:'landscape', src:'photos/DSC07778.jpg', caption:'Wigwam Motel, Route 66',                 aspect:1.6  },
   ];
+  // Shuffle once per page load; filters and lightbox share this order.
+  for (let i = photos.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [photos[i], photos[j]] = [photos[j], photos[i]];
+  }
   function thumbSrc(s) { return s.replace('photos/', 'photos/thumbs/'); }
   function medSrc(s) { return s.replace('photos/', 'photos/medium/'); }
 

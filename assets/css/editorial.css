@@ -34,3 +34,20 @@
 .cursor-canvas{opacity:.8;mix-blend-mode:normal}.landing[data-cursor-mode=pixel] .cursor-canvas,.landing[data-cursor-mode=matrix] .cursor-canvas{opacity:1}
 .cursor-orb{background:radial-gradient(circle,#FBC02D99 0%,#FB8C0066 35%,#8E44AD44 60%,#00A3E000 75%)}
 .cursor-orb{background:conic-gradient(from 0deg,#00A3E088,#8E44AD88,#E5393588,#FB8C0088,#FBC02D88,#4CAF5088,#00A3E088)}
+
+/* Project preview uses the tool page itself so it follows interface updates. */
+.phishlens-art{padding:0;background:#070a12;height:300px}
+.phishlens-preview{display:block;width:200%;height:1200px;border:0;transform:scale(.5);transform-origin:top left;pointer-events:none}
+.phishlens-art .tool-note{background:#070a12;color:#dde6f0;padding:5px 8px}
+.phishlens-info h3,.phishlens-info p{font-family:'JetBrains Mono',Consolas,monospace}
+.phishlens-info p{font-size:12px;line-height:1.7}.blue-period{color:var(--blue)}
+.project-stack{display:inline-block;margin-top:7px;color:var(--muted)}
+.post-card{transition:padding .2s,background-color .2s}
+.post-card:nth-child(6n+1),.journal-row:nth-child(6n+1){--post-accent:var(--blue);--post-tint:#e0f5fd}
+.post-card:nth-child(6n+2),.journal-row:nth-child(6n+2){--post-accent:var(--purple);--post-tint:#f2e6fa}
+.post-card:nth-child(6n+3),.journal-row:nth-child(6n+3){--post-accent:var(--red);--post-tint:#fde8e7}
+.post-card:nth-child(6n+4),.journal-row:nth-child(6n+4){--post-accent:var(--orange);--post-tint:#fff0dc}
+.post-card:nth-child(6n+5),.journal-row:nth-child(6n+5){--post-accent:var(--yellow);--post-tint:#fff7d6}
+.post-card:nth-child(6n+6),.journal-row:nth-child(6n+6){--post-accent:var(--green);--post-tint:#e6f6e2}
+.post-card:hover,.post-card:focus-visible,.journal-row:hover,.journal-row:focus-visible{background:var(--post-tint);background:color-mix(in srgb,var(--post-accent) 13%,white)}
+@media(max-width:650px){.phishlens-art{height:260px}.phishlens-preview{width:250%;transform:scale(.4)}}
